@@ -1,0 +1,196 @@
+# Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD & PS)
+
+## Preparation
+
+```{r message=F, warning=F, error=F}
+library(WeightIt)
+library(broom)
+library(cobalt)
+library(survival)
+library(lmtest)
+library(sandwich)
+library(stargazer)
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+```
+
+```{r message=FALSE, warning=FALSE}
+# load data
+d <- haven::read_dta("data/Data_Chapter7/survival.dta")
+
+# make convenient objects
+match_vars <- colnames(select(d, PSH17A:cgneed, -aodserv))
+psform <- cobalt::f.build("aodserv", match_vars)
+d <- as.data.frame(d)
+
+# cox_vars <- colnames(select(d, aodserv:natam, chdage1:chdage3, CRA47A))
+```
+
+## Propensity Score Weighting 
+
+```{r message=FALSE, warning=FALSE}
+# PSW
+w_ate.out <- WeightIt::weightit(psform, data = d, method = "ps", estimand = "ATE")
+w_att.out <- WeightIt::weightit(psform, data = d, method = "ps", estimand = "ATT")
+
+# weights
+d <- d %>%
+  mutate(
+    ate_w = w_ate.out$weights,
+    att_w = w_att.out$weights
+  )
+```
+
+## Cox Proportional Hazards Model
+
+```{r message=FALSE, warning=FALSE}
+# Unweighted
+cox_unweighted <- survival::coxph(Surv(durm, rrpt) ~ aodserv + married + high +
+  bahigh + poverty2 + poverty3 + poverty4 +
+  poverty5 + employ + open + black + hispanic +
+  natam + chdage1 + chdage2 + chdage3 + CRA47A,
+data = d, robust = TRUE, method = "breslow"
+) 
+summary(cox_unweighted)
+
+## To get the same SE as STATA 
+cox_unweighted_sum <- summary(cox_unweighted)
+cox_unweighted_sum$coefficients[, 4] * cox_unweighted_sum$coefficients[, 2]
+
+# ate-weighted
+cox_ate <- survival::coxph(Surv(durm, rrpt) ~ aodserv + married + high +
+  bahigh + poverty2 + poverty3 + poverty4 +
+  poverty5 + employ + open + black + hispanic +
+  natam + chdage1 + chdage2 + chdage3 + CRA47A,
+data = d, weights = d$ate_w, robust = TRUE, method = "breslow"
+)
+summary(cox_ate)
+
+## To get the same SE as STATA 
+cox_ate_sum <- summary(cox_ate)
+cox_ate_sum$coefficients[, 4] * cox_ate_sum$coefficients[, 2]
+
+# att-weighted
+cox_att <- survival::coxph(Surv(durm, rrpt) ~ aodserv + married + high +
+  bahigh + poverty2 + poverty3 + poverty4 +
+  poverty5 + employ + open + black + hispanic +
+  natam + chdage1 + chdage2 + chdage3 + CRA47A,
+data = d, weights = d$att_w, robust = TRUE, method = "breslow"
+)
+summary(cox_att)
+
+## To get the same SE as STATA 
+cox_att_sum <- summary(cox_att)
+cox_att_sum$coefficients[, 4] * cox_att_sum$coefficients[, 2]
+```
+
+## Checking Imbalance
+
+### Chi-square Tests: Original Sample
+
+```{r message=FALSE, warning=FALSE}
+# Check balance using chi-squared tests
+check_balance <- function(df) {
+
+  # List of covariates to check balance
+  covs <- c(
+    "married", "educ", "pov", "employ", "open", "race",
+    "chdage", "cgage", "CRA47A", "mental",
+    "arrest", "PSH17A", "maltx", "ra", "cidi", "cgneed"
+  )
+
+  # Function to calculate chisq.test p-values
+  calc <- function(cov) {
+    return(data.frame(
+      covariate = cov,
+      p = chisq.test(df[cov], df$aodserv)$p.value
+    ))
+  }
+
+  # Calculate chisq.test for each covariate
+  results <- map_dfr(covs, calc) %>%
+    mutate(sig = ifelse(p < 0.05, "sig", "not sig")) %>%
+    mutate(p = round(p, 2))
+
+  # Get covariates that did not overlap sufficiently (p < .05)
+  results_sig <- results %>%
+    filter(sig == "sig")
+
+  # Return results
+  return(list(table = results, sig = toupper(results_sig$covariate)))
+}
+check_balance(d)
+```
+
+### Weighted Logistic Regression
+
+Note that a custom function by Jorge Cimentada is used to replicate the robust standard errors in Stata.^[https://cimentadaj.github.io/blog/2016-09-19-obtaining-robust-standard-errors-and-odds-ratios/obtaining-robust-standard-errors-and-odds-ratios-for-logistic-regression-in-r/]
+
+```{r message=FALSE, warning=FALSE}
+robustse <- function(x, coef = c("logit", "odd.ratio", "probs")) {
+  suppressMessages(suppressWarnings(library(lmtest)))
+  suppressMessages(suppressWarnings(library(sandwich)))
+
+  sandwich1 <- function(object, ...) {
+    sandwich(object) *
+      nobs(object) / (nobs(object) - 1)
+  }
+  # Function calculates SE's
+  mod1 <- coeftest(x, vcov = sandwich1)
+  # apply the function over the variance-covariance matrix
+
+  if (coef == "logit") {
+    return(mod1) # return logit with robust SE's
+  } else if (coef == "odd.ratio") {
+    mod1[, 1] <- exp(mod1[, 1]) # return odd ratios with robust SE's
+    mod1[, 2] <- mod1[, 1] * mod1[, 2]
+    return(mod1)
+  } else {
+    mod1[, 1] <- (mod1[, 1] / 4) # return probabilites with robust SE's
+    mod1[, 2] <- mod1[, 2] / 4
+    return(mod1)
+  }
+}
+
+# Variables to check balance
+w_vars <- c(
+  "married", "high", "bahigh", "poverty2", "poverty3", "poverty4",
+  "poverty5", "employ", "open", "black", "hispanic", "natam",
+  "chdage1", "chdage2", "chdage3", "cgrage1", "cgrage2", "cgrage3",
+  "CRA47A", "mental", "arrest", "PSH17A", "sexual", "provide",
+  "supervis", "other", "ra", "cidi", "cgneed"
+)
+
+# Function to check balance with weighted logistic regression
+w_check_bal <- function(var, weight) {
+  m <- glm(as.formula(paste0(var, "~aodserv")),
+    family = binomial, data = d,
+    weights = weight
+  )
+
+  m2 <- m %>%
+    tidy() %>%
+    mutate(odds.ratio = exp(estimate), variable = var) %>%
+    mutate(or.se = robustse(m, coef = "odd.ratio")[,2]) %>%
+    mutate(statistic = robustse(m, coef = "odd.ratio")[,3]) %>%
+    mutate(p.value = robustse(m, coef = "odd.ratio")[,4]) %>%
+    select(variable, term, odds.ratio, or.se, statistic, p.value)
+
+  return(m2)
+}
+
+# Function to print balance check results
+w_print_bal <- function(df) {
+  kable(df, digits = 4) %>%
+    kable_material(c("striped")) %>%
+    kable_styling(position = "center") %>%
+    collapse_rows(columns = 1, valign = "top")
+}
+
+# Balance with ATE weights
+w_print_bal(map_dfr(w_vars, w_check_bal, d$ate_w))
+
+# Balance with ATT weights
+w_print_bal(map_dfr(w_vars, w_check_bal, d$att_w))
+```

@@ -1,0 +1,125 @@
+# Section 8.4.1 Matching with Bias-Corrected and Robust Variance Estimators (SD & PS)
+
+## Preparation
+
+```{r message=F, warning=F, error=F}
+library(lmtest)
+library(tidyverse)
+library(broom)
+library(Matching)
+
+# Load Data
+d <- haven::read_dta("data/Data_Chapter8/cds_pcss97.dta")
+```
+
+## Breusch-Pagan Test for Heteroskedasticity
+
+```{r message=FALSE, warning=FALSE}
+m0 <- lm(pcss97 ~ kuse + male + black + age97 + pcged97 + mratio96 + pcg_adc, data = d)
+get_bptest <- function(data, lm.model, var) {
+  b <- lmtest::bptest(lm.model, as.formula(paste0("~", var)), 
+                      data = data, studentize = F)
+  return(tibble(variable = var, statistic = b$statistic, 
+                df = b$parameter, p.value = b$p.value))
+}
+map_dfr(c("kuse", "male", "black", "age97", "pcged97", "mratio96", "pcg_adc"), 
+        get_bptest, data = d, lm.model = m0)
+```
+
+## Matching Estimators
+
+### Sample Average Treatment Effect (SATE)
+
+```{r message=FALSE, warning=FALSE}
+match_sate <- with(d, Matching::Match(
+  Y = pcss97,
+  Tr = kuse,
+  X = data.frame(male, black, age97, pcged97, mratio96, pcg_adc),
+  estimand = "ATE",
+  M = 4,
+  BiasAdjust = TRUE,
+  sample = TRUE,
+  Var.calc = 4
+  ))
+summary(match_sate)
+```
+
+### Population Average Treatment Effect (PATE)
+
+```{r message=FALSE, warning=FALSE}
+match_pate <- with(d, Matching::Match(
+  Y = pcss97,
+  Tr = kuse,
+  X = data.frame(male, black, age97, pcged97, mratio96, pcg_adc),
+  estimand = "ATE",
+  M = 4,
+  BiasAdjust = TRUE,
+  sample = FALSE,
+  Var.calc = 4
+  ))
+summary(match_pate)
+```
+
+### Sample average treatment effect for the treated (SATT)
+
+```{r message=FALSE, warning=FALSE}
+match_satt <- with(d, Matching::Match(
+  Y = pcss97,
+  Tr = kuse,
+  X = data.frame(male, black, age97, pcged97, mratio96, pcg_adc),
+  estimand = "ATT",
+  M = 4,
+  BiasAdjust = TRUE,
+  sample = TRUE,
+  Var.calc = 4
+))
+summary(match_satt)
+```
+
+### Population average treatment effect for the treated (PATT)
+
+```{r message=FALSE, warning=FALSE}
+match_patt <- with(d, Matching::Match(
+  Y = pcss97,
+  Tr = kuse,
+  X = data.frame(male, black, age97, pcged97, mratio96, pcg_adc),
+  estimand = "ATT",
+  M = 4,
+  BiasAdjust = TRUE,
+  sample = FALSE,
+  Var.calc = 4
+))
+summary(match_patt)
+```
+
+### Sample average treatment effect for the controls (SATC)
+
+```{r message=FALSE, warning=FALSE}
+match_satc <- with(d, Matching::Match(
+  Y = pcss97,
+  Tr = kuse,
+  X = data.frame(male, black, age97, pcged97, mratio96, pcg_adc),
+  estimand = "ATC",
+  M = 4,
+  BiasAdjust = TRUE,
+  sample = TRUE,
+  Var.calc = 4
+))
+summary(match_satc)
+```
+
+### Population average treatment effect for the controls (PATC)
+
+```{r message=FALSE, warning=FALSE}
+match_patc <- with(d, Matching::Match(
+  Y = pcss97,
+  Tr = kuse,
+  X = data.frame(male, black, age97, pcged97, mratio96, pcg_adc),
+  estimand = "ATC",
+  M = 4,
+  BiasAdjust = TRUE,
+  sample = FALSE,
+  Var.calc = 4
+))
+summary(match_patc)
+```

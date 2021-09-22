@@ -1,0 +1,83 @@
+# Section 4.4.3 Main Features of Treatreg (PS & SD)
+
+## Preparation
+
+```{r message=F, warning=F, error=F}
+library(purrr)
+library(haven)
+library(mitools)
+library(sampleSelection)
+library(sandwich)
+library(stargazer)
+library(tidyverse)
+select <- dplyr::select
+```
+
+```{r message=FALSE, warning=FALSE}
+# Import data
+mi.files <- list.files(path = "data/Data_Chapter4", full.names = TRUE)
+mi.files.g3ragg <- mi.files[grepl("g3ragg", mi.files)]
+mi.data <- purrr::map(mi.files.g3ragg, read_dta)
+
+# Combine data into a list
+mi.list <- mitools::imputationList(mi.data)
+```
+
+## Run Models
+
+```{r message = FALSE, warning = FALSE}
+fit <- with(mi.list, exp = sampleSelection::treatReg(
+  intbl ~ ageyc + fmale + blck + whit + hisp + pcedu + ipovl + pcemft + fthr + dicsaca2 + dicsint2,
+  raggrch ~ intbl + ageyc + fmale + blck + whit + hisp + pcedu + ipovl + pcemft + fthr
+))
+summary(fit)
+```
+
+## Extract Coefficients
+
+```{r message=FALSE, warning=FALSE, error=F}
+# Extract coefficients
+mi.coef <- mitools::MIextract(fit, fun = coef)
+
+# Get robust clustered standard errors
+mi.data.nm <- mi.data[[1]] %>%
+  select(
+    intbl, ageyc, fmale, blck, whit, hisp, pcedu, ipovl, pcemft, fthr, dicsaca2, dicsint2,
+    raggrch, schbl
+  ) %>%
+  drop_na()
+
+mi.vcovCL <- function(x) {
+  return(vcovCL(x, cluster = mi.data.nm$schbl))
+}
+
+mi.se <- mitools::MIextract(fit, fun = mi.vcovCL)
+
+# Get estimates with robust clustered standard errors
+results <- mitools::MIcombine(results = mi.coef, variances = mi.se)
+results.sum <- summary(results)
+```
+
+## Get Combined Results
+
+```{r}
+results.t <- results.sum$results / results.sum$se
+results.p <- 2 * pt(-abs(results.t), df = nrow(mi.data.nm) - 1)
+results.df <- data.frame(
+  Variable = names(results$coefficients),
+  Estimate = results.sum$results, SE = results.sum$se, t = results.t, p = results.p,
+  `CI Lower` = results.sum$`(lower`, `CI Upper` = results.sum$`upper)`
+)
+```
+
+## Results
+
+```{r results="asis"}
+stargazer(results.df,
+          type = "html",
+          summary = FALSE,
+          digits = 6,
+          notes = c("Standard errors are robust clustered standard errors")
+)
+```
+

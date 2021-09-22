@@ -1,0 +1,360 @@
+# Section 5.8.5 Multilevel Propensity Score (PS)
+
+```{r message=F, warning=F, error=F}
+library(tidyverse)
+library(haven)
+library(broom)
+library(MatchIt)
+library(cobalt)
+library(plm)
+library(lme4)
+library(lmerTest)
+library(sjlabelled)
+library(performance)
+options(scipen=999)
+```
+
+## cccpros57
+
+### Import Data
+
+```{r}
+# Remove formats and labels, because matchit requires a vector for the distance option
+df <- haven::read_dta("data/Data_Chapter5/cccpros57.dta") %>%
+  zap_formats()
+df <- sjlabelled::remove_all_labels(df) %>%
+  as_tibble()
+
+post1 <- haven::read_dta("data/Data_Chapter5/post1.dta")
+post2 <- haven::read_dta("data/Data_Chapter5/post2.dta")
+```
+
+### Obtain Single-Level p-score
+
+```{r}
+m1 <- glm("intschb ~ agey + female + black + hisp + pcedu + incpovlr + pcempf + 
+          fatherr + AYP05Cs + pmin05s", family = binomial, data = df)
+m1.sum <- summary(m1)
+exp(m1.sum$coefficients[,1])
+exp(confint(m1))
+ps_sgl <- predict(m1, type = "response") # equivalent to df$ps_sgl
+```
+
+### Obtain School-Level p-score Model
+
+```{r}
+# Keep the first row/observation for each schbl value
+df.school <- df %>%
+  arrange(schbl) %>%
+  group_by(schbl) %>%
+  slice(1)
+
+m2 <- glm("intschb ~ AYP05Cs + pmin05s", family = binomial, data = df.school)
+m2.sum <- summary(m2)
+exp(m2.sum$coefficients[,1])
+exp(confint(m2))
+```
+
+### Before-Matching Balance Check
+
+```{r}
+t.test(agey ~ intschb, data = df, var.equal = TRUE)
+chisq.test(df$female, df$intschb, correct = FALSE)
+chisq.test(df$black, df$intschb, correct = FALSE)
+chisq.test(df$hisp, df$intschb, correct = FALSE)
+t.test(pcedu ~ intschb, data = df, var.equal = TRUE)
+t.test(incpovlr ~ intschb, data = df, var.equal = TRUE)
+chisq.test(df$pcempf, df$intschb, correct = FALSE)
+chisq.test(df$fatherr, df$intschb, correct = FALSE)
+t.test(AYP05Cs ~ intschb, data = df, var.equal = TRUE)
+t.test(pmin05s ~ intschb, data = df, var.equal = TRUE)
+
+# Alternative balance check using matchit
+scheme1.before <- MatchIt::matchit(intschb ~ agey + female + black + hisp + 
+                    pcedu + incpovlr + pcempf + fatherr + AYP05Cs + pmin05s,
+                    data = df,
+                    method = NULL)
+summary(scheme1.before)
+```
+
+### Matching with ps_sgl
+
+Note that the caliper argument in `matchit()` is "the number of standard deviations of the distance measure within which to draw control units (default = 0, no caliper matching). If a caliper is specified, a control unit within the caliper for a treated unit is randomly selected as the match for that treated unit."^[https://r.iq.harvard.edu/docs/matchit/2.4-14/Additional_Arguments_f3.html]
+
+```{r}
+# Generate a column of x random numbers, sort x in ascending order, calculate caliper with ps_sgl
+set.seed(1000)
+df.scheme1 <- df %>%
+  add_column(x = runif(nrow(.))) %>%
+  arrange(x)
+
+# Scheme 1 - Nearest Neighbor with ps_sgl
+set.seed(1000)
+scheme1 <- MatchIt::matchit(intschb ~ agey + female + black + hisp + pcedu + incpovlr +
+                     pcempf + fatherr + AYP05Cs + pmin05s,
+                   data = df.scheme1,
+                   method = "nearest",
+                   distance = df.scheme1$ps_sgl,
+                   caliper = .25, # equivalent to sd(df.scheme1$ps_sgl)*.25
+                   std.caliper = T, # caliper in standard deviation units
+                   m.order = "largest", # descending order of distance measures
+                   replace = FALSE)
+sd(df.scheme1$ps_sgl)*.25 == scheme1$caliper # check caliper
+scheme1.data <- MatchIt::match.data(scheme1)
+
+# Balance Check
+cobalt::love.plot(scheme1,
+  binary = "std",
+  stats = c("mean.diffs"),
+  threshold = c(.1),
+  var.order = "unadjusted",
+  line = TRUE,
+  s.d.denom = "pooled"
+)
+
+
+```
+
+### Matching with ps_sch
+
+```{r}
+# Generate a column of x random numbers, sort x in ascending order, calculate caliper with ps_sch
+set.seed(1000)
+df.scheme2 <- df %>%
+  add_column(x = runif(nrow(.))) %>%
+  arrange(x)
+
+# Scheme 2 - Nearest Neighbor with ps_sch
+set.seed(1000)
+scheme2 <- MatchIt::matchit(intschb ~ agey + female + black + hisp + pcedu + incpovlr +
+                     pcempf + fatherr + AYP05Cs + pmin05s,
+                   data = df.scheme2,
+                   method = "nearest",
+                   distance = df.scheme2$ps_sch,
+                   caliper = .25, # equivalent to sd(df.scheme2$ps_sch)*.25
+                   m.order = "largest", # descending order of distance measures
+                   replace = FALSE)
+scheme2.data <- MatchIt::match.data(scheme2)
+
+# Balance Check
+cobalt::love.plot(scheme2,
+  binary = "std",
+  stats = c("mean.diffs"),
+  threshold = c(.1),
+  var.order = "unadjusted",
+  line = TRUE,
+  s.d.denom = "pooled"
+)
+```
+
+### Check ICC
+
+```{r}
+# Function to calculate Stata's "rho" (ICC) in xtreg
+get_icc <- function(lmer_obj, group) {
+  sigma_u2 <- as.numeric(attr(VarCorr(lmer_obj)[[group]], "stddev"))^2
+  sigma_e2 <- summary(lmer_obj)$sigma^2
+  return(sigma_u2/(sigma_u2+sigma_e2))
+}
+
+# Original dataset
+m3 <- lmer(cccpros57 ~ (1|schbl), data = df, REML = F)
+get_icc(m3, "schbl")
+
+# Scheme 1: ICC using school as a clustering variable
+m4 <- lmer(cccpros57 ~ (1|schbl), data = post1, REML = F)
+get_icc(m4, "schbl")
+
+# Scheme 1: ICC using the matched set as a clustering variable (create mset first)
+m5 <- lmer(cccpros57 ~ (1|mset), data = post1, REML = F)
+get_icc(m5, "mset")
+
+# Scheme 2: ICC using school as a clustering variable
+m6 <- lmer(cccpros57 ~ (1|schbl), data = post2, REML = F)
+get_icc(m6, "schbl")
+
+# Scheme 2: ICC using the matched set as a clustering variable (create mset first)
+m7 <- lmer(cccpros57 ~ (1|mset), data = post2, REML = F)
+get_icc(m7, "mset")
+```
+
+### Outcome Analsis: Multilevel
+
+```{r}
+out1 <- lmer(cccpros57 ~ intschb + agey + female + black + hisp + pcedu +
+             incpovlr + pcempf + fatherr + AYP05Cs + pmin05s + (1|schbl),
+           data = df,
+           REML = FALSE)
+summary(out1)
+
+out2 <- lmer(cccpros57 ~ intschb + agey + female + black + hisp + pcedu +
+             incpovlr + pcempf + fatherr + AYP05Cs + pmin05s + (1|schbl),
+           data = post1,
+           REML = FALSE)
+summary(out2)
+
+out3 <- lmer(cccpros57 ~ intschb + agey + female + black + hisp + pcedu +
+             incpovlr + pcempf + fatherr + AYP05Cs + pmin05s + (1|schbl),
+           data = post2,
+           REML = FALSE)
+summary(out3)
+
+# Note that lmer() does not use the EM algorithm in Stata's xtmixed, but the results are similar
+out4 <- lmer(cccpros57 ~ intschb + agey + female + black + hisp + pcedu +
+             incpovlr + pcempf + fatherr + AYP05Cs + pmin05s + (1|schbl) + (1|mset),
+           data = post1,
+           REML = FALSE,
+           control=lmerControl(optCtrl=list(maxfun=30000)))
+summary(out4)
+```
+
+## cccragg24
+
+### Import Data
+
+```{r}
+ra <- haven::read_dta("data/Data_Chapter5/cccragg24.dta") %>%
+  zap_formats()
+ra <- sjlabelled::remove_all_labels(ra) %>%
+  as_tibble()
+post3 <- haven::read_dta("data/Data_Chapter5/post3.dta")
+post4 <- haven::read_dta("data/Data_Chapter5/post4.dta")
+```
+
+### Obtain Single-Level p-score
+
+```{r}
+ra_glm <- glm("intschb ~ agey + female + black + hisp + pcedu + incpovlr + pcempf + 
+          fatherr + AYP05Cs + pmin05s", family = binomial, data = ra)
+ra_glm_sum <- summary(ra_glm)
+exp(ra_glm_sum$coefficients[,1])
+ra_ps_sgl <- predict(ra_glm, type = "response")
+```
+
+### Obtain School-Level p-score Model
+
+```{r}
+# Keep the first row/observation for each schbl value
+ra_school <- ra %>%
+  arrange(schbl) %>%
+  group_by(schbl) %>%
+  slice(1)
+
+ra_glm2 <- glm("intschb ~ AYP05Cs + pmin05s", family = binomial, data = ra_school)
+ra_glm2_sum <- summary(ra_glm2)
+exp(ra_glm_sum$coefficients[,1])
+```
+
+### Before-Matching Balance Check
+
+```{r}
+t.test(agey ~ intschb, data = ra, var.equal = TRUE)
+chisq.test(ra$female, ra$intschb, correct = FALSE)
+chisq.test(ra$black, ra$intschb, correct = FALSE)
+chisq.test(ra$hisp, ra$intschb, correct = FALSE)
+t.test(pcedu ~ intschb, data = ra, var.equal = TRUE)
+t.test(incpovlr ~ intschb, data = ra, var.equal = TRUE)
+chisq.test(ra$pcempf, ra$intschb, correct = FALSE)
+chisq.test(ra$fatherr, ra$intschb, correct = FALSE)
+t.test(AYP05Cs ~ intschb, data = ra, var.equal = TRUE)
+t.test(pmin05s ~ intschb, data = ra, var.equal = TRUE)
+```
+
+### Matching with ps_sgl
+
+```{r}
+# Scheme 1 - Nearest Neighbor with ps_sgl
+set.seed(1000)
+ra_scheme1 <- MatchIt::matchit(intschb ~ agey + female + black + hisp + pcedu + 
+                                 incpovlr +pcempf + fatherr + AYP05Cs + pmin05s,
+                               data = ra,
+                               method = "nearest",
+                               distance = ra$ps_sgl,
+                               caliper = .25,
+                               replace = FALSE)
+ra_scheme1_data <- MatchIt::match.data(ra_scheme1)
+
+# Balance Check
+cobalt::love.plot(ra_scheme1,
+  binary = "std",
+  stats = c("mean.diffs"),
+  threshold = c(.1),
+  var.order = "unadjusted",
+  line = TRUE,
+  s.d.denom = "pooled"
+)
+```
+
+### Matching with ps_sch
+
+```{r}
+# Scheme 2 - Nearest Neighbor with ps_sch
+set.seed(1000)
+ra_scheme2 <- MatchIt::matchit(intschb ~ agey + female + black + hisp + pcedu + incpovlr +
+                pcempf + fatherr + AYP05Cs + pmin05s,
+                data = ra,
+                method = "nearest",
+                distance = ra$ps_sch,
+                caliper = .25,
+                replace = FALSE)
+ra_scheme2_data <- MatchIt::match.data(ra_scheme2)
+
+# Balance Check
+cobalt::love.plot(ra_scheme2,
+  binary = "std",
+  stats = c("mean.diffs"),
+  threshold = c(.1),
+  var.order = "unadjusted",
+  line = TRUE,
+  s.d.denom = "pooled"
+)
+```
+
+### Check ICC
+
+```{r}
+i1 <- lmer(cccragg24 ~ (1|schbl), data = ra, REML = F)
+get_icc(i1, "schbl")
+
+i2 <- lmer(cccragg24 ~ (1|schbl), data = post3, REML = F)
+get_icc(i2, "schbl")
+
+i3 <- lmer(cccragg24 ~ (1|mset), data = post3, REML = F)
+get_icc(i3, "mset")
+
+i4 <- lmer(cccragg24 ~ (1|schbl), data = post4, REML = F)
+get_icc(i4, "schbl")
+
+i5 <- lmer(cccragg24 ~ (1|mset), data = post4, REML = F)
+get_icc(i5, "mset")
+```
+
+### Outcome Analsis: Multilevel
+
+```{r}
+ra_out1 <- lmer(cccragg24 ~ intschb + agey + female + black + hisp + pcedu +
+             incpovlr + pcempf + fatherr + AYP05Cs + pmin05s + (1|schbl),
+           data = ra,
+           REML = FALSE)
+summary(ra_out1)
+
+ra_out2 <- lmer(cccragg24 ~ intschb + agey + female + black + hisp + pcedu +
+             incpovlr + pcempf + fatherr + AYP05Cs + pmin05s + (1|schbl),
+           data = post3,
+           REML = FALSE)
+summary(ra_out2)
+
+ra_out3 <- lmer(cccragg24 ~ intschb + agey + female + black + hisp + pcedu +
+             incpovlr + pcempf + fatherr + AYP05Cs + pmin05s + (1|schbl),
+           data = post4,
+           REML = FALSE)
+summary(ra_out3)
+
+# Note that lmer() does not use the EM algorithm in Stata's xtmixed
+ra_out4 <- lmer(cccragg24 ~ intschb + agey + female + black + hisp + pcedu +
+             incpovlr + pcempf + fatherr + AYP05Cs + pmin05s + (1|schbl) + (1|mset),
+           data = post4,
+           REML = FALSE,
+           control=lmerControl(optCtrl=list(maxfun=30000)))
+summary(ra_out4)
+```

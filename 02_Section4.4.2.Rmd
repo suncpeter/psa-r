@@ -1,0 +1,61 @@
+# Section 4.4.2 Evaluation of Treatment Effects From a Program With a Group Randomization Design (SD & PS)
+
+## Preparation
+
+```{r message=F, warning=F, error=F}
+library(haven)
+library(sampleSelection)
+library(stargazer)
+library(lmtest)
+library(sandwich)
+library(broom)
+library(tidyverse)
+
+# Load data
+d <- haven::read_dta("data/Data_Chapter4/chpt4_2.dta") 
+
+# New variables
+d1 <- d %>%
+  mutate(
+    icstsc_ = icstsc9 - icstsc8,
+    cccpros_ = cccpros9 - cccpros8
+  )
+```
+
+## Treatment Effect: Using Robust to Control for Clustering
+
+```{r message=FALSE, warning=FALSE}
+## tm1: icstsc_
+tm1 <- sampleSelection::treatReg(INTSCH ~ AYP05Cs + pmin05 + freel + puptch05 + age + Femalei + Black +
+  White + Hisp + PCEDU + IncPovL + PCempF + Father + icstagg + icstaca +
+  icstint + cccccon + cccstact + cccragg,
+icstsc_ ~ INTSCH + age + Femalei + Black + White + Hisp + PCEDU + IncPovL + PCempF + Father,
+data = d1
+)
+summary(tm1)
+
+## tm2: cccpros_
+tm2 <- sampleSelection::treatReg(INTSCH ~ AYP05Cs + pmin05 + freel + puptch05 + age + Femalei + Black +
+  White + Hisp + PCEDU + IncPovL + PCempF + Father + icstagg + icstaca +
+  icstint + cccccon + cccstact + cccragg,
+cccpros_ ~ INTSCH + age + Femalei + Black + White + Hisp + PCEDU + IncPovL + PCempF + Father,
+data = d1
+)
+summary(tm2)
+
+## tm3: icstsc_ & robust clustering
+broom::tidy(lmtest::coeftest(tm1, vcov = vcovCL, cluster = d1$school))
+
+## tm4: cccpros_ & robust clustering
+broom::tidy(lmtest::coeftest(tm2, vcov = vcovCL, cluster = d1$school))
+```
+
+## Bivariate t-test
+
+```{r message=FALSE, warning=FALSE}
+test1 <- t.test(icstsc_ ~ INTSCH, data = d1, var.eq = TRUE)
+broom::tidy(test1)
+
+test2 <- t.test(cccpros_ ~ INTSCH, data = d1, var.eq = TRUE)
+broom::tidy(test2)
+```

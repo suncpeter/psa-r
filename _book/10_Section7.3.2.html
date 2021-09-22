@@ -1,0 +1,3208 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>11 Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD &amp; PS) | R Code for Propensity Score Analysis</title>
+  <meta name="description" content="11 Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD &amp; PS) | R Code for Propensity Score Analysis" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="11 Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD &amp; PS) | R Code for Propensity Score Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="11 Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD &amp; PS) | R Code for Propensity Score Analysis" />
+  
+  
+  
+
+<meta name="author" content="Shanshan Du, Peter Sun, and Shenyang Guo" />
+
+
+<meta name="date" content="2020-12-30" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="09_Section7.3.1.html"/>
+<link rel="next" href="11_Section8.4.1.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html"><i class="fa fa-check"></i><b>2</b> Section 4.4.1 Application of the Treatment Effect Model to Analysis of Observational Data (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#preparation"><i class="fa fa-check"></i><b>2.1</b> Preparation</a></li>
+<li class="chapter" data-level="2.2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#treatment-effect"><i class="fa fa-check"></i><b>2.2</b> Treatment Effect</a></li>
+<li class="chapter" data-level="2.3" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#bivariate-t-test"><i class="fa fa-check"></i><b>2.3</b> Bivariate t-test</a></li>
+<li class="chapter" data-level="2.4" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#regression-control"><i class="fa fa-check"></i><b>2.4</b> Regression Control</a></li>
+<li class="chapter" data-level="2.5" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#sample-description"><i class="fa fa-check"></i><b>2.5</b> Sample Description</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html"><i class="fa fa-check"></i><b>3</b> Section 4.4.2 Evaluation of Treatment Effects From a Program With a Group Randomization Design (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#preparation-1"><i class="fa fa-check"></i><b>3.1</b> Preparation</a></li>
+<li class="chapter" data-level="3.2" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#treatment-effect-using-robust-to-control-for-clustering"><i class="fa fa-check"></i><b>3.2</b> Treatment Effect: Using Robust to Control for Clustering</a></li>
+<li class="chapter" data-level="3.3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#bivariate-t-test-1"><i class="fa fa-check"></i><b>3.3</b> Bivariate t-test</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html"><i class="fa fa-check"></i><b>4</b> Section 4.4.3 Main Features of Treatreg (PS &amp; SD)</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#preparation-2"><i class="fa fa-check"></i><b>4.1</b> Preparation</a></li>
+<li class="chapter" data-level="4.2" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#run-models"><i class="fa fa-check"></i><b>4.2</b> Run Models</a></li>
+<li class="chapter" data-level="4.3" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#extract-coefficients"><i class="fa fa-check"></i><b>4.3</b> Extract Coefficients</a></li>
+<li class="chapter" data-level="4.4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#get-combined-results"><i class="fa fa-check"></i><b>4.4</b> Get Combined Results</a></li>
+<li class="chapter" data-level="4.5" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#results"><i class="fa fa-check"></i><b>4.5</b> Results</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html"><i class="fa fa-check"></i><b>5</b> Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#preparation-3"><i class="fa fa-check"></i><b>5.1</b> Preparation</a></li>
+<li class="chapter" data-level="5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#propensity-score-estimation"><i class="fa fa-check"></i><b>5.2</b> Propensity Score Estimation</a></li>
+<li class="chapter" data-level="5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-comparisons"><i class="fa fa-check"></i><b>5.3</b> Bivariate Comparisons</a></li>
+<li class="chapter" data-level="5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-covariate-balcance-check"><i class="fa fa-check"></i><b>5.4</b> PSM based on Logistic regression &amp; Covariate Balcance Check</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.4.1</b> Scheme 1 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.4.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.4.2</b> Scheme 2 - Nearest neighbor within caliper .1*SD</a></li>
+<li class="chapter" data-level="5.4.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.4.3</b> Scheme 3 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.4.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.4.4</b> Scheme 4 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-2"><i class="fa fa-check"></i><b>5.5</b> PSM based on Logistic regression 2</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.5.1</b> Scheme 5 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6---nearest-neighbor-within-caliper-.1sd-note-caliper-in-matchit-is-not-real-data"><i class="fa fa-check"></i><b>5.5.2</b> Scheme 6 - Nearest neighbor within caliper .1*SD (Note: caliper in MatchIt is not real data)</a></li>
+<li class="chapter" data-level="5.5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.5.3</b> Scheme 7 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.5.4</b> Scheme 8 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-3"><i class="fa fa-check"></i><b>5.6</b> PSM based on Logistic regression 3</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.6.1</b> Scheme 9 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.6.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.6.2</b> Scheme 10 - Nearest neighbor within caliper .1*SD</a></li>
+<li class="chapter" data-level="5.6.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.6.3</b> Scheme 11 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.6.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.6.4</b> Scheme 12 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-test-after-matching"><i class="fa fa-check"></i><b>5.7</b> Bivariate test after matching</a></li>
+<li class="chapter" data-level="5.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#kaplan-meier-and-significance-test-of-difference-on-survivor-function"><i class="fa fa-check"></i><b>5.8</b> Kaplan-Meier and significance test of difference on survivor function</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#all"><i class="fa fa-check"></i><b>5.8.1</b> All</a></li>
+<li class="chapter" data-level="5.8.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1"><i class="fa fa-check"></i><b>5.8.2</b> Scheme 1</a></li>
+<li class="chapter" data-level="5.8.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2"><i class="fa fa-check"></i><b>5.8.3</b> Scheme 2</a></li>
+<li class="chapter" data-level="5.8.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3"><i class="fa fa-check"></i><b>5.8.4</b> Scheme 3</a></li>
+<li class="chapter" data-level="5.8.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4"><i class="fa fa-check"></i><b>5.8.5</b> Scheme 4</a></li>
+<li class="chapter" data-level="5.8.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5"><i class="fa fa-check"></i><b>5.8.6</b> Scheme 5</a></li>
+<li class="chapter" data-level="5.8.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6"><i class="fa fa-check"></i><b>5.8.7</b> Scheme 6</a></li>
+<li class="chapter" data-level="5.8.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7"><i class="fa fa-check"></i><b>5.8.8</b> Scheme 7</a></li>
+<li class="chapter" data-level="5.8.9" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8"><i class="fa fa-check"></i><b>5.8.9</b> Scheme 8</a></li>
+<li class="chapter" data-level="5.8.10" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9"><i class="fa fa-check"></i><b>5.8.10</b> Scheme 9</a></li>
+<li class="chapter" data-level="5.8.11" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10"><i class="fa fa-check"></i><b>5.8.11</b> Scheme 10</a></li>
+<li class="chapter" data-level="5.8.12" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11"><i class="fa fa-check"></i><b>5.8.12</b> Scheme 11</a></li>
+<li class="chapter" data-level="5.8.13" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12"><i class="fa fa-check"></i><b>5.8.13</b> Scheme 12</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html"><i class="fa fa-check"></i><b>6</b> Section 5.8.2, 5.8.3, and 5.8.4 (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.2-optimal-matching"><i class="fa fa-check"></i><b>6.1</b> Section 5.8.2 Optimal Matching</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#load-data"><i class="fa fa-check"></i><b>6.1.1</b> Load Data</a></li>
+<li class="chapter" data-level="6.1.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#bivariate-comparisons-1"><i class="fa fa-check"></i><b>6.1.2</b> Bivariate Comparisons</a></li>
+<li class="chapter" data-level="6.1.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#outcome-without-bias-control"><i class="fa fa-check"></i><b>6.1.3</b> Outcome Without Bias Control</a></li>
+<li class="chapter" data-level="6.1.4" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#matching"><i class="fa fa-check"></i><b>6.1.4</b> Matching</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.3-post-full-matching-analysis-of-outcome"><i class="fa fa-check"></i><b>6.2</b> Section 5.8.3 Post-Full-Matching Analysis of Outcome</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#hodges-lehmann-aligned-rank-test"><i class="fa fa-check"></i><b>6.2.1</b> Hodges-Lehmann Aligned Rank Test</a></li>
+<li class="chapter" data-level="6.2.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cohens-d"><i class="fa fa-check"></i><b>6.2.2</b> Cohen’s d</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.4-post-matching-analysis-using-regression-of-difference-scores"><i class="fa fa-check"></i><b>6.3</b> Section 5.8.4 Post-Matching Analysis Using Regression of Difference Scores</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html"><i class="fa fa-check"></i><b>7</b> Section 5.8.5 Multilevel Propensity Score (PS)</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccpros57"><i class="fa fa-check"></i><b>7.1</b> cccpros57</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data"><i class="fa fa-check"></i><b>7.1.1</b> Import Data</a></li>
+<li class="chapter" data-level="7.1.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score"><i class="fa fa-check"></i><b>7.1.2</b> Obtain Single-Level p-score</a></li>
+<li class="chapter" data-level="7.1.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model"><i class="fa fa-check"></i><b>7.1.3</b> Obtain School-Level p-score Model</a></li>
+<li class="chapter" data-level="7.1.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check"><i class="fa fa-check"></i><b>7.1.4</b> Before-Matching Balance Check</a></li>
+<li class="chapter" data-level="7.1.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl"><i class="fa fa-check"></i><b>7.1.5</b> Matching with ps_sgl</a></li>
+<li class="chapter" data-level="7.1.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch"><i class="fa fa-check"></i><b>7.1.6</b> Matching with ps_sch</a></li>
+<li class="chapter" data-level="7.1.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc"><i class="fa fa-check"></i><b>7.1.7</b> Check ICC</a></li>
+<li class="chapter" data-level="7.1.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel"><i class="fa fa-check"></i><b>7.1.8</b> Outcome Analsis: Multilevel</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccragg24"><i class="fa fa-check"></i><b>7.2</b> cccragg24</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data-1"><i class="fa fa-check"></i><b>7.2.1</b> Import Data</a></li>
+<li class="chapter" data-level="7.2.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score-1"><i class="fa fa-check"></i><b>7.2.2</b> Obtain Single-Level p-score</a></li>
+<li class="chapter" data-level="7.2.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model-1"><i class="fa fa-check"></i><b>7.2.3</b> Obtain School-Level p-score Model</a></li>
+<li class="chapter" data-level="7.2.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check-1"><i class="fa fa-check"></i><b>7.2.4</b> Before-Matching Balance Check</a></li>
+<li class="chapter" data-level="7.2.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl-1"><i class="fa fa-check"></i><b>7.2.5</b> Matching with ps_sgl</a></li>
+<li class="chapter" data-level="7.2.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch-1"><i class="fa fa-check"></i><b>7.2.6</b> Matching with ps_sch</a></li>
+<li class="chapter" data-level="7.2.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc-1"><i class="fa fa-check"></i><b>7.2.7</b> Check ICC</a></li>
+<li class="chapter" data-level="7.2.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel-1"><i class="fa fa-check"></i><b>7.2.8</b> Outcome Analsis: Multilevel</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html"><i class="fa fa-check"></i><b>8</b> Section 5.8.6 Comparison of Rand-gbm and Stata-boost (PS)</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#import-data-2"><i class="fa fa-check"></i><b>8.1</b> Import Data</a></li>
+<li class="chapter" data-level="8.2" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-rand-gbm-ps"><i class="fa fa-check"></i><b>8.2</b> Optimal pair matching Using pscores generated by Rand-gbm (ps)</a></li>
+<li class="chapter" data-level="8.3" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-stata-boost-psb"><i class="fa fa-check"></i><b>8.3</b> Optimal pair matching Using pscores generated by Stata-boost (psb)</a></li>
+<li class="chapter" data-level="8.4" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#balance-checks"><i class="fa fa-check"></i><b>8.4</b> Balance Checks</a></li>
+<li class="chapter" data-level="8.5" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#postmatching-regression-analysis-using-difference-scores"><i class="fa fa-check"></i><b>8.5</b> Postmatching Regression Analysis Using Difference Scores</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html"><i class="fa fa-check"></i><b>9</b> Section 6.5.2 Subclassification &amp; Cox Proportional Hazards (PS)</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#import-data-3"><i class="fa fa-check"></i><b>9.1</b> Import Data</a></li>
+<li class="chapter" data-level="9.2" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-propensity-score-using-logistic"><i class="fa fa-check"></i><b>9.2</b> Create Propensity Score Using Logistic</a></li>
+<li class="chapter" data-level="9.3" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-conduct-balance-check-using-normalized-difference"><i class="fa fa-check"></i><b>9.3</b> Function to Conduct Balance Check Using Normalized Difference</a></li>
+<li class="chapter" data-level="9.4" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-normalized-difference"><i class="fa fa-check"></i><b>9.4</b> Balance Check on the Original Sample (Normalized Difference)</a></li>
+<li class="chapter" data-level="9.5" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-check-balance-using-chi-square-tests"><i class="fa fa-check"></i><b>9.5</b> Function to Check Balance Using Chi-Square Tests</a></li>
+<li class="chapter" data-level="9.6" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-chi-square"><i class="fa fa-check"></i><b>9.6</b> Balance Check on the Original Sample (Chi-Square)</a></li>
+<li class="chapter" data-level="9.7" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#get-quintiles"><i class="fa fa-check"></i><b>9.7</b> Get Quintiles</a></li>
+<li class="chapter" data-level="9.8" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-subclasses-using-quintiles"><i class="fa fa-check"></i><b>9.8</b> Create 5 Subclasses Using Quintiles</a></li>
+<li class="chapter" data-level="9.9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#check-imbalance-post-subclassification-5-subclasses"><i class="fa fa-check"></i><b>9.9</b> Check Imbalance Post-Subclassification (5 Subclasses)</a></li>
+<li class="chapter" data-level="9.10" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trimming-search-for-best-cutoff-alpha-for-overlap"><i class="fa fa-check"></i><b>9.10</b> Trimming: Search for Best Cutoff Alpha for Overlap</a></li>
+<li class="chapter" data-level="9.11" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trim-observations"><i class="fa fa-check"></i><b>9.11</b> Trim Observations</a></li>
+<li class="chapter" data-level="9.12" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-new-subclasses-and-check-imbalance"><i class="fa fa-check"></i><b>9.12</b> Create 5 New Subclasses and Check Imbalance</a></li>
+<li class="chapter" data-level="9.13" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#outcome-analysis-by-subclass"><i class="fa fa-check"></i><b>9.13</b> Outcome Analysis by Subclass</a></li>
+<li class="chapter" data-level="9.14" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#aggregate-results"><i class="fa fa-check"></i><b>9.14</b> Aggregate Results</a></li>
+<li class="chapter" data-level="9.15" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#subclassification-with-matchit"><i class="fa fa-check"></i><b>9.15</b> Subclassification with MatchIt</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html"><i class="fa fa-check"></i><b>10</b> Section 7.3.1 Propensity Score Weighting (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#preparation-4"><i class="fa fa-check"></i><b>10.1</b> Preparation</a></li>
+<li class="chapter" data-level="10.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-1-obtain-weights-with-weightit"><i class="fa fa-check"></i><b>10.2</b> Solution 1: Obtain Weights with WeightIt</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights"><i class="fa fa-check"></i><b>10.2.1</b> Weights</a></li>
+<li class="chapter" data-level="10.2.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights"><i class="fa fa-check"></i><b>10.2.2</b> PSW With ATE Weights</a></li>
+<li class="chapter" data-level="10.2.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights"><i class="fa fa-check"></i><b>10.2.3</b> PSW With ATT Weights</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-2-creating-the-weights-manually"><i class="fa fa-check"></i><b>10.3</b> Solution 2: Creating the Weights Manually</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights-1"><i class="fa fa-check"></i><b>10.3.1</b> Weights</a></li>
+<li class="chapter" data-level="10.3.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights-1"><i class="fa fa-check"></i><b>10.3.2</b> PSW With ATE Weights</a></li>
+<li class="chapter" data-level="10.3.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights-1"><i class="fa fa-check"></i><b>10.3.3</b> PSW With ATT Weights</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#imbalance-checks"><i class="fa fa-check"></i><b>10.4</b> Imbalance Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html"><i class="fa fa-check"></i><b>11</b> Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#preparation-5"><i class="fa fa-check"></i><b>11.1</b> Preparation</a></li>
+<li class="chapter" data-level="11.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#propensity-score-weighting"><i class="fa fa-check"></i><b>11.2</b> Propensity Score Weighting</a></li>
+<li class="chapter" data-level="11.3" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#cox-proportional-hazards-model"><i class="fa fa-check"></i><b>11.3</b> Cox Proportional Hazards Model</a></li>
+<li class="chapter" data-level="11.4" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#checking-imbalance"><i class="fa fa-check"></i><b>11.4</b> Checking Imbalance</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#chi-square-tests-original-sample"><i class="fa fa-check"></i><b>11.4.1</b> Chi-square Tests: Original Sample</a></li>
+<li class="chapter" data-level="11.4.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#weighted-logistic-regression"><i class="fa fa-check"></i><b>11.4.2</b> Weighted Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html"><i class="fa fa-check"></i><b>12</b> Section 8.4.1 Matching with Bias-Corrected and Robust Variance Estimators (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#preparation-6"><i class="fa fa-check"></i><b>12.1</b> Preparation</a></li>
+<li class="chapter" data-level="12.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#breusch-pagan-test-for-heteroskedasticity"><i class="fa fa-check"></i><b>12.2</b> Breusch-Pagan Test for Heteroskedasticity</a></li>
+<li class="chapter" data-level="12.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#matching-estimators"><i class="fa fa-check"></i><b>12.3</b> Matching Estimators</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-sate"><i class="fa fa-check"></i><b>12.3.1</b> Sample Average Treatment Effect (SATE)</a></li>
+<li class="chapter" data-level="12.3.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-pate"><i class="fa fa-check"></i><b>12.3.2</b> Population Average Treatment Effect (PATE)</a></li>
+<li class="chapter" data-level="12.3.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-treated-satt"><i class="fa fa-check"></i><b>12.3.3</b> Sample average treatment effect for the treated (SATT)</a></li>
+<li class="chapter" data-level="12.3.4" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-treated-patt"><i class="fa fa-check"></i><b>12.3.4</b> Population average treatment effect for the treated (PATT)</a></li>
+<li class="chapter" data-level="12.3.5" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-controls-satc"><i class="fa fa-check"></i><b>12.3.5</b> Sample average treatment effect for the controls (SATC)</a></li>
+<li class="chapter" data-level="12.3.6" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-controls-patc"><i class="fa fa-check"></i><b>12.3.6</b> Population average treatment effect for the controls (PATC)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html"><i class="fa fa-check"></i><b>13</b> Section 8.4.2 Efficacy Subset &amp; Matching Estimators (PS)</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#check-sample-sizes-and-get-summary-statistics"><i class="fa fa-check"></i><b>13.1</b> Check Sample Sizes and Get Summary Statistics</a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4adq"><i class="fa fa-check"></i><b>13.1.1</b> g4adq</a></li>
+<li class="chapter" data-level="13.1.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4hi"><i class="fa fa-check"></i><b>13.1.2</b> g4hi</a></li>
+<li class="chapter" data-level="13.1.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5adq"><i class="fa fa-check"></i><b>13.1.3</b> g5adq</a></li>
+<li class="chapter" data-level="13.1.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5hi"><i class="fa fa-check"></i><b>13.1.4</b> g5hi</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#functions-for-matching"><i class="fa fa-check"></i><b>13.2</b> Functions for Matching</a></li>
+<li class="chapter" data-level="13.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#define-matching-variables"><i class="fa fa-check"></i><b>13.3</b> Define Matching Variables</a></li>
+<li class="chapter" data-level="13.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#matching-1"><i class="fa fa-check"></i><b>13.4</b> Matching</a></li>
+<li class="chapter" data-level="13.5" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#function-to-aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.5</b> Function to Aggregate Using Rubin’s Rule</a></li>
+<li class="chapter" data-level="13.6" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.6</b> Aggregate Using Rubin’s Rule</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html"><i class="fa fa-check"></i><b>14</b> Section 10.6.1 Modeling Doses of Treatment (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#preparation-7"><i class="fa fa-check"></i><b>14.1</b> Preparation</a></li>
+<li class="chapter" data-level="14.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#create-treatment-variable"><i class="fa fa-check"></i><b>14.2</b> Create Treatment Variable</a></li>
+<li class="chapter" data-level="14.3" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#generalized-propensity-scores"><i class="fa fa-check"></i><b>14.3</b> Generalized Propensity Scores</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#mulitinomial-logit-model"><i class="fa fa-check"></i><b>14.3.1</b> Mulitinomial Logit Model</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#sampling-weights"><i class="fa fa-check"></i><b>14.4</b> Sampling Weights</a></li>
+<li class="chapter" data-level="14.5" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#dummy-variables"><i class="fa fa-check"></i><b>14.5</b> Dummy Variables</a></li>
+<li class="chapter" data-level="14.6" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#regression"><i class="fa fa-check"></i><b>14.6</b> Regression</a>
+<ul>
+<li class="chapter" data-level="14.6.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#without-control"><i class="fa fa-check"></i><b>14.6.1</b> Without Control</a></li>
+<li class="chapter" data-level="14.6.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#with-control"><i class="fa fa-check"></i><b>14.6.2</b> With Control</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html"><i class="fa fa-check"></i><b>15</b> Section 11.5.1 &amp; 11.5.2 Sensitivity Analysis of the Effects (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.1-sensitivity-analysis-of-the-effects"><i class="fa fa-check"></i><b>15.1</b> Section 11.5.1 Sensitivity Analysis of the Effects</a></li>
+<li class="chapter" data-level="15.2" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.2-sensitivity-analysis-pair-matching"><i class="fa fa-check"></i><b>15.2</b> Section 11.5.2 Sensitivity Analysis &amp; Pair Matching</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Code for <em>Propensity Score Analysis</em></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="section-7.3.2-propensity-score-weighting-with-a-cox-proportional-hazards-model-sd-ps" class="section level1" number="11">
+<h1><span class="header-section-number">11</span> Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD &amp; PS)</h1>
+<div id="preparation-5" class="section level2" number="11.1">
+<h2><span class="header-section-number">11.1</span> Preparation</h2>
+<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb532-1"><a href="10_Section7.3.2.html#cb532-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(WeightIt)</span>
+<span id="cb532-2"><a href="10_Section7.3.2.html#cb532-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb532-3"><a href="10_Section7.3.2.html#cb532-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cobalt)</span>
+<span id="cb532-4"><a href="10_Section7.3.2.html#cb532-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb532-5"><a href="10_Section7.3.2.html#cb532-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb532-6"><a href="10_Section7.3.2.html#cb532-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sandwich)</span>
+<span id="cb532-7"><a href="10_Section7.3.2.html#cb532-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stargazer)</span>
+<span id="cb532-8"><a href="10_Section7.3.2.html#cb532-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb532-9"><a href="10_Section7.3.2.html#cb532-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb532-10"><a href="10_Section7.3.2.html#cb532-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span></code></pre></div>
+<div class="sourceCode" id="cb533"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb533-1"><a href="10_Section7.3.2.html#cb533-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
+<span id="cb533-2"><a href="10_Section7.3.2.html#cb533-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter7/survival.dta&quot;</span>)</span>
+<span id="cb533-3"><a href="10_Section7.3.2.html#cb533-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb533-4"><a href="10_Section7.3.2.html#cb533-4" aria-hidden="true" tabindex="-1"></a><span class="co"># make convenient objects</span></span>
+<span id="cb533-5"><a href="10_Section7.3.2.html#cb533-5" aria-hidden="true" tabindex="-1"></a>match_vars <span class="ot">&lt;-</span> <span class="fu">colnames</span>(<span class="fu">select</span>(d, PSH17A<span class="sc">:</span>cgneed, <span class="sc">-</span>aodserv))</span>
+<span id="cb533-6"><a href="10_Section7.3.2.html#cb533-6" aria-hidden="true" tabindex="-1"></a>psform <span class="ot">&lt;-</span> cobalt<span class="sc">::</span><span class="fu">f.build</span>(<span class="st">&quot;aodserv&quot;</span>, match_vars)</span>
+<span id="cb533-7"><a href="10_Section7.3.2.html#cb533-7" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(d)</span>
+<span id="cb533-8"><a href="10_Section7.3.2.html#cb533-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb533-9"><a href="10_Section7.3.2.html#cb533-9" aria-hidden="true" tabindex="-1"></a><span class="co"># cox_vars &lt;- colnames(select(d, aodserv:natam, chdage1:chdage3, CRA47A))</span></span></code></pre></div>
+</div>
+<div id="propensity-score-weighting" class="section level2" number="11.2">
+<h2><span class="header-section-number">11.2</span> Propensity Score Weighting</h2>
+<div class="sourceCode" id="cb534"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb534-1"><a href="10_Section7.3.2.html#cb534-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PSW</span></span>
+<span id="cb534-2"><a href="10_Section7.3.2.html#cb534-2" aria-hidden="true" tabindex="-1"></a>w_ate.out <span class="ot">&lt;-</span> WeightIt<span class="sc">::</span><span class="fu">weightit</span>(psform, <span class="at">data =</span> d, <span class="at">method =</span> <span class="st">&quot;ps&quot;</span>, <span class="at">estimand =</span> <span class="st">&quot;ATE&quot;</span>)</span>
+<span id="cb534-3"><a href="10_Section7.3.2.html#cb534-3" aria-hidden="true" tabindex="-1"></a>w_att.out <span class="ot">&lt;-</span> WeightIt<span class="sc">::</span><span class="fu">weightit</span>(psform, <span class="at">data =</span> d, <span class="at">method =</span> <span class="st">&quot;ps&quot;</span>, <span class="at">estimand =</span> <span class="st">&quot;ATT&quot;</span>)</span>
+<span id="cb534-4"><a href="10_Section7.3.2.html#cb534-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb534-5"><a href="10_Section7.3.2.html#cb534-5" aria-hidden="true" tabindex="-1"></a><span class="co"># weights</span></span>
+<span id="cb534-6"><a href="10_Section7.3.2.html#cb534-6" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb534-7"><a href="10_Section7.3.2.html#cb534-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb534-8"><a href="10_Section7.3.2.html#cb534-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">ate_w =</span> w_ate.out<span class="sc">$</span>weights,</span>
+<span id="cb534-9"><a href="10_Section7.3.2.html#cb534-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">att_w =</span> w_att.out<span class="sc">$</span>weights</span>
+<span id="cb534-10"><a href="10_Section7.3.2.html#cb534-10" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+<div id="cox-proportional-hazards-model" class="section level2" number="11.3">
+<h2><span class="header-section-number">11.3</span> Cox Proportional Hazards Model</h2>
+<div class="sourceCode" id="cb535"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb535-1"><a href="10_Section7.3.2.html#cb535-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Unweighted</span></span>
+<span id="cb535-2"><a href="10_Section7.3.2.html#cb535-2" aria-hidden="true" tabindex="-1"></a>cox_unweighted <span class="ot">&lt;-</span> survival<span class="sc">::</span><span class="fu">coxph</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv <span class="sc">+</span> married <span class="sc">+</span> high <span class="sc">+</span></span>
+<span id="cb535-3"><a href="10_Section7.3.2.html#cb535-3" aria-hidden="true" tabindex="-1"></a>  bahigh <span class="sc">+</span> poverty2 <span class="sc">+</span> poverty3 <span class="sc">+</span> poverty4 <span class="sc">+</span></span>
+<span id="cb535-4"><a href="10_Section7.3.2.html#cb535-4" aria-hidden="true" tabindex="-1"></a>  poverty5 <span class="sc">+</span> employ <span class="sc">+</span> open <span class="sc">+</span> black <span class="sc">+</span> hispanic <span class="sc">+</span></span>
+<span id="cb535-5"><a href="10_Section7.3.2.html#cb535-5" aria-hidden="true" tabindex="-1"></a>  natam <span class="sc">+</span> chdage1 <span class="sc">+</span> chdage2 <span class="sc">+</span> chdage3 <span class="sc">+</span> CRA47A,</span>
+<span id="cb535-6"><a href="10_Section7.3.2.html#cb535-6" aria-hidden="true" tabindex="-1"></a><span class="at">data =</span> d, <span class="at">robust =</span> <span class="cn">TRUE</span>, <span class="at">method =</span> <span class="st">&quot;breslow&quot;</span></span>
+<span id="cb535-7"><a href="10_Section7.3.2.html#cb535-7" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb535-8"><a href="10_Section7.3.2.html#cb535-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cox_unweighted)</span></code></pre></div>
+<pre><code>## Call:
+## survival::coxph(formula = Surv(durm, rrpt) ~ aodserv + married + 
+##     high + bahigh + poverty2 + poverty3 + poverty4 + poverty5 + 
+##     employ + open + black + hispanic + natam + chdage1 + chdage2 + 
+##     chdage3 + CRA47A, data = d, robust = TRUE, method = &quot;breslow&quot;)
+## 
+##   n= 2723, number of events= 532 
+## 
+##              coef exp(coef) se(coef) robust se      z    Pr(&gt;|z|)    
+## aodserv   0.43629   1.54696  0.12338   0.12824  3.402    0.000669 ***
+## married  -0.19946   0.81917  0.10482   0.10608 -1.880    0.060080 .  
+## high     -0.21677   0.80511  0.10022   0.10032 -2.161    0.030708 *  
+## bahigh   -0.01873   0.98144  0.12541   0.12726 -0.147    0.882978    
+## poverty2 -0.11175   0.89426  0.10975   0.11104 -1.006    0.314184    
+## poverty3 -0.33078   0.71836  0.14256   0.14337 -2.307    0.021041 *  
+## poverty4 -0.45270   0.63591  0.17390   0.17568 -2.577    0.009969 ** 
+## poverty5 -0.64854   0.52281  0.18292   0.18473 -3.511    0.000447 ***
+## employ   -0.06599   0.93614  0.09482   0.09578 -0.689    0.490847    
+## open      0.20058   1.22211  0.09404   0.09488  2.114    0.034511 *  
+## black    -0.24752   0.78074  0.10896   0.10951 -2.260    0.023808 *  
+## hispanic -0.23345   0.79180  0.13160   0.13096 -1.783    0.074652 .  
+## natam    -0.05366   0.94775  0.19263   0.19391 -0.277    0.781972    
+## chdage1  -0.35216   0.70317  0.12470   0.12544 -2.807    0.004995 ** 
+## chdage2   0.05785   1.05956  0.13712   0.13677  0.423    0.672285    
+## chdage3  -0.10431   0.90095  0.12317   0.12317 -0.847    0.397095    
+## CRA47A    0.52563   1.69152  0.09207   0.09394  5.595 0.000000022 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+##          exp(coef) exp(-coef) lower .95 upper .95
+## aodserv     1.5470     0.6464    1.2031    1.9890
+## married     0.8192     1.2207    0.6654    1.0085
+## high        0.8051     1.2421    0.6614    0.9801
+## bahigh      0.9814     1.0189    0.7648    1.2595
+## poverty2    0.8943     1.1182    0.7194    1.1117
+## poverty3    0.7184     1.3921    0.5424    0.9514
+## poverty4    0.6359     1.5725    0.4507    0.8973
+## poverty5    0.5228     1.9128    0.3640    0.7509
+## employ      0.9361     1.0682    0.7759    1.1295
+## open        1.2221     0.8183    1.0147    1.4719
+## black       0.7807     1.2808    0.6299    0.9677
+## hispanic    0.7918     1.2630    0.6125    1.0235
+## natam       0.9478     1.0551    0.6481    1.3860
+## chdage1     0.7032     1.4221    0.5499    0.8992
+## chdage2     1.0596     0.9438    0.8104    1.3853
+## chdage3     0.9009     1.1099    0.7077    1.1470
+## CRA47A      1.6915     0.5912    1.4071    2.0335
+## 
+## Concordance= 0.641  (se = 0.012 )
+## Likelihood ratio test= 128.5  on 17 df,   p=&lt;0.0000000000000002
+## Wald test            = 133.8  on 17 df,   p=&lt;0.0000000000000002
+## Score (logrank) test = 133.6  on 17 df,   p=&lt;0.0000000000000002,   Robust = 111.4  p=0.0000000000000007
+## 
+##   (Note: the likelihood ratio and score tests assume independence of
+##      observations within a cluster, the Wald and robust score tests do not).</code></pre>
+<div class="sourceCode" id="cb537"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb537-1"><a href="10_Section7.3.2.html#cb537-1" aria-hidden="true" tabindex="-1"></a><span class="do">## To get the same SE as STATA </span></span>
+<span id="cb537-2"><a href="10_Section7.3.2.html#cb537-2" aria-hidden="true" tabindex="-1"></a>cox_unweighted_sum <span class="ot">&lt;-</span> <span class="fu">summary</span>(cox_unweighted)</span>
+<span id="cb537-3"><a href="10_Section7.3.2.html#cb537-3" aria-hidden="true" tabindex="-1"></a>cox_unweighted_sum<span class="sc">$</span>coefficients[, <span class="dv">4</span>] <span class="sc">*</span> cox_unweighted_sum<span class="sc">$</span>coefficients[, <span class="dv">2</span>]</span></code></pre></div>
+<pre><code>##    aodserv    married       high     bahigh   poverty2   poverty3   poverty4 
+## 0.19838411 0.08690146 0.08076877 0.12489367 0.09929461 0.10298916 0.11171394 
+##   poverty5     employ       open      black   hispanic      natam    chdage1 
+## 0.09657851 0.08966314 0.11595167 0.08549832 0.10369423 0.18377700 0.08820606 
+##    chdage2    chdage3     CRA47A 
+## 0.14491398 0.11097396 0.15890750</code></pre>
+<div class="sourceCode" id="cb539"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb539-1"><a href="10_Section7.3.2.html#cb539-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ate-weighted</span></span>
+<span id="cb539-2"><a href="10_Section7.3.2.html#cb539-2" aria-hidden="true" tabindex="-1"></a>cox_ate <span class="ot">&lt;-</span> survival<span class="sc">::</span><span class="fu">coxph</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv <span class="sc">+</span> married <span class="sc">+</span> high <span class="sc">+</span></span>
+<span id="cb539-3"><a href="10_Section7.3.2.html#cb539-3" aria-hidden="true" tabindex="-1"></a>  bahigh <span class="sc">+</span> poverty2 <span class="sc">+</span> poverty3 <span class="sc">+</span> poverty4 <span class="sc">+</span></span>
+<span id="cb539-4"><a href="10_Section7.3.2.html#cb539-4" aria-hidden="true" tabindex="-1"></a>  poverty5 <span class="sc">+</span> employ <span class="sc">+</span> open <span class="sc">+</span> black <span class="sc">+</span> hispanic <span class="sc">+</span></span>
+<span id="cb539-5"><a href="10_Section7.3.2.html#cb539-5" aria-hidden="true" tabindex="-1"></a>  natam <span class="sc">+</span> chdage1 <span class="sc">+</span> chdage2 <span class="sc">+</span> chdage3 <span class="sc">+</span> CRA47A,</span>
+<span id="cb539-6"><a href="10_Section7.3.2.html#cb539-6" aria-hidden="true" tabindex="-1"></a><span class="at">data =</span> d, <span class="at">weights =</span> d<span class="sc">$</span>ate_w, <span class="at">robust =</span> <span class="cn">TRUE</span>, <span class="at">method =</span> <span class="st">&quot;breslow&quot;</span></span>
+<span id="cb539-7"><a href="10_Section7.3.2.html#cb539-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb539-8"><a href="10_Section7.3.2.html#cb539-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cox_ate)</span></code></pre></div>
+<pre><code>## Call:
+## survival::coxph(formula = Surv(durm, rrpt) ~ aodserv + married + 
+##     high + bahigh + poverty2 + poverty3 + poverty4 + poverty5 + 
+##     employ + open + black + hispanic + natam + chdage1 + chdage2 + 
+##     chdage3 + CRA47A, data = d, weights = d$ate_w, robust = TRUE, 
+##     method = &quot;breslow&quot;)
+## 
+##   n= 2723, number of events= 532 
+## 
+##              coef exp(coef) se(coef) robust se      z Pr(&gt;|z|)    
+## aodserv   0.82002   2.27054  0.05935   0.19125  4.288 0.000018 ***
+## married  -0.28812   0.74967  0.07306   0.23468 -1.228 0.219563    
+## high     -0.17885   0.83624  0.07223   0.21053 -0.850 0.395596    
+## bahigh    0.16512   1.17954  0.08647   0.23794  0.694 0.487701    
+## poverty2 -0.10663   0.89886  0.07123   0.21092 -0.506 0.613188    
+## poverty3 -1.07400   0.34164  0.10778   0.29654 -3.622 0.000293 ***
+## poverty4 -1.39662   0.24743  0.13092   0.41690 -3.350 0.000808 ***
+## poverty5 -1.21359   0.29713  0.12509   0.37780 -3.212 0.001317 ** 
+## employ    0.44994   1.56822  0.06503   0.19769  2.276 0.022844 *  
+## open      0.12827   1.13687  0.06137   0.21616  0.593 0.552894    
+## black    -0.17296   0.84117  0.07031   0.20882 -0.828 0.407520    
+## hispanic -0.34897   0.70542  0.10256   0.23825 -1.465 0.143001    
+## natam    -0.13681   0.87213  0.12556   0.30898 -0.443 0.657909    
+## chdage1  -0.79260   0.45267  0.08351   0.34256 -2.314 0.020683 *  
+## chdage2  -0.08189   0.92138  0.09205   0.38506 -0.213 0.831595    
+## chdage3   0.03454   1.03515  0.07875   0.31387  0.110 0.912365    
+## CRA47A   -0.03167   0.96882  0.06419   0.20188 -0.157 0.875325    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+##          exp(coef) exp(-coef) lower .95 upper .95
+## aodserv     2.2705     0.4404    1.5608    3.3031
+## married     0.7497     1.3339    0.4733    1.1875
+## high        0.8362     1.1958    0.5535    1.2634
+## bahigh      1.1795     0.8478    0.7399    1.8804
+## poverty2    0.8989     1.1125    0.5945    1.3590
+## poverty3    0.3416     2.9271    0.1911    0.6109
+## poverty4    0.2474     4.0415    0.1093    0.5602
+## poverty5    0.2971     3.3655    0.1417    0.6231
+## employ      1.5682     0.6377    1.0645    2.3104
+## open        1.1369     0.8796    0.7442    1.7366
+## black       0.8412     1.1888    0.5586    1.2666
+## hispanic    0.7054     1.4176    0.4422    1.1252
+## natam       0.8721     1.1466    0.4760    1.5980
+## chdage1     0.4527     2.2091    0.2313    0.8859
+## chdage2     0.9214     1.0853    0.4332    1.9598
+## chdage3     1.0351     0.9660    0.5595    1.9150
+## CRA47A      0.9688     1.0322    0.6522    1.4391
+## 
+## Concordance= 0.689  (se = 0.031 )
+## Likelihood ratio test= 675  on 17 df,   p=&lt;0.0000000000000002
+## Wald test            = 72.32  on 17 df,   p=0.000000009
+## Score (logrank) test = 645  on 17 df,   p=&lt;0.0000000000000002,   Robust = 33.97  p=0.008
+## 
+##   (Note: the likelihood ratio and score tests assume independence of
+##      observations within a cluster, the Wald and robust score tests do not).</code></pre>
+<div class="sourceCode" id="cb541"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb541-1"><a href="10_Section7.3.2.html#cb541-1" aria-hidden="true" tabindex="-1"></a><span class="do">## To get the same SE as STATA </span></span>
+<span id="cb541-2"><a href="10_Section7.3.2.html#cb541-2" aria-hidden="true" tabindex="-1"></a>cox_ate_sum <span class="ot">&lt;-</span> <span class="fu">summary</span>(cox_ate)</span>
+<span id="cb541-3"><a href="10_Section7.3.2.html#cb541-3" aria-hidden="true" tabindex="-1"></a>cox_ate_sum<span class="sc">$</span>coefficients[, <span class="dv">4</span>] <span class="sc">*</span> cox_ate_sum<span class="sc">$</span>coefficients[, <span class="dv">2</span>]</span></code></pre></div>
+<pre><code>##   aodserv   married      high    bahigh  poverty2  poverty3  poverty4  poverty5 
+## 0.4342308 0.1759354 0.1760497 0.2806583 0.1895879 0.1013106 0.1031550 0.1122553 
+##    employ      open     black  hispanic     natam   chdage1   chdage2   chdage3 
+## 0.3100188 0.2457423 0.1756552 0.1680654 0.2694677 0.1550674 0.3547854 0.3249059 
+##    CRA47A 
+## 0.1955821</code></pre>
+<div class="sourceCode" id="cb543"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb543-1"><a href="10_Section7.3.2.html#cb543-1" aria-hidden="true" tabindex="-1"></a><span class="co"># att-weighted</span></span>
+<span id="cb543-2"><a href="10_Section7.3.2.html#cb543-2" aria-hidden="true" tabindex="-1"></a>cox_att <span class="ot">&lt;-</span> survival<span class="sc">::</span><span class="fu">coxph</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv <span class="sc">+</span> married <span class="sc">+</span> high <span class="sc">+</span></span>
+<span id="cb543-3"><a href="10_Section7.3.2.html#cb543-3" aria-hidden="true" tabindex="-1"></a>  bahigh <span class="sc">+</span> poverty2 <span class="sc">+</span> poverty3 <span class="sc">+</span> poverty4 <span class="sc">+</span></span>
+<span id="cb543-4"><a href="10_Section7.3.2.html#cb543-4" aria-hidden="true" tabindex="-1"></a>  poverty5 <span class="sc">+</span> employ <span class="sc">+</span> open <span class="sc">+</span> black <span class="sc">+</span> hispanic <span class="sc">+</span></span>
+<span id="cb543-5"><a href="10_Section7.3.2.html#cb543-5" aria-hidden="true" tabindex="-1"></a>  natam <span class="sc">+</span> chdage1 <span class="sc">+</span> chdage2 <span class="sc">+</span> chdage3 <span class="sc">+</span> CRA47A,</span>
+<span id="cb543-6"><a href="10_Section7.3.2.html#cb543-6" aria-hidden="true" tabindex="-1"></a><span class="at">data =</span> d, <span class="at">weights =</span> d<span class="sc">$</span>att_w, <span class="at">robust =</span> <span class="cn">TRUE</span>, <span class="at">method =</span> <span class="st">&quot;breslow&quot;</span></span>
+<span id="cb543-7"><a href="10_Section7.3.2.html#cb543-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb543-8"><a href="10_Section7.3.2.html#cb543-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cox_att)</span></code></pre></div>
+<pre><code>## Call:
+## survival::coxph(formula = Surv(durm, rrpt) ~ aodserv + married + 
+##     high + bahigh + poverty2 + poverty3 + poverty4 + poverty5 + 
+##     employ + open + black + hispanic + natam + chdage1 + chdage2 + 
+##     chdage3 + CRA47A, data = d, weights = d$att_w, robust = TRUE, 
+##     method = &quot;breslow&quot;)
+## 
+##   n= 2723, number of events= 532 
+## 
+##                coef  exp(coef)   se(coef)  robust se      z Pr(&gt;|z|)   
+## aodserv   0.4024749  1.4955213  0.1654058  0.1885616  2.134  0.03281 * 
+## married  -0.0356362  0.9649913  0.2068842  0.2194889 -0.162  0.87102   
+## high     -0.0452240  0.9557834  0.1889715  0.2108417 -0.214  0.83016   
+## bahigh    0.0273484  1.0277258  0.2637680  0.2499191  0.109  0.91286   
+## poverty2  0.0599967  1.0618331  0.1903748  0.2261497  0.265  0.79078   
+## poverty3 -0.9944343  0.3699327  0.3468869  0.3296811 -3.016  0.00256 **
+## poverty4 -0.7360582  0.4789983  0.3363917  0.4389999 -1.677  0.09361 . 
+## poverty5 -0.8467160  0.4288209  0.3491816  0.3742472 -2.262  0.02367 * 
+## employ    0.0419691  1.0428622  0.1850729  0.1983783  0.212  0.83245   
+## open     -0.2228788  0.8002118  0.1923686  0.2125882 -1.048  0.29445   
+## black    -0.3530099  0.7025703  0.2013714  0.2370435 -1.489  0.13643   
+## hispanic -0.1302114  0.8779098  0.2717197  0.2681017 -0.486  0.62719   
+## natam     0.0008848  1.0008852  0.2941011  0.3749287  0.002  0.99812   
+## chdage1  -0.4153232  0.6601269  0.2503525  0.2538362 -1.636  0.10180   
+## chdage2   0.2547951  1.2901972  0.2824613  0.2894612  0.880  0.37873   
+## chdage3   0.1399171  1.1501785  0.2766948  0.2526171  0.554  0.57967   
+## CRA47A    0.3135977  1.3683392  0.1676588  0.1806791  1.736  0.08262 . 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+##          exp(coef) exp(-coef) lower .95 upper .95
+## aodserv     1.4955     0.6687    1.0334    2.1642
+## married     0.9650     1.0363    0.6276    1.4837
+## high        0.9558     1.0463    0.6323    1.4449
+## bahigh      1.0277     0.9730    0.6297    1.6773
+## poverty2    1.0618     0.9418    0.6816    1.6541
+## poverty3    0.3699     2.7032    0.1939    0.7059
+## poverty4    0.4790     2.0877    0.2026    1.1324
+## poverty5    0.4288     2.3320    0.2059    0.8930
+## employ      1.0429     0.9589    0.7069    1.5385
+## open        0.8002     1.2497    0.5275    1.2138
+## black       0.7026     1.4233    0.4415    1.1181
+## hispanic    0.8779     1.1391    0.5191    1.4848
+## natam       1.0009     0.9991    0.4800    2.0870
+## chdage1     0.6601     1.5149    0.4014    1.0857
+## chdage2     1.2902     0.7751    0.7316    2.2753
+## chdage3     1.1502     0.8694    0.7010    1.8871
+## CRA47A      1.3683     0.7308    0.9603    1.9498
+## 
+## Concordance= 0.668  (se = 0.027 )
+## Likelihood ratio test= 52.26  on 17 df,   p=0.00002
+## Wald test            = 48.9  on 17 df,   p=0.00006
+## Score (logrank) test = 50.57  on 17 df,   p=0.00003,   Robust = 39.38  p=0.002
+## 
+##   (Note: the likelihood ratio and score tests assume independence of
+##      observations within a cluster, the Wald and robust score tests do not).</code></pre>
+<div class="sourceCode" id="cb545"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb545-1"><a href="10_Section7.3.2.html#cb545-1" aria-hidden="true" tabindex="-1"></a><span class="do">## To get the same SE as STATA </span></span>
+<span id="cb545-2"><a href="10_Section7.3.2.html#cb545-2" aria-hidden="true" tabindex="-1"></a>cox_att_sum <span class="ot">&lt;-</span> <span class="fu">summary</span>(cox_att)</span>
+<span id="cb545-3"><a href="10_Section7.3.2.html#cb545-3" aria-hidden="true" tabindex="-1"></a>cox_att_sum<span class="sc">$</span>coefficients[, <span class="dv">4</span>] <span class="sc">*</span> cox_att_sum<span class="sc">$</span>coefficients[, <span class="dv">2</span>]</span></code></pre></div>
+<pre><code>##   aodserv   married      high    bahigh  poverty2  poverty3  poverty4  poverty5 
+## 0.2819979 0.2118049 0.2015190 0.2568483 0.2401332 0.1219598 0.2102802 0.1604850 
+##    employ      open     black  hispanic     natam   chdage1   chdage2   chdage3 
+## 0.2068812 0.1701156 0.1665397 0.2353691 0.3752606 0.1675641 0.3734621 0.2905547 
+##    CRA47A 
+## 0.2472303</code></pre>
+</div>
+<div id="checking-imbalance" class="section level2" number="11.4">
+<h2><span class="header-section-number">11.4</span> Checking Imbalance</h2>
+<div id="chi-square-tests-original-sample" class="section level3" number="11.4.1">
+<h3><span class="header-section-number">11.4.1</span> Chi-square Tests: Original Sample</h3>
+<div class="sourceCode" id="cb547"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb547-1"><a href="10_Section7.3.2.html#cb547-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check balance using chi-squared tests</span></span>
+<span id="cb547-2"><a href="10_Section7.3.2.html#cb547-2" aria-hidden="true" tabindex="-1"></a>check_balance <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb547-3"><a href="10_Section7.3.2.html#cb547-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb547-4"><a href="10_Section7.3.2.html#cb547-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># List of covariates to check balance</span></span>
+<span id="cb547-5"><a href="10_Section7.3.2.html#cb547-5" aria-hidden="true" tabindex="-1"></a>  covs <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb547-6"><a href="10_Section7.3.2.html#cb547-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;married&quot;</span>, <span class="st">&quot;educ&quot;</span>, <span class="st">&quot;pov&quot;</span>, <span class="st">&quot;employ&quot;</span>, <span class="st">&quot;open&quot;</span>, <span class="st">&quot;race&quot;</span>,</span>
+<span id="cb547-7"><a href="10_Section7.3.2.html#cb547-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;chdage&quot;</span>, <span class="st">&quot;cgage&quot;</span>, <span class="st">&quot;CRA47A&quot;</span>, <span class="st">&quot;mental&quot;</span>,</span>
+<span id="cb547-8"><a href="10_Section7.3.2.html#cb547-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;arrest&quot;</span>, <span class="st">&quot;PSH17A&quot;</span>, <span class="st">&quot;maltx&quot;</span>, <span class="st">&quot;ra&quot;</span>, <span class="st">&quot;cidi&quot;</span>, <span class="st">&quot;cgneed&quot;</span></span>
+<span id="cb547-9"><a href="10_Section7.3.2.html#cb547-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb547-10"><a href="10_Section7.3.2.html#cb547-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb547-11"><a href="10_Section7.3.2.html#cb547-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Function to calculate chisq.test p-values</span></span>
+<span id="cb547-12"><a href="10_Section7.3.2.html#cb547-12" aria-hidden="true" tabindex="-1"></a>  calc <span class="ot">&lt;-</span> <span class="cf">function</span>(cov) {</span>
+<span id="cb547-13"><a href="10_Section7.3.2.html#cb547-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb547-14"><a href="10_Section7.3.2.html#cb547-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">covariate =</span> cov,</span>
+<span id="cb547-15"><a href="10_Section7.3.2.html#cb547-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">p =</span> <span class="fu">chisq.test</span>(df[cov], df<span class="sc">$</span>aodserv)<span class="sc">$</span>p.value</span>
+<span id="cb547-16"><a href="10_Section7.3.2.html#cb547-16" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb547-17"><a href="10_Section7.3.2.html#cb547-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb547-18"><a href="10_Section7.3.2.html#cb547-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb547-19"><a href="10_Section7.3.2.html#cb547-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate chisq.test for each covariate</span></span>
+<span id="cb547-20"><a href="10_Section7.3.2.html#cb547-20" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(covs, calc) <span class="sc">%&gt;%</span></span>
+<span id="cb547-21"><a href="10_Section7.3.2.html#cb547-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">sig =</span> <span class="fu">ifelse</span>(p <span class="sc">&lt;</span> <span class="fl">0.05</span>, <span class="st">&quot;sig&quot;</span>, <span class="st">&quot;not sig&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb547-22"><a href="10_Section7.3.2.html#cb547-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p =</span> <span class="fu">round</span>(p, <span class="dv">2</span>))</span>
+<span id="cb547-23"><a href="10_Section7.3.2.html#cb547-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb547-24"><a href="10_Section7.3.2.html#cb547-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get covariates that did not overlap sufficiently (p &lt; .05)</span></span>
+<span id="cb547-25"><a href="10_Section7.3.2.html#cb547-25" aria-hidden="true" tabindex="-1"></a>  results_sig <span class="ot">&lt;-</span> results <span class="sc">%&gt;%</span></span>
+<span id="cb547-26"><a href="10_Section7.3.2.html#cb547-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(sig <span class="sc">==</span> <span class="st">&quot;sig&quot;</span>)</span>
+<span id="cb547-27"><a href="10_Section7.3.2.html#cb547-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb547-28"><a href="10_Section7.3.2.html#cb547-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return results</span></span>
+<span id="cb547-29"><a href="10_Section7.3.2.html#cb547-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">table =</span> results, <span class="at">sig =</span> <span class="fu">toupper</span>(results_sig<span class="sc">$</span>covariate)))</span>
+<span id="cb547-30"><a href="10_Section7.3.2.html#cb547-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb547-31"><a href="10_Section7.3.2.html#cb547-31" aria-hidden="true" tabindex="-1"></a><span class="fu">check_balance</span>(d)</span></code></pre></div>
+<pre><code>## $table
+##    covariate    p     sig
+## 1    married 0.07 not sig
+## 2       educ 0.01     sig
+## 3        pov 0.02     sig
+## 4     employ 0.00     sig
+## 5       open 0.00     sig
+## 6       race 0.01     sig
+## 7     chdage 0.00     sig
+## 8      cgage 0.26 not sig
+## 9     CRA47A 0.00     sig
+## 10    mental 0.00     sig
+## 11    arrest 0.00     sig
+## 12    PSH17A 0.00     sig
+## 13     maltx 0.00     sig
+## 14        ra 0.00     sig
+## 15      cidi 0.00     sig
+## 16    cgneed 0.00     sig
+## 
+## $sig
+##  [1] &quot;EDUC&quot;   &quot;POV&quot;    &quot;EMPLOY&quot; &quot;OPEN&quot;   &quot;RACE&quot;   &quot;CHDAGE&quot; &quot;CRA47A&quot; &quot;MENTAL&quot;
+##  [9] &quot;ARREST&quot; &quot;PSH17A&quot; &quot;MALTX&quot;  &quot;RA&quot;     &quot;CIDI&quot;   &quot;CGNEED&quot;</code></pre>
+</div>
+<div id="weighted-logistic-regression" class="section level3" number="11.4.2">
+<h3><span class="header-section-number">11.4.2</span> Weighted Logistic Regression</h3>
+<p>Note that a custom function by Jorge Cimentada is used to replicate the robust standard errors in Stata.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<div class="sourceCode" id="cb549"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb549-1"><a href="10_Section7.3.2.html#cb549-1" aria-hidden="true" tabindex="-1"></a>robustse <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">coef =</span> <span class="fu">c</span>(<span class="st">&quot;logit&quot;</span>, <span class="st">&quot;odd.ratio&quot;</span>, <span class="st">&quot;probs&quot;</span>)) {</span>
+<span id="cb549-2"><a href="10_Section7.3.2.html#cb549-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">suppressMessages</span>(<span class="fu">suppressWarnings</span>(<span class="fu">library</span>(lmtest)))</span>
+<span id="cb549-3"><a href="10_Section7.3.2.html#cb549-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">suppressMessages</span>(<span class="fu">suppressWarnings</span>(<span class="fu">library</span>(sandwich)))</span>
+<span id="cb549-4"><a href="10_Section7.3.2.html#cb549-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb549-5"><a href="10_Section7.3.2.html#cb549-5" aria-hidden="true" tabindex="-1"></a>  sandwich1 <span class="ot">&lt;-</span> <span class="cf">function</span>(object, ...) {</span>
+<span id="cb549-6"><a href="10_Section7.3.2.html#cb549-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sandwich</span>(object) <span class="sc">*</span></span>
+<span id="cb549-7"><a href="10_Section7.3.2.html#cb549-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">nobs</span>(object) <span class="sc">/</span> (<span class="fu">nobs</span>(object) <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb549-8"><a href="10_Section7.3.2.html#cb549-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb549-9"><a href="10_Section7.3.2.html#cb549-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Function calculates SE&#39;s</span></span>
+<span id="cb549-10"><a href="10_Section7.3.2.html#cb549-10" aria-hidden="true" tabindex="-1"></a>  mod1 <span class="ot">&lt;-</span> <span class="fu">coeftest</span>(x, <span class="at">vcov =</span> sandwich1)</span>
+<span id="cb549-11"><a href="10_Section7.3.2.html#cb549-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># apply the function over the variance-covariance matrix</span></span>
+<span id="cb549-12"><a href="10_Section7.3.2.html#cb549-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb549-13"><a href="10_Section7.3.2.html#cb549-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (coef <span class="sc">==</span> <span class="st">&quot;logit&quot;</span>) {</span>
+<span id="cb549-14"><a href="10_Section7.3.2.html#cb549-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(mod1) <span class="co"># return logit with robust SE&#39;s</span></span>
+<span id="cb549-15"><a href="10_Section7.3.2.html#cb549-15" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (coef <span class="sc">==</span> <span class="st">&quot;odd.ratio&quot;</span>) {</span>
+<span id="cb549-16"><a href="10_Section7.3.2.html#cb549-16" aria-hidden="true" tabindex="-1"></a>    mod1[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">exp</span>(mod1[, <span class="dv">1</span>]) <span class="co"># return odd ratios with robust SE&#39;s</span></span>
+<span id="cb549-17"><a href="10_Section7.3.2.html#cb549-17" aria-hidden="true" tabindex="-1"></a>    mod1[, <span class="dv">2</span>] <span class="ot">&lt;-</span> mod1[, <span class="dv">1</span>] <span class="sc">*</span> mod1[, <span class="dv">2</span>]</span>
+<span id="cb549-18"><a href="10_Section7.3.2.html#cb549-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(mod1)</span>
+<span id="cb549-19"><a href="10_Section7.3.2.html#cb549-19" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb549-20"><a href="10_Section7.3.2.html#cb549-20" aria-hidden="true" tabindex="-1"></a>    mod1[, <span class="dv">1</span>] <span class="ot">&lt;-</span> (mod1[, <span class="dv">1</span>] <span class="sc">/</span> <span class="dv">4</span>) <span class="co"># return probabilites with robust SE&#39;s</span></span>
+<span id="cb549-21"><a href="10_Section7.3.2.html#cb549-21" aria-hidden="true" tabindex="-1"></a>    mod1[, <span class="dv">2</span>] <span class="ot">&lt;-</span> mod1[, <span class="dv">2</span>] <span class="sc">/</span> <span class="dv">4</span></span>
+<span id="cb549-22"><a href="10_Section7.3.2.html#cb549-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(mod1)</span>
+<span id="cb549-23"><a href="10_Section7.3.2.html#cb549-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb549-24"><a href="10_Section7.3.2.html#cb549-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb549-25"><a href="10_Section7.3.2.html#cb549-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb549-26"><a href="10_Section7.3.2.html#cb549-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables to check balance</span></span>
+<span id="cb549-27"><a href="10_Section7.3.2.html#cb549-27" aria-hidden="true" tabindex="-1"></a>w_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb549-28"><a href="10_Section7.3.2.html#cb549-28" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;married&quot;</span>, <span class="st">&quot;high&quot;</span>, <span class="st">&quot;bahigh&quot;</span>, <span class="st">&quot;poverty2&quot;</span>, <span class="st">&quot;poverty3&quot;</span>, <span class="st">&quot;poverty4&quot;</span>,</span>
+<span id="cb549-29"><a href="10_Section7.3.2.html#cb549-29" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;poverty5&quot;</span>, <span class="st">&quot;employ&quot;</span>, <span class="st">&quot;open&quot;</span>, <span class="st">&quot;black&quot;</span>, <span class="st">&quot;hispanic&quot;</span>, <span class="st">&quot;natam&quot;</span>,</span>
+<span id="cb549-30"><a href="10_Section7.3.2.html#cb549-30" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;chdage1&quot;</span>, <span class="st">&quot;chdage2&quot;</span>, <span class="st">&quot;chdage3&quot;</span>, <span class="st">&quot;cgrage1&quot;</span>, <span class="st">&quot;cgrage2&quot;</span>, <span class="st">&quot;cgrage3&quot;</span>,</span>
+<span id="cb549-31"><a href="10_Section7.3.2.html#cb549-31" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;CRA47A&quot;</span>, <span class="st">&quot;mental&quot;</span>, <span class="st">&quot;arrest&quot;</span>, <span class="st">&quot;PSH17A&quot;</span>, <span class="st">&quot;sexual&quot;</span>, <span class="st">&quot;provide&quot;</span>,</span>
+<span id="cb549-32"><a href="10_Section7.3.2.html#cb549-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;supervis&quot;</span>, <span class="st">&quot;other&quot;</span>, <span class="st">&quot;ra&quot;</span>, <span class="st">&quot;cidi&quot;</span>, <span class="st">&quot;cgneed&quot;</span></span>
+<span id="cb549-33"><a href="10_Section7.3.2.html#cb549-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb549-34"><a href="10_Section7.3.2.html#cb549-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb549-35"><a href="10_Section7.3.2.html#cb549-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to check balance with weighted logistic regression</span></span>
+<span id="cb549-36"><a href="10_Section7.3.2.html#cb549-36" aria-hidden="true" tabindex="-1"></a>w_check_bal <span class="ot">&lt;-</span> <span class="cf">function</span>(var, weight) {</span>
+<span id="cb549-37"><a href="10_Section7.3.2.html#cb549-37" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">as.formula</span>(<span class="fu">paste0</span>(var, <span class="st">&quot;~aodserv&quot;</span>)),</span>
+<span id="cb549-38"><a href="10_Section7.3.2.html#cb549-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">family =</span> binomial, <span class="at">data =</span> d,</span>
+<span id="cb549-39"><a href="10_Section7.3.2.html#cb549-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">weights =</span> weight</span>
+<span id="cb549-40"><a href="10_Section7.3.2.html#cb549-40" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb549-41"><a href="10_Section7.3.2.html#cb549-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb549-42"><a href="10_Section7.3.2.html#cb549-42" aria-hidden="true" tabindex="-1"></a>  m2 <span class="ot">&lt;-</span> m <span class="sc">%&gt;%</span></span>
+<span id="cb549-43"><a href="10_Section7.3.2.html#cb549-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tidy</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb549-44"><a href="10_Section7.3.2.html#cb549-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">odds.ratio =</span> <span class="fu">exp</span>(estimate), <span class="at">variable =</span> var) <span class="sc">%&gt;%</span></span>
+<span id="cb549-45"><a href="10_Section7.3.2.html#cb549-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">or.se =</span> <span class="fu">robustse</span>(m, <span class="at">coef =</span> <span class="st">&quot;odd.ratio&quot;</span>)[,<span class="dv">2</span>]) <span class="sc">%&gt;%</span></span>
+<span id="cb549-46"><a href="10_Section7.3.2.html#cb549-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">statistic =</span> <span class="fu">robustse</span>(m, <span class="at">coef =</span> <span class="st">&quot;odd.ratio&quot;</span>)[,<span class="dv">3</span>]) <span class="sc">%&gt;%</span></span>
+<span id="cb549-47"><a href="10_Section7.3.2.html#cb549-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p.value =</span> <span class="fu">robustse</span>(m, <span class="at">coef =</span> <span class="st">&quot;odd.ratio&quot;</span>)[,<span class="dv">4</span>]) <span class="sc">%&gt;%</span></span>
+<span id="cb549-48"><a href="10_Section7.3.2.html#cb549-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(variable, term, odds.ratio, or.se, statistic, p.value)</span>
+<span id="cb549-49"><a href="10_Section7.3.2.html#cb549-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb549-50"><a href="10_Section7.3.2.html#cb549-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(m2)</span>
+<span id="cb549-51"><a href="10_Section7.3.2.html#cb549-51" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb549-52"><a href="10_Section7.3.2.html#cb549-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb549-53"><a href="10_Section7.3.2.html#cb549-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to print balance check results</span></span>
+<span id="cb549-54"><a href="10_Section7.3.2.html#cb549-54" aria-hidden="true" tabindex="-1"></a>w_print_bal <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb549-55"><a href="10_Section7.3.2.html#cb549-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(df, <span class="at">digits =</span> <span class="dv">4</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb549-56"><a href="10_Section7.3.2.html#cb549-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_material</span>(<span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb549-57"><a href="10_Section7.3.2.html#cb549-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">position =</span> <span class="st">&quot;center&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb549-58"><a href="10_Section7.3.2.html#cb549-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">collapse_rows</span>(<span class="at">columns =</span> <span class="dv">1</span>, <span class="at">valign =</span> <span class="st">&quot;top&quot;</span>)</span>
+<span id="cb549-59"><a href="10_Section7.3.2.html#cb549-59" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb549-60"><a href="10_Section7.3.2.html#cb549-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb549-61"><a href="10_Section7.3.2.html#cb549-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Balance with ATE weights</span></span>
+<span id="cb549-62"><a href="10_Section7.3.2.html#cb549-62" aria-hidden="true" tabindex="-1"></a><span class="fu">w_print_bal</span>(<span class="fu">map_dfr</span>(w_vars, w_check_bal, d<span class="sc">$</span>ate_w))</span></code></pre></div>
+<table class=" lightable-material lightable-striped table" style="font-family: &quot;Source Sans Pro&quot;, helvetica, sans-serif; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+variable
+</th>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+odds.ratio
+</th>
+<th style="text-align:right;">
+or.se
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+married
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.4237
+</td>
+<td style="text-align:right;">
+0.0200
+</td>
+<td style="text-align:right;">
+-18.2192
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+married
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8222
+</td>
+<td style="text-align:right;">
+0.1985
+</td>
+<td style="text-align:right;">
+-0.8109
+</td>
+<td style="text-align:right;">
+0.4174
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+high
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.8255
+</td>
+<td style="text-align:right;">
+0.0382
+</td>
+<td style="text-align:right;">
+-4.1392
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+high
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.1253
+</td>
+<td style="text-align:right;">
+0.2581
+</td>
+<td style="text-align:right;">
+0.5148
+</td>
+<td style="text-align:right;">
+0.6067
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bahigh
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.2747
+</td>
+<td style="text-align:right;">
+0.0141
+</td>
+<td style="text-align:right;">
+-25.1814
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bahigh
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8527
+</td>
+<td style="text-align:right;">
+0.2203
+</td>
+<td style="text-align:right;">
+-0.6167
+</td>
+<td style="text-align:right;">
+0.5374
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.4746
+</td>
+<td style="text-align:right;">
+0.0227
+</td>
+<td style="text-align:right;">
+-15.6143
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty2
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.0763
+</td>
+<td style="text-align:right;">
+0.2707
+</td>
+<td style="text-align:right;">
+0.2925
+</td>
+<td style="text-align:right;">
+0.7699
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty3
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.2249
+</td>
+<td style="text-align:right;">
+0.0127
+</td>
+<td style="text-align:right;">
+-26.3809
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty3
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8695
+</td>
+<td style="text-align:right;">
+0.2760
+</td>
+<td style="text-align:right;">
+-0.4405
+</td>
+<td style="text-align:right;">
+0.6596
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty4
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1464
+</td>
+<td style="text-align:right;">
+0.0123
+</td>
+<td style="text-align:right;">
+-22.8887
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty4
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8950
+</td>
+<td style="text-align:right;">
+0.3167
+</td>
+<td style="text-align:right;">
+-0.3136
+</td>
+<td style="text-align:right;">
+0.7538
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty5
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1656
+</td>
+<td style="text-align:right;">
+0.0102
+</td>
+<td style="text-align:right;">
+-29.1123
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty5
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.7594
+</td>
+<td style="text-align:right;">
+0.2254
+</td>
+<td style="text-align:right;">
+-0.9269
+</td>
+<td style="text-align:right;">
+0.3540
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+employ
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.9125
+</td>
+<td style="text-align:right;">
+0.0412
+</td>
+<td style="text-align:right;">
+-2.0271
+</td>
+<td style="text-align:right;">
+0.0427
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+employ
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8154
+</td>
+<td style="text-align:right;">
+0.1890
+</td>
+<td style="text-align:right;">
+-0.8802
+</td>
+<td style="text-align:right;">
+0.3788
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+open
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1.2934
+</td>
+<td style="text-align:right;">
+0.0578
+</td>
+<td style="text-align:right;">
+5.7591
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+open
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.1913
+</td>
+<td style="text-align:right;">
+0.2894
+</td>
+<td style="text-align:right;">
+0.7205
+</td>
+<td style="text-align:right;">
+0.4712
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+black
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.3419
+</td>
+<td style="text-align:right;">
+0.0176
+</td>
+<td style="text-align:right;">
+-20.8466
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+black
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8937
+</td>
+<td style="text-align:right;">
+0.2080
+</td>
+<td style="text-align:right;">
+-0.4830
+</td>
+<td style="text-align:right;">
+0.6291
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hispanic
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1681
+</td>
+<td style="text-align:right;">
+0.0105
+</td>
+<td style="text-align:right;">
+-28.5568
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hispanic
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.6981
+</td>
+<td style="text-align:right;">
+0.2780
+</td>
+<td style="text-align:right;">
+-0.9026
+</td>
+<td style="text-align:right;">
+0.3667
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+natam
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.0555
+</td>
+<td style="text-align:right;">
+0.0059
+</td>
+<td style="text-align:right;">
+-27.1168
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+natam
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.3532
+</td>
+<td style="text-align:right;">
+0.5599
+</td>
+<td style="text-align:right;">
+0.7310
+</td>
+<td style="text-align:right;">
+0.4648
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chdage1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.5313
+</td>
+<td style="text-align:right;">
+0.0273
+</td>
+<td style="text-align:right;">
+-12.2990
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chdage1
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.2480
+</td>
+<td style="text-align:right;">
+0.2756
+</td>
+<td style="text-align:right;">
+1.0036
+</td>
+<td style="text-align:right;">
+0.3156
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chdage2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1952
+</td>
+<td style="text-align:right;">
+0.0116
+</td>
+<td style="text-align:right;">
+-27.4494
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chdage2
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.1594
+</td>
+<td style="text-align:right;">
+0.3906
+</td>
+<td style="text-align:right;">
+0.4390
+</td>
+<td style="text-align:right;">
+0.6607
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chdage3
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.4049
+</td>
+<td style="text-align:right;">
+0.0191
+</td>
+<td style="text-align:right;">
+-19.2162
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chdage3
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.6730
+</td>
+<td style="text-align:right;">
+0.1767
+</td>
+<td style="text-align:right;">
+-1.5087
+</td>
+<td style="text-align:right;">
+0.1314
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgrage1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+2.1954
+</td>
+<td style="text-align:right;">
+0.1145
+</td>
+<td style="text-align:right;">
+15.0721
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgrage1
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8588
+</td>
+<td style="text-align:right;">
+0.2105
+</td>
+<td style="text-align:right;">
+-0.6210
+</td>
+<td style="text-align:right;">
+0.5346
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgrage2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.3169
+</td>
+<td style="text-align:right;">
+0.0187
+</td>
+<td style="text-align:right;">
+-19.4739
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgrage2
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.1526
+</td>
+<td style="text-align:right;">
+0.3199
+</td>
+<td style="text-align:right;">
+0.5118
+</td>
+<td style="text-align:right;">
+0.6088
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgrage3
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.0595
+</td>
+<td style="text-align:right;">
+0.0055
+</td>
+<td style="text-align:right;">
+-30.3524
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgrage3
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8678
+</td>
+<td style="text-align:right;">
+0.3082
+</td>
+<td style="text-align:right;">
+-0.3993
+</td>
+<td style="text-align:right;">
+0.6896
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CRA47A
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.4539
+</td>
+<td style="text-align:right;">
+0.0240
+</td>
+<td style="text-align:right;">
+-14.9226
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CRA47A
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.1874
+</td>
+<td style="text-align:right;">
+0.2711
+</td>
+<td style="text-align:right;">
+0.7523
+</td>
+<td style="text-align:right;">
+0.4518
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mental
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.3828
+</td>
+<td style="text-align:right;">
+0.0223
+</td>
+<td style="text-align:right;">
+-16.4789
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mental
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.1610
+</td>
+<td style="text-align:right;">
+0.2483
+</td>
+<td style="text-align:right;">
+0.6981
+</td>
+<td style="text-align:right;">
+0.4851
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+arrest
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.5235
+</td>
+<td style="text-align:right;">
+0.0274
+</td>
+<td style="text-align:right;">
+-12.3844
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+arrest
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.7415
+</td>
+<td style="text-align:right;">
+0.3936
+</td>
+<td style="text-align:right;">
+2.4543
+</td>
+<td style="text-align:right;">
+0.0141
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PSH17A
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1341
+</td>
+<td style="text-align:right;">
+0.0143
+</td>
+<td style="text-align:right;">
+-18.8305
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PSH17A
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.6657
+</td>
+<td style="text-align:right;">
+0.4110
+</td>
+<td style="text-align:right;">
+2.0677
+</td>
+<td style="text-align:right;">
+0.0387
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sexual
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1474
+</td>
+<td style="text-align:right;">
+0.0089
+</td>
+<td style="text-align:right;">
+-31.7014
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sexual
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8758
+</td>
+<td style="text-align:right;">
+0.3922
+</td>
+<td style="text-align:right;">
+-0.2962
+</td>
+<td style="text-align:right;">
+0.7671
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+provide
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.2737
+</td>
+<td style="text-align:right;">
+0.0150
+</td>
+<td style="text-align:right;">
+-23.5964
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+provide
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.2687
+</td>
+<td style="text-align:right;">
+0.2932
+</td>
+<td style="text-align:right;">
+1.0296
+</td>
+<td style="text-align:right;">
+0.3032
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+supervis
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.4002
+</td>
+<td style="text-align:right;">
+0.0219
+</td>
+<td style="text-align:right;">
+-16.7556
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+supervis
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.9686
+</td>
+<td style="text-align:right;">
+0.2270
+</td>
+<td style="text-align:right;">
+-0.1359
+</td>
+<td style="text-align:right;">
+0.8919
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+other
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1438
+</td>
+<td style="text-align:right;">
+0.0091
+</td>
+<td style="text-align:right;">
+-30.5254
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+other
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.9776
+</td>
+<td style="text-align:right;">
+0.3112
+</td>
+<td style="text-align:right;">
+-0.0711
+</td>
+<td style="text-align:right;">
+0.9433
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ra
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.2212
+</td>
+<td style="text-align:right;">
+0.0182
+</td>
+<td style="text-align:right;">
+-18.3644
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ra
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.2561
+</td>
+<td style="text-align:right;">
+0.2292
+</td>
+<td style="text-align:right;">
+1.2496
+</td>
+<td style="text-align:right;">
+0.2114
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cidi
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.4189
+</td>
+<td style="text-align:right;">
+0.0239
+</td>
+<td style="text-align:right;">
+-15.2210
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cidi
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.2655
+</td>
+<td style="text-align:right;">
+0.2712
+</td>
+<td style="text-align:right;">
+1.0990
+</td>
+<td style="text-align:right;">
+0.2718
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgneed
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.0568
+</td>
+<td style="text-align:right;">
+0.0111
+</td>
+<td style="text-align:right;">
+-14.6808
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgneed
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+2.0978
+</td>
+<td style="text-align:right;">
+0.7946
+</td>
+<td style="text-align:right;">
+1.9558
+</td>
+<td style="text-align:right;">
+0.0505
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb550-1"><a href="10_Section7.3.2.html#cb550-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Balance with ATT weights</span></span>
+<span id="cb550-2"><a href="10_Section7.3.2.html#cb550-2" aria-hidden="true" tabindex="-1"></a><span class="fu">w_print_bal</span>(<span class="fu">map_dfr</span>(w_vars, w_check_bal, d<span class="sc">$</span>att_w))</span></code></pre></div>
+<table class=" lightable-material lightable-striped table" style="font-family: &quot;Source Sans Pro&quot;, helvetica, sans-serif; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+variable
+</th>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+odds.ratio
+</th>
+<th style="text-align:right;">
+or.se
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+married
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.2772
+</td>
+<td style="text-align:right;">
+0.0446
+</td>
+<td style="text-align:right;">
+-7.9726
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+married
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.2353
+</td>
+<td style="text-align:right;">
+0.2585
+</td>
+<td style="text-align:right;">
+1.0097
+</td>
+<td style="text-align:right;">
+0.3127
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+high
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.9749
+</td>
+<td style="text-align:right;">
+0.1763
+</td>
+<td style="text-align:right;">
+-0.1408
+</td>
+<td style="text-align:right;">
+0.8880
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+high
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.7801
+</td>
+<td style="text-align:right;">
+0.1683
+</td>
+<td style="text-align:right;">
+-1.1508
+</td>
+<td style="text-align:right;">
+0.2498
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bahigh
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1665
+</td>
+<td style="text-align:right;">
+0.0289
+</td>
+<td style="text-align:right;">
+-10.3346
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bahigh
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.1426
+</td>
+<td style="text-align:right;">
+0.2690
+</td>
+<td style="text-align:right;">
+0.5662
+</td>
+<td style="text-align:right;">
+0.5712
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.4733
+</td>
+<td style="text-align:right;">
+0.0821
+</td>
+<td style="text-align:right;">
+-4.3120
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty2
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.1565
+</td>
+<td style="text-align:right;">
+0.2453
+</td>
+<td style="text-align:right;">
+0.6854
+</td>
+<td style="text-align:right;">
+0.4931
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty3
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1678
+</td>
+<td style="text-align:right;">
+0.0395
+</td>
+<td style="text-align:right;">
+-7.5811
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty3
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.9383
+</td>
+<td style="text-align:right;">
+0.2725
+</td>
+<td style="text-align:right;">
+-0.2192
+</td>
+<td style="text-align:right;">
+0.8265
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty4
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1765
+</td>
+<td style="text-align:right;">
+0.0741
+</td>
+<td style="text-align:right;">
+-4.1306
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty4
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.6200
+</td>
+<td style="text-align:right;">
+0.2872
+</td>
+<td style="text-align:right;">
+-1.0318
+</td>
+<td style="text-align:right;">
+0.3022
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty5
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1412
+</td>
+<td style="text-align:right;">
+0.0302
+</td>
+<td style="text-align:right;">
+-9.1465
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poverty5
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.0513
+</td>
+<td style="text-align:right;">
+0.2899
+</td>
+<td style="text-align:right;">
+0.1814
+</td>
+<td style="text-align:right;">
+0.8560
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+employ
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.4376
+</td>
+<td style="text-align:right;">
+0.0658
+</td>
+<td style="text-align:right;">
+-5.4953
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+employ
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.2696
+</td>
+<td style="text-align:right;">
+0.2457
+</td>
+<td style="text-align:right;">
+1.2335
+</td>
+<td style="text-align:right;">
+0.2174
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+open
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+3.7999
+</td>
+<td style="text-align:right;">
+0.5636
+</td>
+<td style="text-align:right;">
+9.0011
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+open
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8916
+</td>
+<td style="text-align:right;">
+0.1813
+</td>
+<td style="text-align:right;">
+-0.5643
+</td>
+<td style="text-align:right;">
+0.5726
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+black
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.4050
+</td>
+<td style="text-align:right;">
+0.0718
+</td>
+<td style="text-align:right;">
+-5.1014
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+black
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.9878
+</td>
+<td style="text-align:right;">
+0.2166
+</td>
+<td style="text-align:right;">
+-0.0562
+</td>
+<td style="text-align:right;">
+0.9552
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hispanic
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1297
+</td>
+<td style="text-align:right;">
+0.0339
+</td>
+<td style="text-align:right;">
+-7.8059
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hispanic
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.1791
+</td>
+<td style="text-align:right;">
+0.3692
+</td>
+<td style="text-align:right;">
+0.5261
+</td>
+<td style="text-align:right;">
+0.5988
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+natam
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.0938
+</td>
+<td style="text-align:right;">
+0.0264
+</td>
+<td style="text-align:right;">
+-8.4120
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+natam
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.0343
+</td>
+<td style="text-align:right;">
+0.3603
+</td>
+<td style="text-align:right;">
+0.0967
+</td>
+<td style="text-align:right;">
+0.9230
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chdage1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1.3155
+</td>
+<td style="text-align:right;">
+0.2230
+</td>
+<td style="text-align:right;">
+1.6178
+</td>
+<td style="text-align:right;">
+0.1057
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chdage1
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8711
+</td>
+<td style="text-align:right;">
+0.1794
+</td>
+<td style="text-align:right;">
+-0.6699
+</td>
+<td style="text-align:right;">
+0.5029
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chdage2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1556
+</td>
+<td style="text-align:right;">
+0.0380
+</td>
+<td style="text-align:right;">
+-7.6199
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chdage2
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.0120
+</td>
+<td style="text-align:right;">
+0.3012
+</td>
+<td style="text-align:right;">
+0.0401
+</td>
+<td style="text-align:right;">
+0.9680
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chdage3
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.2114
+</td>
+<td style="text-align:right;">
+0.0338
+</td>
+<td style="text-align:right;">
+-9.7110
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chdage3
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.1878
+</td>
+<td style="text-align:right;">
+0.2570
+</td>
+<td style="text-align:right;">
+0.7953
+</td>
+<td style="text-align:right;">
+0.4264
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgrage1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1.6662
+</td>
+<td style="text-align:right;">
+0.3492
+</td>
+<td style="text-align:right;">
+2.4365
+</td>
+<td style="text-align:right;">
+0.0148
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgrage1
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.1468
+</td>
+<td style="text-align:right;">
+0.2786
+</td>
+<td style="text-align:right;">
+0.5640
+</td>
+<td style="text-align:right;">
+0.5727
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgrage2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.3994
+</td>
+<td style="text-align:right;">
+0.1021
+</td>
+<td style="text-align:right;">
+-3.5907
+</td>
+<td style="text-align:right;">
+0.0003
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgrage2
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8422
+</td>
+<td style="text-align:right;">
+0.2432
+</td>
+<td style="text-align:right;">
+-0.5944
+</td>
+<td style="text-align:right;">
+0.5522
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgrage3
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.0641
+</td>
+<td style="text-align:right;">
+0.0156
+</td>
+<td style="text-align:right;">
+-11.3052
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgrage3
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.0778
+</td>
+<td style="text-align:right;">
+0.3661
+</td>
+<td style="text-align:right;">
+0.2207
+</td>
+<td style="text-align:right;">
+0.8254
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CRA47A
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.7845
+</td>
+<td style="text-align:right;">
+0.1504
+</td>
+<td style="text-align:right;">
+-1.2660
+</td>
+<td style="text-align:right;">
+0.2055
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CRA47A
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.9042
+</td>
+<td style="text-align:right;">
+0.2038
+</td>
+<td style="text-align:right;">
+-0.4469
+</td>
+<td style="text-align:right;">
+0.6549
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mental
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1.1318
+</td>
+<td style="text-align:right;">
+0.1962
+</td>
+<td style="text-align:right;">
+0.7141
+</td>
+<td style="text-align:right;">
+0.4752
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mental
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.9080
+</td>
+<td style="text-align:right;">
+0.1897
+</td>
+<td style="text-align:right;">
+-0.4621
+</td>
+<td style="text-align:right;">
+0.6440
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+arrest
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1.9692
+</td>
+<td style="text-align:right;">
+0.3194
+</td>
+<td style="text-align:right;">
+4.1782
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+arrest
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8619
+</td>
+<td style="text-align:right;">
+0.1743
+</td>
+<td style="text-align:right;">
+-0.7349
+</td>
+<td style="text-align:right;">
+0.4624
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PSH17A
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.7078
+</td>
+<td style="text-align:right;">
+0.1464
+</td>
+<td style="text-align:right;">
+-1.6715
+</td>
+<td style="text-align:right;">
+0.0946
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PSH17A
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.6850
+</td>
+<td style="text-align:right;">
+0.1653
+</td>
+<td style="text-align:right;">
+-1.5675
+</td>
+<td style="text-align:right;">
+0.1170
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sexual
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.0478
+</td>
+<td style="text-align:right;">
+0.0114
+</td>
+<td style="text-align:right;">
+-12.7450
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sexual
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.9677
+</td>
+<td style="text-align:right;">
+0.3587
+</td>
+<td style="text-align:right;">
+-0.0886
+</td>
+<td style="text-align:right;">
+0.9294
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+provide
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.4434
+</td>
+<td style="text-align:right;">
+0.0734
+</td>
+<td style="text-align:right;">
+-4.9097
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+provide
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.1625
+</td>
+<td style="text-align:right;">
+0.2399
+</td>
+<td style="text-align:right;">
+0.7296
+</td>
+<td style="text-align:right;">
+0.4656
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+supervis
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.5787
+</td>
+<td style="text-align:right;">
+0.1239
+</td>
+<td style="text-align:right;">
+-2.5540
+</td>
+<td style="text-align:right;">
+0.0107
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+supervis
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.7502
+</td>
+<td style="text-align:right;">
+0.1868
+</td>
+<td style="text-align:right;">
+-1.1543
+</td>
+<td style="text-align:right;">
+0.2484
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+other
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.1177
+</td>
+<td style="text-align:right;">
+0.0223
+</td>
+<td style="text-align:right;">
+-11.3046
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+other
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+1.2998
+</td>
+<td style="text-align:right;">
+0.3324
+</td>
+<td style="text-align:right;">
+1.0253
+</td>
+<td style="text-align:right;">
+0.3052
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ra
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+2.4221
+</td>
+<td style="text-align:right;">
+0.3209
+</td>
+<td style="text-align:right;">
+6.6767
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ra
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.8515
+</td>
+<td style="text-align:right;">
+0.1548
+</td>
+<td style="text-align:right;">
+-0.8844
+</td>
+<td style="text-align:right;">
+0.3765
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cidi
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1.6472
+</td>
+<td style="text-align:right;">
+0.2568
+</td>
+<td style="text-align:right;">
+3.2010
+</td>
+<td style="text-align:right;">
+0.0014
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cidi
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.9055
+</td>
+<td style="text-align:right;">
+0.1776
+</td>
+<td style="text-align:right;">
+-0.5062
+</td>
+<td style="text-align:right;">
+0.6127
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgneed
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.3166
+</td>
+<td style="text-align:right;">
+0.1014
+</td>
+<td style="text-align:right;">
+-3.5892
+</td>
+<td style="text-align:right;">
+0.0003
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cgneed
+</td>
+<td style="text-align:left;">
+aodserv
+</td>
+<td style="text-align:right;">
+0.6787
+</td>
+<td style="text-align:right;">
+0.2410
+</td>
+<td style="text-align:right;">
+-1.0917
+</td>
+<td style="text-align:right;">
+0.2750
+</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="3">
+<li id="fn3"><p><a href="https://cimentadaj.github.io/blog/2016-09-19-obtaining-robust-standard-errors-and-odds-ratios/obtaining-robust-standard-errors-and-odds-ratios-for-logistic-regression-in-r/" class="uri">https://cimentadaj.github.io/blog/2016-09-19-obtaining-robust-standard-errors-and-odds-ratios/obtaining-robust-standard-errors-and-odds-ratios-for-logistic-regression-in-r/</a><a href="10_Section7.3.2.html#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="09_Section7.3.1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="11_Section8.4.1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,222 @@
+# Section 6.5.2 Subclassification & Cox Proportional Hazards (PS) 
+
+```{r message=F, warning=F, error=F}
+library(tidyverse)
+library(haven)
+library(MatchIt)
+library(cobalt)
+library(sjlabelled)
+library(broom)
+library(survival)
+library(PSweight)
+options(scipen=999)
+```
+
+## Import Data
+
+```{r}
+df <- read_dta("data/Data_Chapter6/sur_subclass.dta") %>%
+  zap_formats()
+df <- sjlabelled::remove_all_labels(df) %>%
+  as_tibble()
+```
+
+## Create Propensity Score Using Logistic
+
+```{r}
+cov <- "married + high + bahigh + poverty2 + poverty3 + poverty4 + poverty5 + employ + open + black + hispanic + natam + chdage1 + chdage2 + chdage3 + cgrage1 + cgrage2 + cgrage3 + CRA47A + mental + arrest + PSH17A	+ sexual + provide + supervis + other + ra + cidi + cgneed"
+f <- as.formula(paste("aodserv ~", cov))
+m1 <- glm(aodserv ~ married + high + bahigh + poverty2 + poverty3 + 
+          poverty4 + poverty5 + employ + open + black + hispanic + natam + chdage1 + 
+          chdage2 + chdage3 + cgrage1 + cgrage2 + cgrage3 + CRA47A + mental + 
+          arrest + PSH17A	+ sexual + provide + supervis + other + ra + cidi + cgneed,
+          family = binomial,
+          data = df)
+ps3 <- predict(m1, type = "response")
+sur_subclass1 <- df
+sur_subclass1$ps3 <- ps3
+```
+
+## Function to Conduct Balance Check Using Normalized Difference
+
+```{r}
+nd <- function(cov, df = sur_subclass1, tx = "aodserv") {
+  
+  tx <- as.name(tx)
+  cov <- as.name(cov)
+  
+  df <- df %>%
+    group_by(!!tx) %>%
+    summarize(m = mean(!!cov, na.rm = T),
+              s = sd(!!cov, na.rm = T),
+              .groups = "drop") %>%
+    pivot_wider(names_from = !!tx, values_from = c("m", "s"), names_sep = "") %>%
+    mutate(nd = (m1-m0)/sqrt(s1^2+s0^2))
+  return(df$nd)
+}
+```
+
+## Balance Check on the Original Sample (Normalized Difference)
+
+```{r}
+covs <- str_split(cov, "\\s[+]\\s")[[1]] # vector of covariates
+sapply(covs, nd) # apply the function nd on each covariate
+```
+
+## Function to Check Balance Using Chi-Square Tests
+
+```{r}
+check_blc <- function(cov, df = sur_subclass1, tx = "aodserv") {
+  ct <- tidy(
+    chisq.test(
+      table(df[[cov]], y = df[[tx]]), correct =F
+      )
+    ) %>%
+    add_column(cov = cov, .before = "statistic") %>%
+    mutate(p.value = round(p.value, 2))
+  return(ct)
+}
+```
+
+## Balance Check on the Original Sample (Chi-Square)
+
+```{r warning=F}
+covs2 <- c("married", "educ", "pov", "employ", "open", "race", "chdage",
+           "cgage", "CRA47A", "mental", "arrest", "PSH17A", "maltx", "ra",
+           "cidi", "cgneed")
+map_dfr(covs2, check_blc)
+```
+
+## Get Quintiles
+
+```{r}
+q5 <- c(0, round(quantile(sur_subclass1$ps3, c(.2, .4, .6, .8), type = 1), 7), 1) # round to 7 digits to replicate Stata code
+q5
+```
+
+## Create 5 Subclasses Using Quintiles
+
+```{r}
+# Cut 5 subclasses
+subs <- sur_subclass1 %>%
+  arrange(ps3) %>%
+  group_by(q = cut(ps3, 
+                   include.lowest = F,
+                   right = F,
+                   dig.lab = 7,
+                   breaks = q5,
+                   labels = F))
+
+# Summary statistics of ps3 per subclass
+subs %>%
+  group_by(q) %>%
+  summarise(obs = n(),
+            mean = mean(ps3),
+            sd = sd(ps3),
+            min = min(ps3),
+            max = max(ps3), .groups = "drop")
+
+# Filter each subclass into its own tibble
+sub1 <- subs %>% filter(q == 1)
+sub2 <- subs %>% filter(q == 2)
+sub3 <- subs %>% filter(q == 3)
+sub4 <- subs %>% filter(q == 4)
+sub5 <- subs %>% filter(q == 5)
+```
+
+## Check Imbalance Post-Subclassification (5 Subclasses)
+
+```{r warning=F}
+map_dfr(covs2, check_blc, df = sub1)
+map_dfr(covs2, check_blc, df = sub2)
+map_dfr(covs2, check_blc, df = sub3)
+map_dfr(covs2, check_blc, df = sub4)
+map_dfr(covs2, check_blc, df = sub5)
+```
+
+## Trimming: Search for Best Cutoff Alpha for Overlap
+
+```{r}
+# Program to search best cutoff value alpha for overlap (Crum et al., 2009)
+trim <- PSweight::PStrim(
+  data = as.data.frame(sur_subclass1), # fix for latest package update
+  ps.formula = f,
+  optimal = T
+)
+trim$delta # or use .079 from the Stata results
+1-trim$delta # or use .921 from the Stata results
+```
+
+## Trim Observations
+
+```{r}
+summary(sur_subclass1$ps3)
+sur_subclass2 <- sur_subclass1 %>%
+  filter(ps3 >= .079 & ps3 <= .921)
+summary(sur_subclass2$ps3)
+```
+
+## Create 5 New Subclasses and Check Imbalance
+
+```{r warning=F}
+# Cut 5 subclasses (Type 2 and 5 in Quantile() are identical to Stata results)
+subs_t <- sur_subclass2 %>%
+  arrange(ps3) %>%
+  group_by(q = cut(ps3, 
+                   include.lowest = F,
+                   right = F,
+                   dig.lab = 7,
+                   breaks = c(0, round(quantile(sur_subclass2$ps3, 
+                            c(.2, .4, .6, .8), type = 2), 7), 2),
+                   labels = F))
+
+# Summary statistics of ps3 per subclass
+subs_t %>%
+  group_by(q) %>%
+  summarise(obs = n(),
+            mean = mean(ps3),
+            sd = sd(ps3),
+            min = min(ps3),
+            max = max(ps3), .groups = "drop")
+
+# Filter each subclass into its own tibble
+sub1_t <- subs_t %>% filter(q == 1)
+sub2_t <- subs_t %>% filter(q == 2)
+sub3_t <- subs_t %>% filter(q == 3)
+sub4_t <- subs_t %>% filter(q == 4)
+sub5_t <- subs_t %>% filter(q == 5)
+
+# Check imbalance
+map_dfr(covs2, check_blc, df = sub1_t)
+map_dfr(covs2, check_blc, df = sub2_t)
+map_dfr(covs2, check_blc, df = sub3_t)
+map_dfr(covs2, check_blc, df = sub4_t)
+map_dfr(covs2, check_blc, df = sub5_t)
+```
+
+## Outcome Analysis by Subclass
+
+```{r}
+f2 <- as.formula("Surv(durm, rrpt) ~ aodserv + married + high + bahigh + poverty2 + poverty3 + poverty4 + poverty5 + employ + open + black + hispanic + natam + chdage1 + chdage2 + chdage3 + CRA47A")
+tidy(survival::coxph(f2, sub1_t))
+tidy(survival::coxph(f2, sub2_t))
+tidy(survival::coxph(f2, sub3_t))
+tidy(survival::coxph(f2, sub4_t))
+tidy(survival::coxph(f2, sub5_t))
+```
+
+## Aggregate Results
+
+```{r}
+exp(0.37513328)
+(1-pnorm(1.899353989))*2 # p = .05751795
+tidy(survival::coxph(f2, df))
+```
+
+## Subclassification with MatchIt
+
+```{r}
+mm <- MatchIt::matchit(f, df, method = "subclass", subclass = 5)
+love.plot(mm, binary = "std", disp.subclass = T)
+bal.tab(mm, un = T, binary = "std", disp.subclass = T)
+```

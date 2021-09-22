@@ -1,0 +1,403 @@
+# Section 5.8.2, 5.8.3, and 5.8.4 (SD & PS)
+
+## Section 5.8.2 Optimal Matching
+
+```{r message=F, warning=F, error=F}
+library(optmatch)
+library(knitr)
+library(broom)
+library(sandwich)
+library(kableExtra)
+library(tidyverse)
+library(rlang)
+select <- dplyr::select
+```
+
+### Load Data
+
+```{r message=FALSE, warning=FALSE}
+d <- haven::read_dta("data/Data_Chapter5/chpt5_2_original.dta")
+df <- haven::read_dta("data/Data_Chapter5/chpt5_2.dta")
+cds <- haven::read_dta("data/Data_Chapter5/chpt5_2ps.dta")
+```
+
+### Bivariate Comparisons 
+
+```{r message=FALSE, warning=FALSE}
+# Intergenerational dependence 
+gmodels::CrossTable(d$kuse, d$puse, 
+                    prop.c = FALSE, prop.r = FALSE, prop.chisq = FALSE, 
+                    chisq = TRUE)
+
+# Wilcoxon Rank-Sum (Mann-Whitney) test and t-test
+d %>%
+  select(mratio96, pcged97, pcg_adc, black, age97, male, kuse) %>%
+  pivot_longer(-kuse, names_to = "variable") %>%
+  group_by(variable) %>%
+  nest() %>%
+  mutate(wilcoxon = map(data, ~wilcox.test(.$value ~.$kuse, correct = F))) %>%
+  mutate(wilcoxon.stat = map(wilcoxon, ~round(.$statistic, 3))) %>%
+  mutate(wilcoxon.pvalue = map(wilcoxon, ~round(.$p.value, 3))) %>%
+  unnest(cols = c(wilcoxon.stat, wilcoxon.pvalue)) %>%
+  mutate(ttest = map(data, ~t.test(.$value ~ .$kuse, var.equal = T))) %>%
+  mutate(t.stat = map(ttest, ~round(.$statistic, 3))) %>%
+  mutate(t.pvalue = map(ttest, ~round(.$p.value, 3))) %>%
+  unnest(cols = c(t.stat, t.pvalue)) %>%
+  select(-data, -wilcoxon, -ttest)
+```
+
+### Outcome Without Bias Control
+
+```{r message=FALSE, warning=FALSE}
+# visual
+d <- d %>% 
+  dplyr::mutate(treatfac = case_when(kuse==0 ~ "Nonusers", 
+                                      kuse==1 ~ "Users"))               
+ggplot(d, aes(y = lwss97, x = treatfac)) + 
+  geom_boxplot()
+
+# t-test
+t.test(lwss97 ~ kuse, data = d, var.equal = T) %>% 
+  broom::tidy()
+
+# regression 
+reg <- lm( lwss97 ~ kuse + male + black + age97 + pcged97 + mratio96 + pcg_adc, 
+           data = d)
+broom::tidy(lmtest::coeftest(reg, vcov = vcovCL, cluster = d$pcg_id))
+```
+
+### Matching
+
+*Note: To be consistent with the STATA result, we will use the propensity scores created by Stata.*
+
+#### Distribution of estimated propensity scores
+
+```{r message=FALSE, warning=FALSE}
+cds <- cds %>% 
+  dplyr::mutate( treatfac = case_when( kuse==0 ~ "Nonusers", 
+                                       kuse==1 ~ "Users"))
+
+ggplot(cds, aes(x = treatfac, y = ps)) + geom_boxplot() + 
+  ggtitle("Box Plots of Estimated Propensity Scores") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(cds, aes(x = ps, color = treatfac)) + 
+  geom_histogram(aes(y=..density..), fill="white", position="dodge")+
+  geom_density(alpha=.2, fill="#FF6666") +
+  ggtitle("Histograms of Estimated Propensity Scores") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+#### Optimal Matching
+
+```{r message=FALSE, warning=FALSE, results="hide"}
+attach(cds)
+prank <- rank(ps)
+names(prank) <- kid
+d1 <- outer(prank[kuse==1], prank[kuse==0], "-")
+d1 <- abs(d1)
+
+#fullmatch fm
+fm <- fullmatch(d1)
+(fm.d <- matched.distances(fm,d1,pres=TRUE))
+unlist(fm.d,max)
+
+#variable match, (vm1 - at least 1 at most 4)
+vm1 <- fullmatch(d1,min.controls=1,max.controls=4)
+(vm1.d <- matched.distances(vm1,d1,pres=TRUE))
+unlist(vm1.d,max)
+
+#variable match, (vm2 - at least 2 at most 4)
+vm2 <- fullmatch(d1,min.controls=2,max.controls=4)
+(vm2.d <- matched.distances(vm2,d1,pres=TRUE))
+unlist(vm2.d,max)
+
+#variable match, (vm3 - use Hensen's equaion)
+vm3 <- fullmatch(d1,min.controls=1.33,max.controls=5.32)
+(vm3.d <- matched.distances(vm3,d1,pres=TRUE))
+unlist(vm3.d,max)
+
+#variable match, (vm4 at least 2 at most 7)
+vm4 <- fullmatch(d1,min.controls=2,max.controls=7)
+(vm4.d <- matched.distances(vm4,d1,pres=TRUE))
+unlist(vm4.d,max)
+
+#pairmatch pm
+pm <- pairmatch(d1, controls=1)
+(pm.d <- matched.distances(pm,d1,pres=TRUE))
+unlist(pm.d,max)
+```
+
+```{r message=FALSE, warning=FALSE}
+mean(unlist(fm.d))
+sum(unlist(fm.d))
+stratumStructure(fm)
+
+mean(unlist(vm1.d))
+sum(unlist(vm1.d))
+stratumStructure(vm1)
+
+mean(unlist(vm2.d))
+sum(unlist(vm2.d))
+stratumStructure(vm2)
+
+mean(unlist(vm3.d))
+sum(unlist(vm3.d))
+stratumStructure(vm3)
+
+mean(unlist(vm4.d))
+sum(unlist(vm4.d))
+stratumStructure(vm4)
+
+mean(unlist(pm.d))
+sum(unlist(pm.d))
+stratumStructure(pm)
+```
+
+#### Table 5.10. Covariate Imbalance Before and After Matching by Matching Scheme
+```{r message=FALSE, warning=FALSE}
+# Imbalance function
+imbalance <- function(cov, method) {
+  
+  # get quosure
+  cov_name <- cov
+  method_name <- method
+  cov <- rlang::parse_expr(cov)
+  method <- rlang::parse_expr(method)
+  
+  # dx
+  df2 <- df %>%
+    group_by(kuse) %>%
+    summarise(m_x := mean(!!cov), 
+              sd_x := sd(!!cov), .groups = "drop")
+  mxt = df2[2,2]
+  mxc = df2[1,2]
+  s2xt = df2[2,3]^2
+  s2xc = df2[1,3]^2
+  sx = sqrt((s2xt+s2xc)/2)
+  dx = as.numeric(abs(mxt-mxc)/sx)
+  
+  # dxm
+  if (method != "before") {
+    df3 <- df %>%
+      group_by(!!method, kuse) %>%
+      summarise(m_x = mean(!!cov),
+                sd_x = sd(!!cov),
+                n = n(),
+                .groups = "drop")
+    
+    mxc = as.numeric(mean(filter(df3, kuse == 0)$m_x))
+    mxt = as.numeric(mean(filter(df3, kuse == 1)$m_x))
+    dxm_num = abs(mxt-mxc)
+    dxm = as.numeric(dxm_num/sx)
+  
+    return(tibble(cov = cov_name, method = method_name, dx = NA, dxm = dxm))
+  
+  } else {
+    return(tibble(cov = cov_name, method = method_name, dx = dx, dxm = NA))
+  }
+}
+
+# Define covariates
+cov_labels <- tibble(cov = c("mratio96", "pcged97", "pcg_adc", 
+                                      "black", "age97", "male"),
+                         new = c("Ratio of family income to poverty line in 1996", 
+                                 "Caregiver's education in 1997 (years of schooling)", 
+                                 "Caregiver's number of years using AFDC in childhood", 
+                                 "Child's race: African American (reference: other)", 
+                                 "Child's age in 1997", "Child's gender: male (reference: female)"),
+                         order = c(1, 2, 3, 4, 5, 6))
+
+# Calculate dx and dxm using imbalance()
+arg1 <- rep(c("mratio96", "pcged97", "pcg_adc", "black", "age97", "male"), each = 7)
+arg2 <- rep(c("before", "fm", "vm1", "vm2", "vm3", "vm4", "pm"), length(arg1)/7)
+table_5.10 <- map2_dfr(arg1, arg2, imbalance) %>%
+  mutate(method = recode(method,
+                         `before` = "Before Matching",
+                          `fm` = "Full Matching", 
+                         `vm1` = "Variable Matching 1 (at least 1, at most 4)", 
+                         `vm2` = "Variable Matching 2 (at least 2, at most 4)",
+                         `vm3` = "Variable Matching 3 (Hansen's equation)", 
+                         `vm4` = "Variable Matching 4 (at least 2, at most 7)",
+                         `pm` = "Pair matching")) %>%
+  left_join(cov_labels, by = "cov") %>%
+  arrange(order) %>%
+  select(new, method, dx, dxm)
+
+# Print Table 5.10
+options(knitr.kable.NA = "")
+knitr::kable(table_5.10, 
+             col.names = c("Covariate", "Matching Scheme", "$d_x$", "$d_{xm}$"), 
+             escape = FALSE,
+             format = "html", 
+             digits = 2,
+             caption = "Table 5.10. Covariate Imbalance Before and After Matching by Matching Scheme") %>%
+  kable_styling(latex_options = "striped") %>%
+  kable_styling(position = "center") %>%
+  collapse_rows(columns = 1, valign = "top")
+```
+
+## Section 5.8.3 Post-Full-Matching Analysis of Outcome
+
+### Hodges-Lehmann Aligned Rank Test 
+
+```{r message=FALSE, warning=FALSE}
+# Shenyang Guo's Stata program, hodgesl, version 8.2
+hodgesl <- function(dataname, varname, blockname, treatname) {
+  blockname_str <- deparse(substitute(blockname))
+  set.seed(1000)
+  renamed_file <- dataname %>%
+    filter(!is.na({{blockname}}))
+  r1 <- renamed_file %>%
+    group_by({{blockname}}) %>%
+    summarise(m_y = mean({{varname}}), .groups = "drop") %>%
+    arrange({{blockname}})
+  r2 <- renamed_file %>%
+    group_by({{blockname}}, {{treatname}}) %>%
+    summarise(mean_y = mean({{varname}}),
+              n = n(), .groups = "drop") %>%
+    mutate(mean_diff = ifelse({{treatname}} == 1,
+                              ((n+lag(n))/sum(n))*(mean_y-lag(mean_y)), NA)) %>%
+    mutate(tx_effect = sum(mean_diff, na.rm = T)) %>%
+    mutate(i = row_number()) %>%
+    slice(1) %>%
+    select(tx_effect, i)
+  fm_results <- renamed_file %>%
+    group_by({{blockname}}, {{treatname}}) %>%
+    summarise(mean_y = mean({{varname}}),
+              n = n(), .groups = "drop")
+  r3 <- renamed_file %>%
+    group_by({{blockname}}, {{treatname}}) %>%
+    summarise(m_or_n = n(), .groups = "drop") %>%
+    arrange({{blockname}}, {{treatname}}) %>%
+    mutate(mi = ifelse({{treatname}} == 0, m_or_n, 
+                ifelse({{treatname}} == 1, NA, NA))) %>%
+    mutate(ni = ifelse({{treatname}} == 1, m_or_n,
+                ifelse({{treatname}} == 0, NA, NA))) %>%
+    mutate(Ni = ni+lag(mi)) %>%
+    mutate(mi = ifelse(is.na(mi), lag(mi), mi)) %>%
+    filter(!is.na(Ni)) %>%
+    mutate(factor = (mi*ni)/(Ni*(Ni-1))) %>%
+    select({{blockname}}, factor) %>%
+    arrange({{blockname}})
+  r4 <- renamed_file %>%
+    arrange({{blockname}}) %>%
+    left_join(r1, by = blockname_str) %>%
+    mutate(dy = {{varname}}-m_y) %>%
+    arrange(dy) %>%
+    mutate(rk = row_number()) %>%
+    arrange({{blockname}})
+  r4a <- r4 %>%
+    filter({{treatname}} != 0) %>%
+    group_by({{blockname}}) %>%
+    summarise(wsi = sum(rk), .groups = "drop")
+  r5 <- r4 %>%
+    group_by({{blockname}}) %>%
+    summarise(ki_ = mean(rk), .groups = "drop")
+  r6 <- r4 %>%
+    filter({{treatname}} != 0) %>%
+    group_by({{blockname}}) %>%
+    summarise(ni = n(), .groups = "drop") %>%
+    arrange({{blockname}}) %>%
+    left_join(r5, by = blockname_str) %>%
+    mutate(E_wsi = ni*ki_) %>%
+    arrange({{blockname}})
+  r7 <- r4 %>%
+    arrange({{blockname}}) %>%
+    left_join(r5, by = blockname_str) %>%
+    mutate(k = (rk-ki_)^2) %>%
+    group_by({{blockname}}) %>%
+    summarise(ss_kd_i = sum(k), .groups = "drop") %>%
+    arrange({{blockname}})
+  results <- r3 %>%
+    arrange({{blockname}}) %>%
+    left_join(r7, by = blockname_str) %>%
+    left_join(r6, by = blockname_str) %>%
+    left_join(r4a, by = blockname_str) %>%
+    mutate(var_wsi = factor*ss_kd_i,
+          var = sum(var_wsi),
+          sum_Ewsi = sum(E_wsi),
+          ws = sum(wsi),
+          HL_mean = ws-sum_Ewsi,
+          HL_se = sqrt(var),
+          z = HL_mean/HL_se,
+          p = 1 - pnorm(abs(z))) %>%
+    select(HL_mean, HL_se, z, p) %>%
+    slice(1) %>%
+    mutate(i = row_number()) %>%
+    left_join(r2, by = "i")
+  return(results)
+}
+
+df.h <- haven::read_dta("data/Data_Chapter5/chpt5_2(original).dta") %>%
+  mutate(fm_s = paste0(round(fm, 5), "s"))
+hodgesl(df.h, lwss97, fm_s, kuse)
+```
+
+### Cohen's d
+
+```{r message=FALSE, warning=FALSE}
+# Shenyang Guo's Stata program, imbalance, version 8.2
+imbalance2 <- function(df, varname, treatname, blockname) {
+  
+  # dx
+  df2 <- df %>%
+    group_by({{treatname}}) %>%
+    summarise(m_x = mean({{varname}}), sd_x = sd({{varname}}), .groups = "drop")
+  mxt = df2[2,2]
+  mxc = df2[1,2]
+  s2xt = df2[2,3]^2
+  s2xc = df2[1,3]^2
+  sx = sqrt((s2xt+s2xc)/2)
+  dx = as.numeric(abs(mxt-mxc)/sx)
+  
+  # dx
+  df3 <- df %>%
+    group_by({{blockname}}, {{treatname}}) %>%
+    summarise(m_x = mean({{varname}}),
+              sd_x = sd({{varname}}),
+              n = n(),
+              .groups = "drop")
+    
+  mxc = as.numeric(mean(filter(df3, {{treatname}} == 0)$m_x))
+  mxt = as.numeric(mean(filter(df3, {{treatname}} == 1)$m_x))
+  dxm_num = abs(mxt-mxc)
+  dxm = as.numeric(dxm_num/sx)
+  
+  return(list(dx = dx, dxm = dxm))
+}
+
+df.h2 <- haven::read_dta("data/Data_Chapter5/chpt5_2(original).dta")
+imbalance2(df.h2, lwss97, kuse, fm)$dxm # dxm for the outcome variable is Cohen's d
+```
+
+## Section 5.8.4 Post-Matching Analysis Using Regression of Difference Scores
+
+```{r message=FALSE, warning=FALSE}
+df <- haven::read_dta("data/Data_Chapter5/chpt5_2.dta")
+
+# kuse == 1
+df1 <- df %>% 
+  select(pm, kuse, y1 = lwss97, male1 = male, black1 = black, age971 = age97, 
+         pcged971 = pcged97, mratio961 = mratio96, pcg_id) %>% 
+  filter(kuse==1) 
+
+# kuse == 0
+df0 <- df %>% 
+  select(pm, kuse, y0 = lwss97, male0 = male, black0 = black, age970 = age97, pcged970 = pcged97, mratio960 = mratio96, pcg_id) %>% 
+  filter( kuse == 0 ) 
+
+# merge data
+df2 <- left_join(df0, df1, "pm")
+df2 <- df2 %>% 
+  mutate(y = y1 - y0,
+         male = male1 - male0,
+         black = black1 - black0,
+         age97 = age971 - age970,
+         pcged97 = pcged971 - pcged970,
+         mratio96 = mratio961 - mratio960)
+
+# regression 
+reg1 <- lm(y ~ male + black + age97 + pcged97 + mratio96, data = df2)
+broom::tidy(lmtest::coeftest(reg1, vcov = vcovCL, cluster = df2$pcg_id.x))
+```

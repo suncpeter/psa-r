@@ -1,0 +1,299 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\Peter\Box\PhD\Research\PSA-R\Data\Data_Chapter10\data\gpscore_results.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}25 Jun 2020, 10:09:28
+{txt}
+{com}. 
+. //Run gpscor
+. set more off
+{txt}
+{com}. use chpt10, replace
+{txt}
+{com}. drop if k_adc==0
+{txt}(729 observations deleted)
+
+{com}. tab k_adc
+
+      {txt}k_adc {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+   7.692308 {c |}{res}         25        9.12        9.12
+{txt}   8.333333 {c |}{res}         10        3.65       12.77
+{txt}   9.090909 {c |}{res}          5        1.82       14.60
+{txt}         10 {c |}{res}          4        1.46       16.06
+{txt}   11.11111 {c |}{res}          8        2.92       18.98
+{txt}       12.5 {c |}{res}          1        0.36       19.34
+{txt}   14.28571 {c |}{res}          1        0.36       19.71
+{txt}   15.38462 {c |}{res}         15        5.47       25.18
+{txt}   16.66667 {c |}{res}          4        1.46       26.64
+{txt}   18.18182 {c |}{res}          4        1.46       28.10
+{txt}         20 {c |}{res}          5        1.82       29.93
+{txt}   22.22222 {c |}{res}          8        2.92       32.85
+{txt}   23.07692 {c |}{res}          9        3.28       36.13
+{txt}         25 {c |}{res}          4        1.46       37.59
+{txt}   27.27273 {c |}{res}          3        1.09       38.69
+{txt}   28.57143 {c |}{res}          1        0.36       39.05
+{txt}         30 {c |}{res}          6        2.19       41.24
+{txt}   30.76923 {c |}{res}          9        3.28       44.53
+{txt}   33.33333 {c |}{res}         13        4.74       49.27
+{txt}   36.36364 {c |}{res}          4        1.46       50.73
+{txt}   38.46154 {c |}{res}         12        4.38       55.11
+{txt}         40 {c |}{res}          6        2.19       57.30
+{txt}   41.66667 {c |}{res}          3        1.09       58.39
+{txt}   44.44444 {c |}{res}          4        1.46       59.85
+{txt}   45.45455 {c |}{res}          2        0.73       60.58
+{txt}   46.15385 {c |}{res}         11        4.01       64.60
+{txt}         50 {c |}{res}         11        4.01       68.61
+{txt}   53.84615 {c |}{res}          2        0.73       69.34
+{txt}   54.54545 {c |}{res}          2        0.73       70.07
+{txt}   55.55556 {c |}{res}          2        0.73       70.80
+{txt}   58.33333 {c |}{res}          5        1.82       72.63
+{txt}         60 {c |}{res}          5        1.82       74.45
+{txt}   61.53846 {c |}{res}         10        3.65       78.10
+{txt}       62.5 {c |}{res}          1        0.36       78.47
+{txt}   63.63636 {c |}{res}          3        1.09       79.56
+{txt}   66.66667 {c |}{res}          8        2.92       82.48
+{txt}   69.23077 {c |}{res}          7        2.55       85.04
+{txt}         70 {c |}{res}          3        1.09       86.13
+{txt}   72.72727 {c |}{res}          1        0.36       86.50
+{txt}         75 {c |}{res}          3        1.09       87.59
+{txt}   76.92308 {c |}{res}          5        1.82       89.42
+{txt}   77.77778 {c |}{res}          5        1.82       91.24
+{txt}         80 {c |}{res}          1        0.36       91.61
+{txt}   81.81818 {c |}{res}          2        0.73       92.34
+{txt}   84.61538 {c |}{res}         10        3.65       95.99
+{txt}       87.5 {c |}{res}          1        0.36       96.35
+{txt}   88.88889 {c |}{res}          1        0.36       96.72
+{txt}   90.90909 {c |}{res}          2        0.73       97.45
+{txt}   92.30769 {c |}{res}          3        1.09       98.54
+{txt}        100 {c |}{res}          4        1.46      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}        274      100.00
+{txt}
+{com}. gen     cut = 25  if k_adc<=25
+{txt}(171 missing values generated)
+
+{com}. replace cut = 60  if k_adc>25 & k_adc<=60
+{txt}(101 real changes made)
+
+{com}. replace cut = 100 if k_adc >60
+{txt}(70 real changes made)
+
+{com}. tab cut
+
+        {txt}cut {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+         25 {c |}{res}        103       37.59       37.59
+{txt}         60 {c |}{res}        101       36.86       74.45
+{txt}        100 {c |}{res}         70       25.55      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}        274      100.00
+{txt}
+{com}. 
+. gpscore pcg_adc age97 male black ///
+>  mratio96 pcged97, t(k_adc) ///
+>  gpscore(pscore) predict(hat_treat) ///
+>  sigma(sd) cutpoints(cut) index(p50) ///
+>  nq_gps(5) t_transf(lnskew0) test(Bayes_factor) detail
+
+{res}Generalized Propensity Score
+
+******************************************************
+Algorithm to estimate the generalized propensity score 
+****************************************************** 
+
+
+
+Estimation of the propensity score 
+
+The Zero-skewness log transformation of the treatment variable k_adc is used
+
+                              {txt}T
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res} 3.608037       3.608037
+{txt} 5%    {res} 3.608037       3.608037
+{txt}10%    {res} 3.625263       3.608037       {txt}Obs         {res}        274
+{txt}25%    {res} 3.797417       3.608037       {txt}Sum of Wgt. {res}        274
+
+{txt}50%    {res} 4.183041                      {txt}Mean          {res} 4.166399
+                        {txt}Largest       Std. Dev.     {res}  .376854
+{txt}75%    {res} 4.507995       4.861372
+{txt}90%    {res} 4.672633       4.861372       {txt}Variance      {res} .1420189
+{txt}95%    {res} 4.734589       4.861372       {txt}Skewness      {res}-.0000222
+{txt}99%    {res} 4.861372       4.861372       {txt}Kurtosis      {res}   1.7832
+
+{txt}initial:       log likelihood = {res}    -<inf>{txt}  (could not be evaluated)
+feasible:      log likelihood = {res}-7505.8873
+{txt}rescale:       log likelihood = {res}-607.30281
+{txt}rescale eq:    log likelihood = {res}-154.58244
+{txt}Iteration 0:{col 16}log likelihood = {res}-154.58244{txt}  
+Iteration 1:{col 16}log likelihood = {res}-95.618476{txt}  
+Iteration 2:{col 16}log likelihood = {res}  -87.3456{txt}  
+Iteration 3:{col 16}log likelihood = {res}-86.224209{txt}  
+Iteration 4:{col 16}log likelihood = {res}-86.223409{txt}  
+Iteration 5:{col 16}log likelihood = {res}-86.223409{txt}  
+
+{col 49}Number of obs{col 67}= {res}       274
+{txt}{col 49}Wald chi2({res}6{txt}){col 67}= {res}     78.90
+{txt}Log likelihood = {res}-86.223409{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}           T{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}eq1          {txt}{c |}
+{space 5}pcg_adc {c |}{col 14}{res}{space 2} .0249492{col 26}{space 2} .0081308{col 37}{space 1}    3.07{col 46}{space 3}0.002{col 54}{space 4} .0090132{col 67}{space 3} .0408852
+{txt}{space 7}age97 {c |}{col 14}{res}{space 2} .0053311{col 26}{space 2} .0071508{col 37}{space 1}    0.75{col 46}{space 3}0.456{col 54}{space 4}-.0086843{col 67}{space 3} .0193465
+{txt}{space 8}male {c |}{col 14}{res}{space 2}-.0528454{col 26}{space 2} .0405265{col 37}{space 1}   -1.30{col 46}{space 3}0.192{col 54}{space 4} -.132276{col 67}{space 3} .0265851
+{txt}{space 7}black {c |}{col 14}{res}{space 2} .0909976{col 26}{space 2} .0527316{col 37}{space 1}    1.73{col 46}{space 3}0.084{col 54}{space 4}-.0123545{col 67}{space 3} .1943497
+{txt}{space 4}mratio96 {c |}{col 14}{res}{space 2}-.1319046{col 26}{space 2}  .021381{col 37}{space 1}   -6.17{col 46}{space 3}0.000{col 54}{space 4}-.1738105{col 67}{space 3}-.0899987
+{txt}{space 5}pcged97 {c |}{col 14}{res}{space 2}-.0200609{col 26}{space 2} .0134216{col 37}{space 1}   -1.49{col 46}{space 3}0.135{col 54}{space 4}-.0463669{col 67}{space 3}  .006245
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 4.409499{col 26}{space 2} .1653171{col 37}{space 1}   26.67{col 46}{space 3}0.000{col 54}{space 4} 4.085483{col 67}{space 3} 4.733514
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}eq2          {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} .3314579{col 26}{space 2} .0141592{col 37}{space 1}   23.41{col 46}{space 3}0.000{col 54}{space 4} .3037064{col 67}{space 3} .3592094
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}Test for normality of the disturbances
+
+Kolmogorov-Smirnov equality-of-distributions test
+Normal Distribution of the disturbances
+
+{txt}One-sample Kolmogorov-Smirnov test against theoretical distribution
+           normal((res_etreat - r(mean))/sqrt(r(Var)))
+
+ Smaller group       D       P-value  Corrected
+ {hline 46}
+ res_etreat:       {res}  0.0630    0.114
+{txt} Cumulative:       {res} -0.0597    0.141
+{txt} Combined K-S:     {res}  0.0630    0.227      0.204
+
+{txt}Note: Ties exist in dataset; 
+      there are 271 unique values out of 274 observations.
+
+The assumption of Normality is statistically satisfied at .05 level
+
+           Estimated generalized propensity score
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res} .1268813       .0441524
+{txt} 5%    {res} .2380916       .1163848
+{txt}10%    {res} .3449092       .1268813       {txt}Obs         {res}        274
+{txt}25%    {res} .5841727       .1354869       {txt}Sum of Wgt. {res}        274
+
+{txt}50%    {res} .8509963                      {txt}Mean          {res} .8156506
+                        {txt}Largest       Std. Dev.     {res} .3130054
+{txt}75%    {res} 1.111649       1.203522
+{txt}90%    {res}  1.18659       1.203532       {txt}Variance      {res} .0979724
+{txt}95%    {res} 1.199575       1.203561       {txt}Skewness      {res}-.5078767
+{txt}99%    {res} 1.203532       1.203598       {txt}Kurtosis      {res} 2.172566
+
+******************************************** 
+End of the algorithm to estimate the gpscore 
+******************************************** 
+
+******************************************************************************
+The set of the potential treatment values is divided into 3 intervals
+
+The values of the gpscore evaluated at the representative point of each
+treatment interval are divided into 5 intervals
+******************************************************************************
+
+***********************************************************
+Summary statistics of the distribution of the GPS evaluated
+at the representative point of each treatment interval
+***********************************************************
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 7}gps_1 {c |}{res}        274    .4630824    .2814854   .0847197   1.203596
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 7}gps_2 {c |}{res}        274    1.064274    .2032879   .0051903   1.203584
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 7}gps_3 {c |}{res}        274    .4778988    .2610872   .0000411    1.02816
+
+
+************************************************************************************
+Test that the conditional mean of the pre-treatment variables given the generalized 
+propensity score is not different between units who belong to a particular treatment
+interval and units who belong to all other treatment intervals
+************************************************************************************
+
+{txt}Treatment Gruop No 1 - [7.692307692307693, 25]
+
+               Mean        Standard   
+               Difference  Deviation   Bayes-Factor
+
+     pcg_adc  {res} .18131       .31168     4.7608
+
+       {txt}age97  {res} .19101       .39241     5.0153
+
+        {txt}male  {res} .05722       .06902     3.9827
+
+       {txt}black  {res} .02043        .0474     5.1489
+
+    {txt}mratio96  {res}-.18193       .09596     .93354
+
+     {txt}pcged97  {res}  .0553       .20223     5.4514
+
+
+{txt}Treatment Gruop No 2 - [27.27272727272727, 60]
+
+               Mean        Standard   
+               Difference  Deviation   Bayes-Factor
+
+     pcg_adc  {res} .64063       .32088     .73694
+
+       {txt}age97  {res} .34649       .35642     3.3307
+
+        {txt}male  {res}-.09612       .06393     1.7171
+
+       {txt}black  {res} .01377       .04804     5.1873
+
+    {txt}mratio96  {res} .05631       .10619     4.6806
+
+     {txt}pcged97  {res}-.43328       .19075     .42034
+
+
+{txt}Treatment Gruop No 3 - [61.53846153846154, 100]
+
+               Mean        Standard   
+               Difference  Deviation   Bayes-Factor
+
+     pcg_adc  {res}-.23433       .29455     3.6901
+
+       {txt}age97  {res}-.62966       .45096     1.8994
+
+        {txt}male  {res} .09242       .08113     2.6352
+
+       {txt}black  {res}  .0137       .06767     4.9919
+
+    {txt}mratio96  {res} .30989       .15045     .61272
+
+     {txt}pcged97  {res}  .4288       .24358     1.0731
+
+
+According to the Bayes Factor:
+
+Very slight evidence against the balancing property
+
+Minimum bayes factor =.42034322 in (0.316; 1)
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\Peter\AppData\Local\Temp\STD201c_000000.tmp"
+{txt}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\Peter\Box\PhD\Research\PSA-R\Data\Data_Chapter10\data\gpscore_results.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}25 Jun 2020, 10:09:39
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

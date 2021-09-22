@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5 Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD &amp; PS) | R Code for Propensity Score Analysis</title>
+  <meta name="description" content="5 Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD &amp; PS) | R Code for Propensity Score Analysis" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5 Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD &amp; PS) | R Code for Propensity Score Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5 Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD &amp; PS) | R Code for Propensity Score Analysis" />
+  
+  
+  
+
+<meta name="author" content="Shanshan Du, Peter Sun, and Shenyang Guo" />
+
+
+<meta name="date" content="2020-12-30" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="03_Section4.4.3.html"/>
+<link rel="next" href="05_Section5.8.2_5.8.3_5.8.4.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html"><i class="fa fa-check"></i><b>2</b> Section 4.4.1 Application of the Treatment Effect Model to Analysis of Observational Data (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#preparation"><i class="fa fa-check"></i><b>2.1</b> Preparation</a></li>
+<li class="chapter" data-level="2.2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#treatment-effect"><i class="fa fa-check"></i><b>2.2</b> Treatment Effect</a></li>
+<li class="chapter" data-level="2.3" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#bivariate-t-test"><i class="fa fa-check"></i><b>2.3</b> Bivariate t-test</a></li>
+<li class="chapter" data-level="2.4" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#regression-control"><i class="fa fa-check"></i><b>2.4</b> Regression Control</a></li>
+<li class="chapter" data-level="2.5" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#sample-description"><i class="fa fa-check"></i><b>2.5</b> Sample Description</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html"><i class="fa fa-check"></i><b>3</b> Section 4.4.2 Evaluation of Treatment Effects From a Program With a Group Randomization Design (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#preparation-1"><i class="fa fa-check"></i><b>3.1</b> Preparation</a></li>
+<li class="chapter" data-level="3.2" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#treatment-effect-using-robust-to-control-for-clustering"><i class="fa fa-check"></i><b>3.2</b> Treatment Effect: Using Robust to Control for Clustering</a></li>
+<li class="chapter" data-level="3.3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#bivariate-t-test-1"><i class="fa fa-check"></i><b>3.3</b> Bivariate t-test</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html"><i class="fa fa-check"></i><b>4</b> Section 4.4.3 Main Features of Treatreg (PS &amp; SD)</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#preparation-2"><i class="fa fa-check"></i><b>4.1</b> Preparation</a></li>
+<li class="chapter" data-level="4.2" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#run-models"><i class="fa fa-check"></i><b>4.2</b> Run Models</a></li>
+<li class="chapter" data-level="4.3" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#extract-coefficients"><i class="fa fa-check"></i><b>4.3</b> Extract Coefficients</a></li>
+<li class="chapter" data-level="4.4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#get-combined-results"><i class="fa fa-check"></i><b>4.4</b> Get Combined Results</a></li>
+<li class="chapter" data-level="4.5" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#results"><i class="fa fa-check"></i><b>4.5</b> Results</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html"><i class="fa fa-check"></i><b>5</b> Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#preparation-3"><i class="fa fa-check"></i><b>5.1</b> Preparation</a></li>
+<li class="chapter" data-level="5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#propensity-score-estimation"><i class="fa fa-check"></i><b>5.2</b> Propensity Score Estimation</a></li>
+<li class="chapter" data-level="5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-comparisons"><i class="fa fa-check"></i><b>5.3</b> Bivariate Comparisons</a></li>
+<li class="chapter" data-level="5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-covariate-balcance-check"><i class="fa fa-check"></i><b>5.4</b> PSM based on Logistic regression &amp; Covariate Balcance Check</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.4.1</b> Scheme 1 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.4.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.4.2</b> Scheme 2 - Nearest neighbor within caliper .1*SD</a></li>
+<li class="chapter" data-level="5.4.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.4.3</b> Scheme 3 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.4.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.4.4</b> Scheme 4 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-2"><i class="fa fa-check"></i><b>5.5</b> PSM based on Logistic regression 2</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.5.1</b> Scheme 5 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6---nearest-neighbor-within-caliper-.1sd-note-caliper-in-matchit-is-not-real-data"><i class="fa fa-check"></i><b>5.5.2</b> Scheme 6 - Nearest neighbor within caliper .1*SD (Note: caliper in MatchIt is not real data)</a></li>
+<li class="chapter" data-level="5.5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.5.3</b> Scheme 7 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.5.4</b> Scheme 8 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-3"><i class="fa fa-check"></i><b>5.6</b> PSM based on Logistic regression 3</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.6.1</b> Scheme 9 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.6.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.6.2</b> Scheme 10 - Nearest neighbor within caliper .1*SD</a></li>
+<li class="chapter" data-level="5.6.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.6.3</b> Scheme 11 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.6.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.6.4</b> Scheme 12 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-test-after-matching"><i class="fa fa-check"></i><b>5.7</b> Bivariate test after matching</a></li>
+<li class="chapter" data-level="5.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#kaplan-meier-and-significance-test-of-difference-on-survivor-function"><i class="fa fa-check"></i><b>5.8</b> Kaplan-Meier and significance test of difference on survivor function</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#all"><i class="fa fa-check"></i><b>5.8.1</b> All</a></li>
+<li class="chapter" data-level="5.8.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1"><i class="fa fa-check"></i><b>5.8.2</b> Scheme 1</a></li>
+<li class="chapter" data-level="5.8.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2"><i class="fa fa-check"></i><b>5.8.3</b> Scheme 2</a></li>
+<li class="chapter" data-level="5.8.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3"><i class="fa fa-check"></i><b>5.8.4</b> Scheme 3</a></li>
+<li class="chapter" data-level="5.8.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4"><i class="fa fa-check"></i><b>5.8.5</b> Scheme 4</a></li>
+<li class="chapter" data-level="5.8.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5"><i class="fa fa-check"></i><b>5.8.6</b> Scheme 5</a></li>
+<li class="chapter" data-level="5.8.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6"><i class="fa fa-check"></i><b>5.8.7</b> Scheme 6</a></li>
+<li class="chapter" data-level="5.8.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7"><i class="fa fa-check"></i><b>5.8.8</b> Scheme 7</a></li>
+<li class="chapter" data-level="5.8.9" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8"><i class="fa fa-check"></i><b>5.8.9</b> Scheme 8</a></li>
+<li class="chapter" data-level="5.8.10" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9"><i class="fa fa-check"></i><b>5.8.10</b> Scheme 9</a></li>
+<li class="chapter" data-level="5.8.11" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10"><i class="fa fa-check"></i><b>5.8.11</b> Scheme 10</a></li>
+<li class="chapter" data-level="5.8.12" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11"><i class="fa fa-check"></i><b>5.8.12</b> Scheme 11</a></li>
+<li class="chapter" data-level="5.8.13" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12"><i class="fa fa-check"></i><b>5.8.13</b> Scheme 12</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html"><i class="fa fa-check"></i><b>6</b> Section 5.8.2, 5.8.3, and 5.8.4 (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.2-optimal-matching"><i class="fa fa-check"></i><b>6.1</b> Section 5.8.2 Optimal Matching</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#load-data"><i class="fa fa-check"></i><b>6.1.1</b> Load Data</a></li>
+<li class="chapter" data-level="6.1.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#bivariate-comparisons-1"><i class="fa fa-check"></i><b>6.1.2</b> Bivariate Comparisons</a></li>
+<li class="chapter" data-level="6.1.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#outcome-without-bias-control"><i class="fa fa-check"></i><b>6.1.3</b> Outcome Without Bias Control</a></li>
+<li class="chapter" data-level="6.1.4" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#matching"><i class="fa fa-check"></i><b>6.1.4</b> Matching</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.3-post-full-matching-analysis-of-outcome"><i class="fa fa-check"></i><b>6.2</b> Section 5.8.3 Post-Full-Matching Analysis of Outcome</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#hodges-lehmann-aligned-rank-test"><i class="fa fa-check"></i><b>6.2.1</b> Hodges-Lehmann Aligned Rank Test</a></li>
+<li class="chapter" data-level="6.2.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cohens-d"><i class="fa fa-check"></i><b>6.2.2</b> Cohen’s d</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.4-post-matching-analysis-using-regression-of-difference-scores"><i class="fa fa-check"></i><b>6.3</b> Section 5.8.4 Post-Matching Analysis Using Regression of Difference Scores</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html"><i class="fa fa-check"></i><b>7</b> Section 5.8.5 Multilevel Propensity Score (PS)</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccpros57"><i class="fa fa-check"></i><b>7.1</b> cccpros57</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data"><i class="fa fa-check"></i><b>7.1.1</b> Import Data</a></li>
+<li class="chapter" data-level="7.1.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score"><i class="fa fa-check"></i><b>7.1.2</b> Obtain Single-Level p-score</a></li>
+<li class="chapter" data-level="7.1.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model"><i class="fa fa-check"></i><b>7.1.3</b> Obtain School-Level p-score Model</a></li>
+<li class="chapter" data-level="7.1.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check"><i class="fa fa-check"></i><b>7.1.4</b> Before-Matching Balance Check</a></li>
+<li class="chapter" data-level="7.1.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl"><i class="fa fa-check"></i><b>7.1.5</b> Matching with ps_sgl</a></li>
+<li class="chapter" data-level="7.1.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch"><i class="fa fa-check"></i><b>7.1.6</b> Matching with ps_sch</a></li>
+<li class="chapter" data-level="7.1.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc"><i class="fa fa-check"></i><b>7.1.7</b> Check ICC</a></li>
+<li class="chapter" data-level="7.1.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel"><i class="fa fa-check"></i><b>7.1.8</b> Outcome Analsis: Multilevel</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccragg24"><i class="fa fa-check"></i><b>7.2</b> cccragg24</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data-1"><i class="fa fa-check"></i><b>7.2.1</b> Import Data</a></li>
+<li class="chapter" data-level="7.2.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score-1"><i class="fa fa-check"></i><b>7.2.2</b> Obtain Single-Level p-score</a></li>
+<li class="chapter" data-level="7.2.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model-1"><i class="fa fa-check"></i><b>7.2.3</b> Obtain School-Level p-score Model</a></li>
+<li class="chapter" data-level="7.2.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check-1"><i class="fa fa-check"></i><b>7.2.4</b> Before-Matching Balance Check</a></li>
+<li class="chapter" data-level="7.2.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl-1"><i class="fa fa-check"></i><b>7.2.5</b> Matching with ps_sgl</a></li>
+<li class="chapter" data-level="7.2.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch-1"><i class="fa fa-check"></i><b>7.2.6</b> Matching with ps_sch</a></li>
+<li class="chapter" data-level="7.2.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc-1"><i class="fa fa-check"></i><b>7.2.7</b> Check ICC</a></li>
+<li class="chapter" data-level="7.2.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel-1"><i class="fa fa-check"></i><b>7.2.8</b> Outcome Analsis: Multilevel</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html"><i class="fa fa-check"></i><b>8</b> Section 5.8.6 Comparison of Rand-gbm and Stata-boost (PS)</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#import-data-2"><i class="fa fa-check"></i><b>8.1</b> Import Data</a></li>
+<li class="chapter" data-level="8.2" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-rand-gbm-ps"><i class="fa fa-check"></i><b>8.2</b> Optimal pair matching Using pscores generated by Rand-gbm (ps)</a></li>
+<li class="chapter" data-level="8.3" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-stata-boost-psb"><i class="fa fa-check"></i><b>8.3</b> Optimal pair matching Using pscores generated by Stata-boost (psb)</a></li>
+<li class="chapter" data-level="8.4" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#balance-checks"><i class="fa fa-check"></i><b>8.4</b> Balance Checks</a></li>
+<li class="chapter" data-level="8.5" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#postmatching-regression-analysis-using-difference-scores"><i class="fa fa-check"></i><b>8.5</b> Postmatching Regression Analysis Using Difference Scores</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html"><i class="fa fa-check"></i><b>9</b> Section 6.5.2 Subclassification &amp; Cox Proportional Hazards (PS)</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#import-data-3"><i class="fa fa-check"></i><b>9.1</b> Import Data</a></li>
+<li class="chapter" data-level="9.2" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-propensity-score-using-logistic"><i class="fa fa-check"></i><b>9.2</b> Create Propensity Score Using Logistic</a></li>
+<li class="chapter" data-level="9.3" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-conduct-balance-check-using-normalized-difference"><i class="fa fa-check"></i><b>9.3</b> Function to Conduct Balance Check Using Normalized Difference</a></li>
+<li class="chapter" data-level="9.4" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-normalized-difference"><i class="fa fa-check"></i><b>9.4</b> Balance Check on the Original Sample (Normalized Difference)</a></li>
+<li class="chapter" data-level="9.5" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-check-balance-using-chi-square-tests"><i class="fa fa-check"></i><b>9.5</b> Function to Check Balance Using Chi-Square Tests</a></li>
+<li class="chapter" data-level="9.6" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-chi-square"><i class="fa fa-check"></i><b>9.6</b> Balance Check on the Original Sample (Chi-Square)</a></li>
+<li class="chapter" data-level="9.7" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#get-quintiles"><i class="fa fa-check"></i><b>9.7</b> Get Quintiles</a></li>
+<li class="chapter" data-level="9.8" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-subclasses-using-quintiles"><i class="fa fa-check"></i><b>9.8</b> Create 5 Subclasses Using Quintiles</a></li>
+<li class="chapter" data-level="9.9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#check-imbalance-post-subclassification-5-subclasses"><i class="fa fa-check"></i><b>9.9</b> Check Imbalance Post-Subclassification (5 Subclasses)</a></li>
+<li class="chapter" data-level="9.10" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trimming-search-for-best-cutoff-alpha-for-overlap"><i class="fa fa-check"></i><b>9.10</b> Trimming: Search for Best Cutoff Alpha for Overlap</a></li>
+<li class="chapter" data-level="9.11" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trim-observations"><i class="fa fa-check"></i><b>9.11</b> Trim Observations</a></li>
+<li class="chapter" data-level="9.12" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-new-subclasses-and-check-imbalance"><i class="fa fa-check"></i><b>9.12</b> Create 5 New Subclasses and Check Imbalance</a></li>
+<li class="chapter" data-level="9.13" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#outcome-analysis-by-subclass"><i class="fa fa-check"></i><b>9.13</b> Outcome Analysis by Subclass</a></li>
+<li class="chapter" data-level="9.14" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#aggregate-results"><i class="fa fa-check"></i><b>9.14</b> Aggregate Results</a></li>
+<li class="chapter" data-level="9.15" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#subclassification-with-matchit"><i class="fa fa-check"></i><b>9.15</b> Subclassification with MatchIt</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html"><i class="fa fa-check"></i><b>10</b> Section 7.3.1 Propensity Score Weighting (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#preparation-4"><i class="fa fa-check"></i><b>10.1</b> Preparation</a></li>
+<li class="chapter" data-level="10.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-1-obtain-weights-with-weightit"><i class="fa fa-check"></i><b>10.2</b> Solution 1: Obtain Weights with WeightIt</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights"><i class="fa fa-check"></i><b>10.2.1</b> Weights</a></li>
+<li class="chapter" data-level="10.2.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights"><i class="fa fa-check"></i><b>10.2.2</b> PSW With ATE Weights</a></li>
+<li class="chapter" data-level="10.2.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights"><i class="fa fa-check"></i><b>10.2.3</b> PSW With ATT Weights</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-2-creating-the-weights-manually"><i class="fa fa-check"></i><b>10.3</b> Solution 2: Creating the Weights Manually</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights-1"><i class="fa fa-check"></i><b>10.3.1</b> Weights</a></li>
+<li class="chapter" data-level="10.3.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights-1"><i class="fa fa-check"></i><b>10.3.2</b> PSW With ATE Weights</a></li>
+<li class="chapter" data-level="10.3.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights-1"><i class="fa fa-check"></i><b>10.3.3</b> PSW With ATT Weights</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#imbalance-checks"><i class="fa fa-check"></i><b>10.4</b> Imbalance Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html"><i class="fa fa-check"></i><b>11</b> Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#preparation-5"><i class="fa fa-check"></i><b>11.1</b> Preparation</a></li>
+<li class="chapter" data-level="11.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#propensity-score-weighting"><i class="fa fa-check"></i><b>11.2</b> Propensity Score Weighting</a></li>
+<li class="chapter" data-level="11.3" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#cox-proportional-hazards-model"><i class="fa fa-check"></i><b>11.3</b> Cox Proportional Hazards Model</a></li>
+<li class="chapter" data-level="11.4" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#checking-imbalance"><i class="fa fa-check"></i><b>11.4</b> Checking Imbalance</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#chi-square-tests-original-sample"><i class="fa fa-check"></i><b>11.4.1</b> Chi-square Tests: Original Sample</a></li>
+<li class="chapter" data-level="11.4.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#weighted-logistic-regression"><i class="fa fa-check"></i><b>11.4.2</b> Weighted Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html"><i class="fa fa-check"></i><b>12</b> Section 8.4.1 Matching with Bias-Corrected and Robust Variance Estimators (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#preparation-6"><i class="fa fa-check"></i><b>12.1</b> Preparation</a></li>
+<li class="chapter" data-level="12.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#breusch-pagan-test-for-heteroskedasticity"><i class="fa fa-check"></i><b>12.2</b> Breusch-Pagan Test for Heteroskedasticity</a></li>
+<li class="chapter" data-level="12.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#matching-estimators"><i class="fa fa-check"></i><b>12.3</b> Matching Estimators</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-sate"><i class="fa fa-check"></i><b>12.3.1</b> Sample Average Treatment Effect (SATE)</a></li>
+<li class="chapter" data-level="12.3.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-pate"><i class="fa fa-check"></i><b>12.3.2</b> Population Average Treatment Effect (PATE)</a></li>
+<li class="chapter" data-level="12.3.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-treated-satt"><i class="fa fa-check"></i><b>12.3.3</b> Sample average treatment effect for the treated (SATT)</a></li>
+<li class="chapter" data-level="12.3.4" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-treated-patt"><i class="fa fa-check"></i><b>12.3.4</b> Population average treatment effect for the treated (PATT)</a></li>
+<li class="chapter" data-level="12.3.5" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-controls-satc"><i class="fa fa-check"></i><b>12.3.5</b> Sample average treatment effect for the controls (SATC)</a></li>
+<li class="chapter" data-level="12.3.6" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-controls-patc"><i class="fa fa-check"></i><b>12.3.6</b> Population average treatment effect for the controls (PATC)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html"><i class="fa fa-check"></i><b>13</b> Section 8.4.2 Efficacy Subset &amp; Matching Estimators (PS)</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#check-sample-sizes-and-get-summary-statistics"><i class="fa fa-check"></i><b>13.1</b> Check Sample Sizes and Get Summary Statistics</a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4adq"><i class="fa fa-check"></i><b>13.1.1</b> g4adq</a></li>
+<li class="chapter" data-level="13.1.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4hi"><i class="fa fa-check"></i><b>13.1.2</b> g4hi</a></li>
+<li class="chapter" data-level="13.1.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5adq"><i class="fa fa-check"></i><b>13.1.3</b> g5adq</a></li>
+<li class="chapter" data-level="13.1.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5hi"><i class="fa fa-check"></i><b>13.1.4</b> g5hi</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#functions-for-matching"><i class="fa fa-check"></i><b>13.2</b> Functions for Matching</a></li>
+<li class="chapter" data-level="13.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#define-matching-variables"><i class="fa fa-check"></i><b>13.3</b> Define Matching Variables</a></li>
+<li class="chapter" data-level="13.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#matching-1"><i class="fa fa-check"></i><b>13.4</b> Matching</a></li>
+<li class="chapter" data-level="13.5" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#function-to-aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.5</b> Function to Aggregate Using Rubin’s Rule</a></li>
+<li class="chapter" data-level="13.6" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.6</b> Aggregate Using Rubin’s Rule</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html"><i class="fa fa-check"></i><b>14</b> Section 10.6.1 Modeling Doses of Treatment (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#preparation-7"><i class="fa fa-check"></i><b>14.1</b> Preparation</a></li>
+<li class="chapter" data-level="14.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#create-treatment-variable"><i class="fa fa-check"></i><b>14.2</b> Create Treatment Variable</a></li>
+<li class="chapter" data-level="14.3" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#generalized-propensity-scores"><i class="fa fa-check"></i><b>14.3</b> Generalized Propensity Scores</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#mulitinomial-logit-model"><i class="fa fa-check"></i><b>14.3.1</b> Mulitinomial Logit Model</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#sampling-weights"><i class="fa fa-check"></i><b>14.4</b> Sampling Weights</a></li>
+<li class="chapter" data-level="14.5" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#dummy-variables"><i class="fa fa-check"></i><b>14.5</b> Dummy Variables</a></li>
+<li class="chapter" data-level="14.6" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#regression"><i class="fa fa-check"></i><b>14.6</b> Regression</a>
+<ul>
+<li class="chapter" data-level="14.6.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#without-control"><i class="fa fa-check"></i><b>14.6.1</b> Without Control</a></li>
+<li class="chapter" data-level="14.6.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#with-control"><i class="fa fa-check"></i><b>14.6.2</b> With Control</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html"><i class="fa fa-check"></i><b>15</b> Section 11.5.1 &amp; 11.5.2 Sensitivity Analysis of the Effects (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.1-sensitivity-analysis-of-the-effects"><i class="fa fa-check"></i><b>15.1</b> Section 11.5.1 Sensitivity Analysis of the Effects</a></li>
+<li class="chapter" data-level="15.2" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.2-sensitivity-analysis-pair-matching"><i class="fa fa-check"></i><b>15.2</b> Section 11.5.2 Sensitivity Analysis &amp; Pair Matching</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Code for <em>Propensity Score Analysis</em></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="section-5.8.1-greedy-matching-and-subsequent-analysis-of-hazard-rates-sd-ps" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD &amp; PS)</h1>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="04_Section5.8.1.html#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MatchIt)</span>
+<span id="cb69-2"><a href="04_Section5.8.1.html#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cobalt)</span>
+<span id="cb69-3"><a href="04_Section5.8.1.html#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gmodels)</span>
+<span id="cb69-4"><a href="04_Section5.8.1.html#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb69-5"><a href="04_Section5.8.1.html#cb69-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb69-6"><a href="04_Section5.8.1.html#cb69-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survMisc)</span>
+<span id="cb69-7"><a href="04_Section5.8.1.html#cb69-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survminer)</span>
+<span id="cb69-8"><a href="04_Section5.8.1.html#cb69-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb69-9"><a href="04_Section5.8.1.html#cb69-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb69-10"><a href="04_Section5.8.1.html#cb69-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb69-11"><a href="04_Section5.8.1.html#cb69-11" aria-hidden="true" tabindex="-1"></a>select <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>select</span></code></pre></div>
+<div id="preparation-3" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Preparation</h2>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="04_Section5.8.1.html#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
+<span id="cb70-2"><a href="04_Section5.8.1.html#cb70-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/chpt5_1_original.dta&quot;</span>)</span>
+<span id="cb70-3"><a href="04_Section5.8.1.html#cb70-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-4"><a href="04_Section5.8.1.html#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="co"># make convenient objects</span></span>
+<span id="cb70-5"><a href="04_Section5.8.1.html#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="do">## names of match vars</span></span>
+<span id="cb70-6"><a href="04_Section5.8.1.html#cb70-6" aria-hidden="true" tabindex="-1"></a>match_vars1 <span class="ot">&lt;-</span> <span class="fu">colnames</span>(<span class="fu">select</span>(d, PSH17A<span class="sc">:</span>other, <span class="sc">-</span>aodserv))</span>
+<span id="cb70-7"><a href="04_Section5.8.1.html#cb70-7" aria-hidden="true" tabindex="-1"></a>match_vars2 <span class="ot">&lt;-</span> <span class="fu">colnames</span>(<span class="fu">select</span>(d, PSH17A<span class="sc">:</span>cwwrep, <span class="sc">-</span>aodserv))</span>
+<span id="cb70-8"><a href="04_Section5.8.1.html#cb70-8" aria-hidden="true" tabindex="-1"></a>match_vars3 <span class="ot">&lt;-</span> <span class="fu">colnames</span>(<span class="fu">select</span>(d, PSH17A<span class="sc">:</span>cgneed, <span class="sc">-</span>aodserv))</span>
+<span id="cb70-9"><a href="04_Section5.8.1.html#cb70-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-10"><a href="04_Section5.8.1.html#cb70-10" aria-hidden="true" tabindex="-1"></a><span class="do">## PS formula</span></span>
+<span id="cb70-11"><a href="04_Section5.8.1.html#cb70-11" aria-hidden="true" tabindex="-1"></a>psform1 <span class="ot">&lt;-</span> <span class="fu">f.build</span>(<span class="st">&quot;aodserv&quot;</span>, match_vars1)</span>
+<span id="cb70-12"><a href="04_Section5.8.1.html#cb70-12" aria-hidden="true" tabindex="-1"></a>psform2 <span class="ot">&lt;-</span> <span class="fu">f.build</span>(<span class="st">&quot;aodserv&quot;</span>, match_vars2)</span>
+<span id="cb70-13"><a href="04_Section5.8.1.html#cb70-13" aria-hidden="true" tabindex="-1"></a>psform3 <span class="ot">&lt;-</span> <span class="fu">f.build</span>(<span class="st">&quot;aodserv&quot;</span>, match_vars3)</span>
+<span id="cb70-14"><a href="04_Section5.8.1.html#cb70-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-15"><a href="04_Section5.8.1.html#cb70-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for balance check</span></span>
+<span id="cb70-16"><a href="04_Section5.8.1.html#cb70-16" aria-hidden="true" tabindex="-1"></a>get_bal <span class="ot">&lt;-</span> <span class="cf">function</span>(out)</span>
+<span id="cb70-17"><a href="04_Section5.8.1.html#cb70-17" aria-hidden="true" tabindex="-1"></a>  cobalt<span class="sc">::</span><span class="fu">love.plot</span>(out,</span>
+<span id="cb70-18"><a href="04_Section5.8.1.html#cb70-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">binary =</span> <span class="st">&quot;std&quot;</span>,</span>
+<span id="cb70-19"><a href="04_Section5.8.1.html#cb70-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">stats =</span> <span class="fu">c</span>(<span class="st">&quot;mean.diffs&quot;</span>),</span>
+<span id="cb70-20"><a href="04_Section5.8.1.html#cb70-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="fu">c</span>(.<span class="dv">1</span>),</span>
+<span id="cb70-21"><a href="04_Section5.8.1.html#cb70-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">var.order =</span> <span class="st">&quot;unadjusted&quot;</span>,</span>
+<span id="cb70-22"><a href="04_Section5.8.1.html#cb70-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">line =</span> <span class="cn">TRUE</span></span>
+<span id="cb70-23"><a href="04_Section5.8.1.html#cb70-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="propensity-score-estimation" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Propensity Score Estimation</h2>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="04_Section5.8.1.html#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># logistic 1</span></span>
+<span id="cb71-2"><a href="04_Section5.8.1.html#cb71-2" aria-hidden="true" tabindex="-1"></a>psmodel1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(psform1, <span class="at">data =</span> d, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb71-3"><a href="04_Section5.8.1.html#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(psmodel1)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = psform1, family = binomial(), data = d)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.6438  -0.4514  -0.2918  -0.1913   2.9941  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -3.08390    0.55184  -5.588 2.29e-08 ***
+## PSH17A       1.36643    0.16501   8.281  &lt; 2e-16 ***
+## CRA47A      -0.05870    0.14756  -0.398 0.690761    
+## married      0.05537    0.16348   0.339 0.734845    
+## high        -0.16055    0.15412  -1.042 0.297546    
+## bahigh      -0.42414    0.21172  -2.003 0.045142 *  
+## poverty2    -0.14588    0.17830  -0.818 0.413269    
+## poverty3    -0.32912    0.23375  -1.408 0.159126    
+## poverty4    -0.12501    0.26138  -0.478 0.632463    
+## poverty5     0.09470    0.25266   0.375 0.707812    
+## employ      -0.17456    0.14975  -1.166 0.243744    
+## open         0.80711    0.15888   5.080 3.77e-07 ***
+## black        0.16694    0.16609   1.005 0.314827    
+## hispanic     0.29803    0.21530   1.384 0.166285    
+## natam        0.88220    0.26281   3.357 0.000788 ***
+## cgrage1     -1.22543    0.44893  -2.730 0.006340 ** 
+## cgrage2     -0.75447    0.46083  -1.637 0.101588    
+## cgrage3     -0.71892    0.51347  -1.400 0.161476    
+## chdage1      1.08795    0.22546   4.826 1.40e-06 ***
+## chdage2      0.34131    0.26566   1.285 0.198879    
+## chdage3      0.23326    0.23314   1.001 0.317061    
+## mental       0.73412    0.14429   5.088 3.62e-07 ***
+## arrest       1.03357    0.14070   7.346 2.05e-13 ***
+## sexual      -0.66734    0.33500  -1.992 0.046365 *  
+## provide      0.44020    0.20441   2.154 0.031277 *  
+## supervis     0.10838    0.20141   0.538 0.590524    
+## other        0.21122    0.24002   0.880 0.378865    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 1888.8  on 2757  degrees of freedom
+## Residual deviance: 1508.5  on 2731  degrees of freedom
+## AIC: 1562.5
+## 
+## Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="04_Section5.8.1.html#cb73-1" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(psmodel1, <span class="at">newdata =</span> d, <span class="at">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb73-2"><a href="04_Section5.8.1.html#cb73-2" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>ps1 <span class="ot">&lt;-</span> <span class="fu">log</span>((<span class="dv">1</span> <span class="sc">-</span> d<span class="sc">$</span>p1) <span class="sc">/</span> (d<span class="sc">$</span>p1))</span>
+<span id="cb73-3"><a href="04_Section5.8.1.html#cb73-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-4"><a href="04_Section5.8.1.html#cb73-4" aria-hidden="true" tabindex="-1"></a><span class="co"># logistic 2</span></span>
+<span id="cb73-5"><a href="04_Section5.8.1.html#cb73-5" aria-hidden="true" tabindex="-1"></a>psmodel2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(psform2, <span class="at">data =</span> d, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb73-6"><a href="04_Section5.8.1.html#cb73-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(psmodel2)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = psform2, family = binomial(), data = d)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.5328  -0.2371  -0.1569  -0.1127   3.1786  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -3.93287    0.76855  -5.117 3.10e-07 ***
+## PSH17A       0.35830    0.23549   1.522 0.128134    
+## CRA47A      -0.19514    0.19862  -0.982 0.325865    
+## married      0.39739    0.22083   1.800 0.071929 .  
+## high         0.07841    0.21128   0.371 0.710541    
+## bahigh      -0.06395    0.28667  -0.223 0.823466    
+## poverty2    -0.20632    0.24105  -0.856 0.392039    
+## poverty3    -0.22029    0.30907  -0.713 0.476000    
+## poverty4    -0.09863    0.35644  -0.277 0.782015    
+## poverty5    -0.27714    0.34128  -0.812 0.416760    
+## employ      -0.32332    0.20119  -1.607 0.108037    
+## open         0.16749    0.20614   0.812 0.416518    
+## black       -0.36731    0.23130  -1.588 0.112285    
+## hispanic    -0.08868    0.30319  -0.292 0.769914    
+## natam        0.76930    0.36310   2.119 0.034115 *  
+## cgrage1     -0.92469    0.64331  -1.437 0.150606    
+## cgrage2     -0.45959    0.65310  -0.704 0.481620    
+## cgrage3     -0.42056    0.71567  -0.588 0.556773    
+## chdage1      0.73922    0.29343   2.519 0.011761 *  
+## chdage2      0.22307    0.34508   0.646 0.518011    
+## chdage3      0.17889    0.30061   0.595 0.551785    
+## mental       0.20260    0.19791   1.024 0.305979    
+## arrest       0.76652    0.18897   4.056 4.99e-05 ***
+## sexual      -0.42210    0.40478  -1.043 0.297052    
+## provide     -0.19100    0.27996  -0.682 0.495085    
+## supervis    -0.20181    0.27020  -0.747 0.455120    
+## other       -0.56899    0.34079  -1.670 0.094998 .  
+## ra           1.38794    0.19334   7.179 7.04e-13 ***
+## cidi         0.97079    0.19578   4.959 7.10e-07 ***
+## cgneed       1.10853    0.31760   3.490 0.000482 ***
+## cwwrep       3.39786    0.20240  16.788  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 1888.77  on 2757  degrees of freedom
+## Residual deviance:  889.14  on 2727  degrees of freedom
+## AIC: 951.14
+## 
+## Number of Fisher Scoring iterations: 7</code></pre>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="04_Section5.8.1.html#cb75-1" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>p2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(psmodel2, <span class="at">newdata =</span> d, <span class="at">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb75-2"><a href="04_Section5.8.1.html#cb75-2" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>ps2 <span class="ot">&lt;-</span> <span class="fu">log</span>((<span class="dv">1</span> <span class="sc">-</span> d<span class="sc">$</span>p2) <span class="sc">/</span> (d<span class="sc">$</span>p2))</span>
+<span id="cb75-3"><a href="04_Section5.8.1.html#cb75-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-4"><a href="04_Section5.8.1.html#cb75-4" aria-hidden="true" tabindex="-1"></a><span class="co"># logistic 3</span></span>
+<span id="cb75-5"><a href="04_Section5.8.1.html#cb75-5" aria-hidden="true" tabindex="-1"></a>psmodel3 <span class="ot">&lt;-</span> <span class="fu">glm</span>(psform3, <span class="at">data =</span> d, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb75-6"><a href="04_Section5.8.1.html#cb75-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(psmodel3)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = psform3, family = binomial(), data = d)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.4604  -0.3366  -0.2096  -0.1429   3.0240  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -3.79884    0.62666  -6.062 1.34e-09 ***
+## PSH17A       0.62992    0.19120   3.295 0.000986 ***
+## CRA47A      -0.08252    0.16271  -0.507 0.612045    
+## married      0.18045    0.18464   0.977 0.328416    
+## high        -0.21000    0.17289  -1.215 0.224504    
+## bahigh      -0.25255    0.23458  -1.077 0.281664    
+## poverty2    -0.08765    0.19929  -0.440 0.660077    
+## poverty3    -0.22084    0.26155  -0.844 0.398466    
+## poverty4     0.09489    0.29126   0.326 0.744579    
+## poverty5     0.01112    0.28038   0.040 0.968356    
+## employ      -0.16203    0.16607  -0.976 0.329231    
+## open         0.50934    0.17368   2.933 0.003362 ** 
+## black        0.02147    0.18840   0.114 0.909258    
+## hispanic     0.33221    0.24475   1.357 0.174675    
+## natam        0.81935    0.29513   2.776 0.005499 ** 
+## cgrage1     -1.21001    0.50236  -2.409 0.016012 *  
+## cgrage2     -0.81256    0.51415  -1.580 0.114015    
+## cgrage3     -0.40958    0.56728  -0.722 0.470294    
+## chdage1      1.02718    0.24950   4.117 3.84e-05 ***
+## chdage2      0.35775    0.29296   1.221 0.222021    
+## chdage3      0.19034    0.25683   0.741 0.458610    
+## mental       0.63288    0.16118   3.927 8.62e-05 ***
+## arrest       0.85781    0.15751   5.446 5.15e-08 ***
+## sexual      -0.42152    0.36142  -1.166 0.243493    
+## provide      0.27552    0.22986   1.199 0.230659    
+## supervis    -0.01958    0.22708  -0.086 0.931271    
+## other        0.03372    0.26971   0.125 0.900518    
+## ra           2.02604    0.15716  12.892  &lt; 2e-16 ***
+## cidi         0.91196    0.15992   5.703 1.18e-08 ***
+## cgneed       1.21045    0.26045   4.648 3.36e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 1888.8  on 2757  degrees of freedom
+## Residual deviance: 1226.5  on 2728  degrees of freedom
+## AIC: 1286.5
+## 
+## Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="04_Section5.8.1.html#cb77-1" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>p3 <span class="ot">&lt;-</span> <span class="fu">predict</span>(psmodel3, <span class="at">newdata =</span> d, <span class="at">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb77-2"><a href="04_Section5.8.1.html#cb77-2" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>ps3 <span class="ot">&lt;-</span> <span class="fu">log</span>((<span class="dv">1</span> <span class="sc">-</span> d<span class="sc">$</span>p3) <span class="sc">/</span> (d<span class="sc">$</span>p3))</span></code></pre></div>
+</div>
+<div id="bivariate-comparisons" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Bivariate Comparisons</h2>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="04_Section5.8.1.html#cb78-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span></span>
+<span id="cb78-2"><a href="04_Section5.8.1.html#cb78-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(married, educ, pov, employ, open, race, chdage, cgage, CRA47A, mental, </span>
+<span id="cb78-3"><a href="04_Section5.8.1.html#cb78-3" aria-hidden="true" tabindex="-1"></a>         arrest, PSH17A, maltx, ra, cidi, cgneed, cwwrep, aodserv) <span class="sc">%&gt;%</span></span>
+<span id="cb78-4"><a href="04_Section5.8.1.html#cb78-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>aodserv, <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb78-5"><a href="04_Section5.8.1.html#cb78-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(variable) <span class="sc">%&gt;%</span></span>
+<span id="cb78-6"><a href="04_Section5.8.1.html#cb78-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb78-7"><a href="04_Section5.8.1.html#cb78-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bivariate.test =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">chisq.test</span>(.<span class="sc">$</span>aodserv, .<span class="sc">$</span>value, <span class="at">correct =</span> F))) <span class="sc">%&gt;%</span></span>
+<span id="cb78-8"><a href="04_Section5.8.1.html#cb78-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">statistic =</span> <span class="fu">map</span>(bivariate.test, <span class="sc">~</span><span class="fu">round</span>(.<span class="sc">$</span>statistic, <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb78-9"><a href="04_Section5.8.1.html#cb78-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p.value =</span> <span class="fu">map</span>(bivariate.test, <span class="sc">~</span><span class="fu">round</span>(.<span class="sc">$</span>p.value, <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb78-10"><a href="04_Section5.8.1.html#cb78-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(statistic, p.value)) <span class="sc">%&gt;%</span></span>
+<span id="cb78-11"><a href="04_Section5.8.1.html#cb78-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(variable, statistic, p.value)</span></code></pre></div>
+<pre><code>## # A tibble: 17 x 3
+## # Groups:   variable [17]
+##    variable statistic p.value
+##    &lt;chr&gt;        &lt;dbl&gt;   &lt;dbl&gt;
+##  1 married       2.97   0.085
+##  2 educ         10.5    0.005
+##  3 pov          11.3    0.023
+##  4 employ       23.1    0    
+##  5 open         58.4    0    
+##  6 race         11.5    0.009
+##  7 chdage       55.4    0    
+##  8 cgage         3.56   0.313
+##  9 CRA47A       17.5    0    
+## 10 mental       92.5    0    
+## 11 arrest      127.     0    
+## 12 PSH17A      179.     0    
+## 13 maltx        49.7    0    
+## 14 ra          585.     0    
+## 15 cidi        157.     0    
+## 16 cgneed      139.     0    
+## 17 cwwrep     1240.     0</code></pre>
+<p>Bivariate tests with contingency tables can also be accomplished with:</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="04_Section5.8.1.html#cb80-1" aria-hidden="true" tabindex="-1"></a>gmodels<span class="sc">::</span><span class="fu">CrossTable</span>(d<span class="sc">$</span>married, d<span class="sc">$</span>aodserv, <span class="at">prop.c =</span> <span class="cn">FALSE</span>, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="psm-based-on-logistic-regression-covariate-balcance-check" class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> PSM based on Logistic regression &amp; Covariate Balcance Check</h2>
+<p><strong>Note: The matching results here are slightly different from the results in STATA. With R, we also prefer to use plots to check balances, which is different from the approach in STATA.</strong></p>
+<div id="scheme-1---nearest-neighbor-within-caliper-.25sd" class="section level3" number="5.4.1">
+<h3><span class="header-section-number">5.4.1</span> Scheme 1 - Nearest neighbor within caliper .25*SD</h3>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="04_Section5.8.1.html#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PSM based on Logistic regression 1 &amp; Covariate Balance Check</span></span>
+<span id="cb81-2"><a href="04_Section5.8.1.html#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
+<span id="cb81-3"><a href="04_Section5.8.1.html#cb81-3" aria-hidden="true" tabindex="-1"></a>m_nc1_1.out <span class="ot">&lt;-</span></span>
+<span id="cb81-4"><a href="04_Section5.8.1.html#cb81-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matchit</span>(psform1,</span>
+<span id="cb81-5"><a href="04_Section5.8.1.html#cb81-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> d,</span>
+<span id="cb81-6"><a href="04_Section5.8.1.html#cb81-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;nearest&quot;</span>,</span>
+<span id="cb81-7"><a href="04_Section5.8.1.html#cb81-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">distance =</span> d<span class="sc">$</span>ps1,</span>
+<span id="cb81-8"><a href="04_Section5.8.1.html#cb81-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">m.order =</span> <span class="st">&quot;random&quot;</span>,</span>
+<span id="cb81-9"><a href="04_Section5.8.1.html#cb81-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">caliper =</span> .<span class="dv">25</span>,</span>
+<span id="cb81-10"><a href="04_Section5.8.1.html#cb81-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">replace =</span> T</span>
+<span id="cb81-11"><a href="04_Section5.8.1.html#cb81-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb81-12"><a href="04_Section5.8.1.html#cb81-12" aria-hidden="true" tabindex="-1"></a>m_nc1_1.out</span></code></pre></div>
+<pre><code>## A matchit object
+##  - method: Variable ratio 1:1 nearest neighbor matching with replacement
+##  - distance: User-defined [caliper]
+##  - caliper: &lt;distance&gt; (0.311)
+##  - number of obs.: 2758 (original), 527 (matched)
+##  - target estimand: ATT
+##  - covariates: PSH17A, CRA47A, married, high, bahigh, poverty2, poverty3, poverty4, poverty5, employ, open, black, hispanic, natam, cgrage1, cgrage2, cgrage3, chdage1, chdage2, chdage3, mental, arrest, sexual, provide, supervis, other</code></pre>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="04_Section5.8.1.html#cb83-1" aria-hidden="true" tabindex="-1"></a>m_nc1_1.data <span class="ot">&lt;-</span> MatchIt<span class="sc">::</span><span class="fu">match.data</span>(m_nc1_1.out)</span>
+<span id="cb83-2"><a href="04_Section5.8.1.html#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_bal</span>(m_nc1_1.out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+</div>
+<div id="scheme-2---nearest-neighbor-within-caliper-.1sd" class="section level3" number="5.4.2">
+<h3><span class="header-section-number">5.4.2</span> Scheme 2 - Nearest neighbor within caliper .1*SD</h3>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="04_Section5.8.1.html#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: Unlike Stata, the default caliper setting in matchit() is in standard deviation units (i.e., caliper = 0.1 is 0.1*SD)</span></span>
+<span id="cb84-2"><a href="04_Section5.8.1.html#cb84-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
+<span id="cb84-3"><a href="04_Section5.8.1.html#cb84-3" aria-hidden="true" tabindex="-1"></a>m_nc1_2.out <span class="ot">&lt;-</span></span>
+<span id="cb84-4"><a href="04_Section5.8.1.html#cb84-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matchit</span>(psform1,</span>
+<span id="cb84-5"><a href="04_Section5.8.1.html#cb84-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> d,</span>
+<span id="cb84-6"><a href="04_Section5.8.1.html#cb84-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;nearest&quot;</span>,</span>
+<span id="cb84-7"><a href="04_Section5.8.1.html#cb84-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">distance =</span> d<span class="sc">$</span>ps1,</span>
+<span id="cb84-8"><a href="04_Section5.8.1.html#cb84-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">m.order =</span> <span class="st">&quot;random&quot;</span>,</span>
+<span id="cb84-9"><a href="04_Section5.8.1.html#cb84-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">caliper =</span> .<span class="dv">1</span>,</span>
+<span id="cb84-10"><a href="04_Section5.8.1.html#cb84-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">replace =</span> T</span>
+<span id="cb84-11"><a href="04_Section5.8.1.html#cb84-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb84-12"><a href="04_Section5.8.1.html#cb84-12" aria-hidden="true" tabindex="-1"></a>m_nc1_2.out</span></code></pre></div>
+<pre><code>## A matchit object
+##  - method: Variable ratio 1:1 nearest neighbor matching with replacement
+##  - distance: User-defined [caliper]
+##  - caliper: &lt;distance&gt; (0.124)
+##  - number of obs.: 2758 (original), 527 (matched)
+##  - target estimand: ATT
+##  - covariates: PSH17A, CRA47A, married, high, bahigh, poverty2, poverty3, poverty4, poverty5, employ, open, black, hispanic, natam, cgrage1, cgrage2, cgrage3, chdage1, chdage2, chdage3, mental, arrest, sexual, provide, supervis, other</code></pre>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="04_Section5.8.1.html#cb86-1" aria-hidden="true" tabindex="-1"></a>m_nc1_2.data <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m_nc1_2.out)</span>
+<span id="cb86-2"><a href="04_Section5.8.1.html#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_bal</span>(m_nc1_2.out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+<div id="scheme-3---mahalanobis-without-propensity-score" class="section level3" number="5.4.3">
+<h3><span class="header-section-number">5.4.3</span> Scheme 3 - Mahalanobis without propensity score</h3>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="04_Section5.8.1.html#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
+<span id="cb87-2"><a href="04_Section5.8.1.html#cb87-2" aria-hidden="true" tabindex="-1"></a>m_m1.out <span class="ot">&lt;-</span> <span class="fu">matchit</span>(psform1,</span>
+<span id="cb87-3"><a href="04_Section5.8.1.html#cb87-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> d,</span>
+<span id="cb87-4"><a href="04_Section5.8.1.html#cb87-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">distance =</span> <span class="st">&quot;mahalanobis&quot;</span>,</span>
+<span id="cb87-5"><a href="04_Section5.8.1.html#cb87-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">m.order =</span> <span class="st">&quot;random&quot;</span></span>
+<span id="cb87-6"><a href="04_Section5.8.1.html#cb87-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb87-7"><a href="04_Section5.8.1.html#cb87-7" aria-hidden="true" tabindex="-1"></a>m_m1.out</span></code></pre></div>
+<pre><code>## A matchit object
+##  - method: Variable ratio 1:1 nearest neighbor matching without replacement
+##  - distance: Mahalanobis
+##  - number of obs.: 2758 (original), 596 (matched)
+##  - target estimand: ATT
+##  - covariates: PSH17A, CRA47A, married, high, bahigh, poverty2, poverty3, poverty4, poverty5, employ, open, black, hispanic, natam, cgrage1, cgrage2, cgrage3, chdage1, chdage2, chdage3, mental, arrest, sexual, provide, supervis, other</code></pre>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="04_Section5.8.1.html#cb89-1" aria-hidden="true" tabindex="-1"></a>m_m1.data <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m_m1.out)</span>
+<span id="cb89-2"><a href="04_Section5.8.1.html#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_bal</span>(m_m1.out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+</div>
+<div id="scheme-4---mahalanobis-with-propensity-score" class="section level3" number="5.4.4">
+<h3><span class="header-section-number">5.4.4</span> Scheme 4 - Mahalanobis with propensity score</h3>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="04_Section5.8.1.html#cb90-1" aria-hidden="true" tabindex="-1"></a>match_vars1m <span class="ot">&lt;-</span> <span class="fu">colnames</span>(<span class="fu">select</span>(d, PSH17A<span class="sc">:</span>other, ps1, <span class="sc">-</span>aodserv))</span>
+<span id="cb90-2"><a href="04_Section5.8.1.html#cb90-2" aria-hidden="true" tabindex="-1"></a>psform1m <span class="ot">&lt;-</span> <span class="fu">f.build</span>(<span class="st">&quot;aodserv&quot;</span>, match_vars1m)</span>
+<span id="cb90-3"><a href="04_Section5.8.1.html#cb90-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
+<span id="cb90-4"><a href="04_Section5.8.1.html#cb90-4" aria-hidden="true" tabindex="-1"></a>m_mp1.out <span class="ot">&lt;-</span> <span class="fu">matchit</span>(psform1m,</span>
+<span id="cb90-5"><a href="04_Section5.8.1.html#cb90-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> d,</span>
+<span id="cb90-6"><a href="04_Section5.8.1.html#cb90-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">distance =</span> <span class="st">&quot;mahalanobis&quot;</span></span>
+<span id="cb90-7"><a href="04_Section5.8.1.html#cb90-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb90-8"><a href="04_Section5.8.1.html#cb90-8" aria-hidden="true" tabindex="-1"></a>m_mp1.out</span></code></pre></div>
+<pre><code>## A matchit object
+##  - method: Variable ratio 1:1 nearest neighbor matching without replacement
+##  - distance: Mahalanobis
+##  - number of obs.: 2758 (original), 596 (matched)
+##  - target estimand: ATT
+##  - covariates: PSH17A, CRA47A, married, high, bahigh, poverty2, poverty3, poverty4, poverty5, employ, open, black, hispanic, natam, cgrage1, cgrage2, cgrage3, chdage1, chdage2, chdage3, mental, arrest, sexual, provide, supervis, other, ps1</code></pre>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="04_Section5.8.1.html#cb92-1" aria-hidden="true" tabindex="-1"></a>m_mp1.data <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m_mp1.out)</span>
+<span id="cb92-2"><a href="04_Section5.8.1.html#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_bal</span>(m_mp1.out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+</div>
+</div>
+<div id="psm-based-on-logistic-regression-2" class="section level2" number="5.5">
+<h2><span class="header-section-number">5.5</span> PSM based on Logistic regression 2</h2>
+<div id="scheme-5---nearest-neighbor-within-caliper-.25sd" class="section level3" number="5.5.1">
+<h3><span class="header-section-number">5.5.1</span> Scheme 5 - Nearest neighbor within caliper .25*SD</h3>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="04_Section5.8.1.html#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
+<span id="cb93-2"><a href="04_Section5.8.1.html#cb93-2" aria-hidden="true" tabindex="-1"></a>m_nc2_1.out <span class="ot">&lt;-</span></span>
+<span id="cb93-3"><a href="04_Section5.8.1.html#cb93-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matchit</span>(psform2,</span>
+<span id="cb93-4"><a href="04_Section5.8.1.html#cb93-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> d,</span>
+<span id="cb93-5"><a href="04_Section5.8.1.html#cb93-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;nearest&quot;</span>,</span>
+<span id="cb93-6"><a href="04_Section5.8.1.html#cb93-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">distance =</span> d<span class="sc">$</span>ps2,</span>
+<span id="cb93-7"><a href="04_Section5.8.1.html#cb93-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">m.order =</span> <span class="st">&quot;random&quot;</span>,</span>
+<span id="cb93-8"><a href="04_Section5.8.1.html#cb93-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">caliper =</span> .<span class="dv">25</span>,</span>
+<span id="cb93-9"><a href="04_Section5.8.1.html#cb93-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">replace =</span> T</span>
+<span id="cb93-10"><a href="04_Section5.8.1.html#cb93-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb93-11"><a href="04_Section5.8.1.html#cb93-11" aria-hidden="true" tabindex="-1"></a>m_nc2_1.out</span></code></pre></div>
+<pre><code>## A matchit object
+##  - method: Variable ratio 1:1 nearest neighbor matching with replacement
+##  - distance: User-defined [caliper]
+##  - caliper: &lt;distance&gt; (0.49)
+##  - number of obs.: 2758 (original), 424 (matched)
+##  - target estimand: ATT
+##  - covariates: PSH17A, CRA47A, married, high, bahigh, poverty2, poverty3, poverty4, poverty5, employ, open, black, hispanic, natam, cgrage1, cgrage2, cgrage3, chdage1, chdage2, chdage3, mental, arrest, sexual, provide, supervis, other, ra, cidi, cgneed, cwwrep</code></pre>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="04_Section5.8.1.html#cb95-1" aria-hidden="true" tabindex="-1"></a>m_nc2_1.data <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m_nc2_1.out) </span>
+<span id="cb95-2"><a href="04_Section5.8.1.html#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_bal</span>(m_nc2_1.out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+</div>
+<div id="scheme-6---nearest-neighbor-within-caliper-.1sd-note-caliper-in-matchit-is-not-real-data" class="section level3" number="5.5.2">
+<h3><span class="header-section-number">5.5.2</span> Scheme 6 - Nearest neighbor within caliper .1*SD (Note: caliper in MatchIt is not real data)</h3>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="04_Section5.8.1.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>) </span>
+<span id="cb96-2"><a href="04_Section5.8.1.html#cb96-2" aria-hidden="true" tabindex="-1"></a>m_nc2_2.out <span class="ot">&lt;-</span></span>
+<span id="cb96-3"><a href="04_Section5.8.1.html#cb96-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matchit</span>(psform2, </span>
+<span id="cb96-4"><a href="04_Section5.8.1.html#cb96-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> d,</span>
+<span id="cb96-5"><a href="04_Section5.8.1.html#cb96-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;nearest&quot;</span>, </span>
+<span id="cb96-6"><a href="04_Section5.8.1.html#cb96-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">distance =</span> d<span class="sc">$</span>ps2, </span>
+<span id="cb96-7"><a href="04_Section5.8.1.html#cb96-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">m.order =</span> <span class="st">&quot;random&quot;</span>, </span>
+<span id="cb96-8"><a href="04_Section5.8.1.html#cb96-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">caliper =</span> .<span class="dv">1</span>,</span>
+<span id="cb96-9"><a href="04_Section5.8.1.html#cb96-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">replace =</span> T</span>
+<span id="cb96-10"><a href="04_Section5.8.1.html#cb96-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb96-11"><a href="04_Section5.8.1.html#cb96-11" aria-hidden="true" tabindex="-1"></a>m_nc2_2.out</span></code></pre></div>
+<pre><code>## A matchit object
+##  - method: Variable ratio 1:1 nearest neighbor matching with replacement
+##  - distance: User-defined [caliper]
+##  - caliper: &lt;distance&gt; (0.196)
+##  - number of obs.: 2758 (original), 417 (matched)
+##  - target estimand: ATT
+##  - covariates: PSH17A, CRA47A, married, high, bahigh, poverty2, poverty3, poverty4, poverty5, employ, open, black, hispanic, natam, cgrage1, cgrage2, cgrage3, chdage1, chdage2, chdage3, mental, arrest, sexual, provide, supervis, other, ra, cidi, cgneed, cwwrep</code></pre>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="04_Section5.8.1.html#cb98-1" aria-hidden="true" tabindex="-1"></a>m_mp2.data <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m_nc2_2.out)</span>
+<span id="cb98-2"><a href="04_Section5.8.1.html#cb98-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_bal</span>(m_nc2_2.out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+</div>
+<div id="scheme-7---mahalanobis-without-propensity-score" class="section level3" number="5.5.3">
+<h3><span class="header-section-number">5.5.3</span> Scheme 7 - Mahalanobis without propensity score</h3>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="04_Section5.8.1.html#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
+<span id="cb99-2"><a href="04_Section5.8.1.html#cb99-2" aria-hidden="true" tabindex="-1"></a>m_m2.out <span class="ot">&lt;-</span> <span class="fu">matchit</span>(psform2,</span>
+<span id="cb99-3"><a href="04_Section5.8.1.html#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> d,</span>
+<span id="cb99-4"><a href="04_Section5.8.1.html#cb99-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">distance =</span> <span class="st">&quot;mahalanobis&quot;</span>,</span>
+<span id="cb99-5"><a href="04_Section5.8.1.html#cb99-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">m.order =</span> <span class="st">&quot;random&quot;</span></span>
+<span id="cb99-6"><a href="04_Section5.8.1.html#cb99-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb99-7"><a href="04_Section5.8.1.html#cb99-7" aria-hidden="true" tabindex="-1"></a>m_m2.out</span></code></pre></div>
+<pre><code>## A matchit object
+##  - method: Variable ratio 1:1 nearest neighbor matching without replacement
+##  - distance: Mahalanobis
+##  - number of obs.: 2758 (original), 596 (matched)
+##  - target estimand: ATT
+##  - covariates: PSH17A, CRA47A, married, high, bahigh, poverty2, poverty3, poverty4, poverty5, employ, open, black, hispanic, natam, cgrage1, cgrage2, cgrage3, chdage1, chdage2, chdage3, mental, arrest, sexual, provide, supervis, other, ra, cidi, cgneed, cwwrep</code></pre>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="04_Section5.8.1.html#cb101-1" aria-hidden="true" tabindex="-1"></a>m_m2.data <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m_m2.out) </span>
+<span id="cb101-2"><a href="04_Section5.8.1.html#cb101-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_bal</span>(m_m2.out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+</div>
+<div id="scheme-8---mahalanobis-with-propensity-score" class="section level3" number="5.5.4">
+<h3><span class="header-section-number">5.5.4</span> Scheme 8 - Mahalanobis with propensity score</h3>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="04_Section5.8.1.html#cb102-1" aria-hidden="true" tabindex="-1"></a>vars2m <span class="ot">&lt;-</span> <span class="fu">colnames</span>(<span class="fu">select</span>(d, PSH17A<span class="sc">:</span>cwwrep, ps2, <span class="sc">-</span>aodserv))</span>
+<span id="cb102-2"><a href="04_Section5.8.1.html#cb102-2" aria-hidden="true" tabindex="-1"></a>psform2m <span class="ot">&lt;-</span> <span class="fu">f.build</span>(<span class="st">&quot;aodserv&quot;</span>, vars2m)</span>
+<span id="cb102-3"><a href="04_Section5.8.1.html#cb102-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-4"><a href="04_Section5.8.1.html#cb102-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
+<span id="cb102-5"><a href="04_Section5.8.1.html#cb102-5" aria-hidden="true" tabindex="-1"></a>m_mp2.out <span class="ot">&lt;-</span> <span class="fu">matchit</span>(psform2m,</span>
+<span id="cb102-6"><a href="04_Section5.8.1.html#cb102-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> d,</span>
+<span id="cb102-7"><a href="04_Section5.8.1.html#cb102-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">distance =</span> <span class="st">&quot;mahalanobis&quot;</span></span>
+<span id="cb102-8"><a href="04_Section5.8.1.html#cb102-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb102-9"><a href="04_Section5.8.1.html#cb102-9" aria-hidden="true" tabindex="-1"></a>m_mp2.out</span>
+<span id="cb102-10"><a href="04_Section5.8.1.html#cb102-10" aria-hidden="true" tabindex="-1"></a>m_mp2.data <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m_mp2.out)</span>
+<span id="cb102-11"><a href="04_Section5.8.1.html#cb102-11" aria-hidden="true" tabindex="-1"></a><span class="fu">get_bal</span>(m_mp2.out)</span></code></pre></div>
+</div>
+</div>
+<div id="psm-based-on-logistic-regression-3" class="section level2" number="5.6">
+<h2><span class="header-section-number">5.6</span> PSM based on Logistic regression 3</h2>
+<div id="scheme-9---nearest-neighbor-within-caliper-.25sd" class="section level3" number="5.6.1">
+<h3><span class="header-section-number">5.6.1</span> Scheme 9 - Nearest neighbor within caliper .25*SD</h3>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="04_Section5.8.1.html#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>) </span>
+<span id="cb103-2"><a href="04_Section5.8.1.html#cb103-2" aria-hidden="true" tabindex="-1"></a>m_nc3_1.out <span class="ot">&lt;-</span></span>
+<span id="cb103-3"><a href="04_Section5.8.1.html#cb103-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matchit</span>(psform3, </span>
+<span id="cb103-4"><a href="04_Section5.8.1.html#cb103-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> d,</span>
+<span id="cb103-5"><a href="04_Section5.8.1.html#cb103-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;nearest&quot;</span>, </span>
+<span id="cb103-6"><a href="04_Section5.8.1.html#cb103-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">distance =</span> d<span class="sc">$</span>ps3, </span>
+<span id="cb103-7"><a href="04_Section5.8.1.html#cb103-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">m.order =</span> <span class="st">&quot;random&quot;</span>, </span>
+<span id="cb103-8"><a href="04_Section5.8.1.html#cb103-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">caliper =</span> .<span class="dv">25</span>,</span>
+<span id="cb103-9"><a href="04_Section5.8.1.html#cb103-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">replace =</span> T</span>
+<span id="cb103-10"><a href="04_Section5.8.1.html#cb103-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb103-11"><a href="04_Section5.8.1.html#cb103-11" aria-hidden="true" tabindex="-1"></a>m_nc3_1.out</span></code></pre></div>
+<pre><code>## A matchit object
+##  - method: Variable ratio 1:1 nearest neighbor matching with replacement
+##  - distance: User-defined [caliper]
+##  - caliper: &lt;distance&gt; (0.401)
+##  - number of obs.: 2758 (original), 494 (matched)
+##  - target estimand: ATT
+##  - covariates: PSH17A, CRA47A, married, high, bahigh, poverty2, poverty3, poverty4, poverty5, employ, open, black, hispanic, natam, cgrage1, cgrage2, cgrage3, chdage1, chdage2, chdage3, mental, arrest, sexual, provide, supervis, other, ra, cidi, cgneed</code></pre>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="04_Section5.8.1.html#cb105-1" aria-hidden="true" tabindex="-1"></a>m_nc3_1.data <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m_nc3_1.out) </span>
+<span id="cb105-2"><a href="04_Section5.8.1.html#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_bal</span>(m_nc3_1.out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+</div>
+<div id="scheme-10---nearest-neighbor-within-caliper-.1sd" class="section level3" number="5.6.2">
+<h3><span class="header-section-number">5.6.2</span> Scheme 10 - Nearest neighbor within caliper .1*SD</h3>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="04_Section5.8.1.html#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>) </span>
+<span id="cb106-2"><a href="04_Section5.8.1.html#cb106-2" aria-hidden="true" tabindex="-1"></a>m_nc3_2.out <span class="ot">&lt;-</span></span>
+<span id="cb106-3"><a href="04_Section5.8.1.html#cb106-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matchit</span>(psform3, </span>
+<span id="cb106-4"><a href="04_Section5.8.1.html#cb106-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> d,</span>
+<span id="cb106-5"><a href="04_Section5.8.1.html#cb106-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;nearest&quot;</span>, </span>
+<span id="cb106-6"><a href="04_Section5.8.1.html#cb106-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">distance =</span> d<span class="sc">$</span>ps3, </span>
+<span id="cb106-7"><a href="04_Section5.8.1.html#cb106-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">m.order =</span> <span class="st">&quot;random&quot;</span>, </span>
+<span id="cb106-8"><a href="04_Section5.8.1.html#cb106-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">caliper =</span> .<span class="dv">1</span>,</span>
+<span id="cb106-9"><a href="04_Section5.8.1.html#cb106-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">replace =</span> T</span>
+<span id="cb106-10"><a href="04_Section5.8.1.html#cb106-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb106-11"><a href="04_Section5.8.1.html#cb106-11" aria-hidden="true" tabindex="-1"></a>m_nc3_2.out</span></code></pre></div>
+<pre><code>## A matchit object
+##  - method: Variable ratio 1:1 nearest neighbor matching with replacement
+##  - distance: User-defined [caliper]
+##  - caliper: &lt;distance&gt; (0.16)
+##  - number of obs.: 2758 (original), 491 (matched)
+##  - target estimand: ATT
+##  - covariates: PSH17A, CRA47A, married, high, bahigh, poverty2, poverty3, poverty4, poverty5, employ, open, black, hispanic, natam, cgrage1, cgrage2, cgrage3, chdage1, chdage2, chdage3, mental, arrest, sexual, provide, supervis, other, ra, cidi, cgneed</code></pre>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="04_Section5.8.1.html#cb108-1" aria-hidden="true" tabindex="-1"></a>m_nc3_2.data <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m_nc3_2.out) </span>
+<span id="cb108-2"><a href="04_Section5.8.1.html#cb108-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_bal</span>(m_nc3_2.out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+</div>
+<div id="scheme-11---mahalanobis-without-propensity-score" class="section level3" number="5.6.3">
+<h3><span class="header-section-number">5.6.3</span> Scheme 11 - Mahalanobis without propensity score</h3>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="04_Section5.8.1.html#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
+<span id="cb109-2"><a href="04_Section5.8.1.html#cb109-2" aria-hidden="true" tabindex="-1"></a>m_m3.out <span class="ot">&lt;-</span> <span class="fu">matchit</span>(psform3,</span>
+<span id="cb109-3"><a href="04_Section5.8.1.html#cb109-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> d,</span>
+<span id="cb109-4"><a href="04_Section5.8.1.html#cb109-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">distance =</span> <span class="st">&quot;mahalanobis&quot;</span>,</span>
+<span id="cb109-5"><a href="04_Section5.8.1.html#cb109-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">m.order =</span> <span class="st">&quot;random&quot;</span></span>
+<span id="cb109-6"><a href="04_Section5.8.1.html#cb109-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb109-7"><a href="04_Section5.8.1.html#cb109-7" aria-hidden="true" tabindex="-1"></a>m_m3.out</span></code></pre></div>
+<pre><code>## A matchit object
+##  - method: Variable ratio 1:1 nearest neighbor matching without replacement
+##  - distance: Mahalanobis
+##  - number of obs.: 2758 (original), 596 (matched)
+##  - target estimand: ATT
+##  - covariates: PSH17A, CRA47A, married, high, bahigh, poverty2, poverty3, poverty4, poverty5, employ, open, black, hispanic, natam, cgrage1, cgrage2, cgrage3, chdage1, chdage2, chdage3, mental, arrest, sexual, provide, supervis, other, ra, cidi, cgneed</code></pre>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="04_Section5.8.1.html#cb111-1" aria-hidden="true" tabindex="-1"></a>m_m3.data <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m_m3.out) </span>
+<span id="cb111-2"><a href="04_Section5.8.1.html#cb111-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_bal</span>(m_m3.out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+</div>
+<div id="scheme-12---mahalanobis-with-propensity-score" class="section level3" number="5.6.4">
+<h3><span class="header-section-number">5.6.4</span> Scheme 12 - Mahalanobis with propensity score</h3>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="04_Section5.8.1.html#cb112-1" aria-hidden="true" tabindex="-1"></a>match_vars3m <span class="ot">&lt;-</span> <span class="fu">colnames</span>(<span class="fu">select</span>(d, PSH17A<span class="sc">:</span>cgneed, ps3, <span class="sc">-</span>aodserv))</span>
+<span id="cb112-2"><a href="04_Section5.8.1.html#cb112-2" aria-hidden="true" tabindex="-1"></a>psform3m <span class="ot">&lt;-</span> <span class="fu">f.build</span>(<span class="st">&quot;aodserv&quot;</span>, match_vars3m)</span>
+<span id="cb112-3"><a href="04_Section5.8.1.html#cb112-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
+<span id="cb112-4"><a href="04_Section5.8.1.html#cb112-4" aria-hidden="true" tabindex="-1"></a>m_mp3.out <span class="ot">&lt;-</span> <span class="fu">matchit</span>(psform3m,</span>
+<span id="cb112-5"><a href="04_Section5.8.1.html#cb112-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> d,</span>
+<span id="cb112-6"><a href="04_Section5.8.1.html#cb112-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">distance =</span> <span class="st">&quot;mahalanobis&quot;</span></span>
+<span id="cb112-7"><a href="04_Section5.8.1.html#cb112-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb112-8"><a href="04_Section5.8.1.html#cb112-8" aria-hidden="true" tabindex="-1"></a>m_mp3.out</span></code></pre></div>
+<pre><code>## A matchit object
+##  - method: Variable ratio 1:1 nearest neighbor matching without replacement
+##  - distance: Mahalanobis
+##  - number of obs.: 2758 (original), 596 (matched)
+##  - target estimand: ATT
+##  - covariates: PSH17A, CRA47A, married, high, bahigh, poverty2, poverty3, poverty4, poverty5, employ, open, black, hispanic, natam, cgrage1, cgrage2, cgrage3, chdage1, chdage2, chdage3, mental, arrest, sexual, provide, supervis, other, ra, cidi, cgneed, ps3</code></pre>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="04_Section5.8.1.html#cb114-1" aria-hidden="true" tabindex="-1"></a>m_mp3.data <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m_mp3.out)</span>
+<span id="cb114-2"><a href="04_Section5.8.1.html#cb114-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_bal</span>(m_mp3.out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+</div>
+</div>
+<div id="bivariate-test-after-matching" class="section level2" number="5.7">
+<h2><span class="header-section-number">5.7</span> Bivariate test after matching</h2>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="04_Section5.8.1.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check balance using chi-squared tests</span></span>
+<span id="cb115-2"><a href="04_Section5.8.1.html#cb115-2" aria-hidden="true" tabindex="-1"></a>check_balance <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb115-3"><a href="04_Section5.8.1.html#cb115-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb115-4"><a href="04_Section5.8.1.html#cb115-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># List of covariates to check balance</span></span>
+<span id="cb115-5"><a href="04_Section5.8.1.html#cb115-5" aria-hidden="true" tabindex="-1"></a>  covs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;married&quot;</span>, <span class="st">&quot;high&quot;</span>, <span class="st">&quot;bahigh&quot;</span>,  <span class="st">&quot;poverty2&quot;</span>, <span class="st">&quot;poverty3&quot;</span>,</span>
+<span id="cb115-6"><a href="04_Section5.8.1.html#cb115-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;poverty4&quot;</span>, <span class="st">&quot;poverty5&quot;</span>, <span class="st">&quot;employ&quot;</span>, <span class="st">&quot;open&quot;</span>, <span class="st">&quot;black&quot;</span>, <span class="st">&quot;hispanic&quot;</span>,</span>
+<span id="cb115-7"><a href="04_Section5.8.1.html#cb115-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;natam&quot;</span>,  <span class="st">&quot;cgrage1&quot;</span>, <span class="st">&quot;cgrage2&quot;</span>, <span class="st">&quot;cgrage3&quot;</span>, </span>
+<span id="cb115-8"><a href="04_Section5.8.1.html#cb115-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;chdage1&quot;</span>, <span class="st">&quot;chdage2&quot;</span>, <span class="st">&quot;chdage3&quot;</span>, <span class="st">&quot;CRA47A&quot;</span>, <span class="st">&quot;mental&quot;</span>,  </span>
+<span id="cb115-9"><a href="04_Section5.8.1.html#cb115-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;arrest&quot;</span>, <span class="st">&quot;PSH17A&quot;</span>, <span class="st">&quot;sexual&quot;</span>, <span class="st">&quot;provide&quot;</span>, <span class="st">&quot;supervis&quot;</span>, </span>
+<span id="cb115-10"><a href="04_Section5.8.1.html#cb115-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;other&quot;</span>,  <span class="st">&quot;ra&quot;</span>, <span class="st">&quot;cidi&quot;</span>, <span class="st">&quot;cgneed&quot;</span>, <span class="st">&quot;cwwrep&quot;</span>)</span>
+<span id="cb115-11"><a href="04_Section5.8.1.html#cb115-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb115-12"><a href="04_Section5.8.1.html#cb115-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Function to calculate chisq.test p-values</span></span>
+<span id="cb115-13"><a href="04_Section5.8.1.html#cb115-13" aria-hidden="true" tabindex="-1"></a>  calc <span class="ot">&lt;-</span> <span class="cf">function</span>(cov) {</span>
+<span id="cb115-14"><a href="04_Section5.8.1.html#cb115-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">data.frame</span>(<span class="at">covariate =</span> cov,</span>
+<span id="cb115-15"><a href="04_Section5.8.1.html#cb115-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">p =</span> <span class="fu">chisq.test</span>(df[cov], df<span class="sc">$</span>aodserv)<span class="sc">$</span>p.value))</span>
+<span id="cb115-16"><a href="04_Section5.8.1.html#cb115-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb115-17"><a href="04_Section5.8.1.html#cb115-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb115-18"><a href="04_Section5.8.1.html#cb115-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate chisq.test for each covariate</span></span>
+<span id="cb115-19"><a href="04_Section5.8.1.html#cb115-19" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(covs, calc) <span class="sc">%&gt;%</span></span>
+<span id="cb115-20"><a href="04_Section5.8.1.html#cb115-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">sig =</span> <span class="fu">ifelse</span>(p <span class="sc">&lt;</span> <span class="fl">0.05</span>, <span class="st">&quot;sig&quot;</span>, <span class="st">&quot;not sig&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb115-21"><a href="04_Section5.8.1.html#cb115-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p =</span> <span class="fu">round</span>(p, <span class="dv">2</span>))</span>
+<span id="cb115-22"><a href="04_Section5.8.1.html#cb115-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb115-23"><a href="04_Section5.8.1.html#cb115-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get covariates that did not overlap sufficiently (p &lt; .05)</span></span>
+<span id="cb115-24"><a href="04_Section5.8.1.html#cb115-24" aria-hidden="true" tabindex="-1"></a>  results_sig <span class="ot">&lt;-</span> results <span class="sc">%&gt;%</span></span>
+<span id="cb115-25"><a href="04_Section5.8.1.html#cb115-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(sig <span class="sc">==</span> <span class="st">&quot;sig&quot;</span>)</span>
+<span id="cb115-26"><a href="04_Section5.8.1.html#cb115-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb115-27"><a href="04_Section5.8.1.html#cb115-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return results</span></span>
+<span id="cb115-28"><a href="04_Section5.8.1.html#cb115-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">table =</span> results, <span class="at">sig =</span> <span class="fu">toupper</span>(results_sig<span class="sc">$</span>covariate)))</span>
+<span id="cb115-29"><a href="04_Section5.8.1.html#cb115-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb115-30"><a href="04_Section5.8.1.html#cb115-30" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="04_Section5.8.1.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine tables 5.5 and 5.6</span></span>
+<span id="cb116-2"><a href="04_Section5.8.1.html#cb116-2" aria-hidden="true" tabindex="-1"></a>get_table <span class="ot">&lt;-</span> <span class="cf">function</span>(scheme, df) {</span>
+<span id="cb116-3"><a href="04_Section5.8.1.html#cb116-3" aria-hidden="true" tabindex="-1"></a>  sig_vars <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.data.frame</span>(df), <span class="fu">paste</span>(<span class="fu">check_balance</span>(df)<span class="sc">$</span>sig, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>), df)</span>
+<span id="cb116-4"><a href="04_Section5.8.1.html#cb116-4" aria-hidden="true" tabindex="-1"></a>  treated_n <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.data.frame</span>(df), <span class="fu">nrow</span>(<span class="fu">filter</span>(df, aodserv <span class="sc">==</span> <span class="dv">1</span>)), <span class="cn">NA</span>)</span>
+<span id="cb116-5"><a href="04_Section5.8.1.html#cb116-5" aria-hidden="true" tabindex="-1"></a>  control_n <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.data.frame</span>(df), <span class="fu">nrow</span>(<span class="fu">filter</span>(df, aodserv <span class="sc">==</span> <span class="dv">0</span>)), <span class="cn">NA</span>)</span>
+<span id="cb116-6"><a href="04_Section5.8.1.html#cb116-6" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Scheme =</span> scheme,</span>
+<span id="cb116-7"><a href="04_Section5.8.1.html#cb116-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">SigCovariates =</span> sig_vars,</span>
+<span id="cb116-8"><a href="04_Section5.8.1.html#cb116-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">Treated =</span> treated_n,</span>
+<span id="cb116-9"><a href="04_Section5.8.1.html#cb116-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">Control =</span> control_n)</span>
+<span id="cb116-10"><a href="04_Section5.8.1.html#cb116-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb116-11"><a href="04_Section5.8.1.html#cb116-11" aria-hidden="true" tabindex="-1"></a>table_schemes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Original&quot;</span>, <span class="st">&quot;1. Nearest 1-1&quot;</span>, <span class="st">&quot;2. Nearest 1-2&quot;</span>, </span>
+<span id="cb116-12"><a href="04_Section5.8.1.html#cb116-12" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;3. Mahalanobis 1&quot;</span>, <span class="st">&quot;4. Mahalanobis 1 with p-score added&quot;</span>,</span>
+<span id="cb116-13"><a href="04_Section5.8.1.html#cb116-13" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;5. Nearest 2-1&quot;</span>, <span class="st">&quot;6. Nearest 2-2&quot;</span>,</span>
+<span id="cb116-14"><a href="04_Section5.8.1.html#cb116-14" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;7. Mahalanobis 2&quot;</span>, <span class="st">&quot;8. Mahalanobis 2 with p-score added&quot;</span>,</span>
+<span id="cb116-15"><a href="04_Section5.8.1.html#cb116-15" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;9. Nearest 3-1&quot;</span>, <span class="st">&quot;10. Nearest 3-2&quot;</span>,</span>
+<span id="cb116-16"><a href="04_Section5.8.1.html#cb116-16" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;11. Mahalanobis 3&quot;</span>, <span class="st">&quot;12. Mahalanobis 3 with p-score added&quot;</span>)</span>
+<span id="cb116-17"><a href="04_Section5.8.1.html#cb116-17" aria-hidden="true" tabindex="-1"></a>table_dfs <span class="ot">&lt;-</span> <span class="fu">list</span>(d, m_nc1_1.data, m_nc1_2.data, <span class="co"># Original, Schemes 1, 2</span></span>
+<span id="cb116-18"><a href="04_Section5.8.1.html#cb116-18" aria-hidden="true" tabindex="-1"></a>                      m_m1.data, m_mp1.data, <span class="co"># Schemes 3, 4</span></span>
+<span id="cb116-19"><a href="04_Section5.8.1.html#cb116-19" aria-hidden="true" tabindex="-1"></a>                      m_nc2_1.data, m_mp2.data, <span class="co"># Schemes 5, 6</span></span>
+<span id="cb116-20"><a href="04_Section5.8.1.html#cb116-20" aria-hidden="true" tabindex="-1"></a>                      m_m2.data, m_mp2.data , <span class="co"># Schemes 7, 8</span></span>
+<span id="cb116-21"><a href="04_Section5.8.1.html#cb116-21" aria-hidden="true" tabindex="-1"></a>                      m_nc3_1.data, m_nc3_2.data, <span class="co"># Schemes 9, 10</span></span>
+<span id="cb116-22"><a href="04_Section5.8.1.html#cb116-22" aria-hidden="true" tabindex="-1"></a>                      m_m3.data, m_mp3.data) <span class="co"># Schemes 11, 12</span></span>
+<span id="cb116-23"><a href="04_Section5.8.1.html#cb116-23" aria-hidden="true" tabindex="-1"></a>table_summary <span class="ot">&lt;-</span> <span class="fu">map2_dfr</span>(table_schemes, table_dfs, get_table)</span>
+<span id="cb116-24"><a href="04_Section5.8.1.html#cb116-24" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">knitr.kable.NA =</span> <span class="st">&quot;&quot;</span>) <span class="co"># Do not display NAs in kable</span></span>
+<span id="cb116-25"><a href="04_Section5.8.1.html#cb116-25" aria-hidden="true" tabindex="-1"></a>table_summary <span class="sc">%&gt;%</span></span>
+<span id="cb116-26"><a href="04_Section5.8.1.html#cb116-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">format =</span> <span class="st">&quot;html&quot;</span>, </span>
+<span id="cb116-27"><a href="04_Section5.8.1.html#cb116-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Scheme&quot;</span>, </span>
+<span id="cb116-28"><a href="04_Section5.8.1.html#cb116-28" aria-hidden="true" tabindex="-1"></a> <span class="st">&quot;Covariate Distributions Did Not Overlap Sufficiently: Covariates Significant After Matching p &lt; .05&quot;</span>,</span>
+<span id="cb116-29"><a href="04_Section5.8.1.html#cb116-29" aria-hidden="true" tabindex="-1"></a> <span class="st">&quot;Treated&quot;</span>, <span class="st">&quot;Control&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb116-30"><a href="04_Section5.8.1.html#cb116-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot; &quot;</span> <span class="ot">=</span> <span class="dv">2</span>, <span class="st">&quot;N of the New Sample&quot;</span> <span class="ot">=</span> <span class="dv">2</span>))</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="2">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+N of the New Sample
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+Scheme
+</th>
+<th style="text-align:left;">
+Covariate Distributions Did Not Overlap Sufficiently: Covariates Significant After Matching p &lt; .05
+</th>
+<th style="text-align:right;">
+Treated
+</th>
+<th style="text-align:right;">
+Control
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Original
+</td>
+<td style="text-align:left;">
+BAHIGH, POVERTY3, EMPLOY, OPEN, NATAM, CHDAGE1, CHDAGE3, CRA47A, MENTAL, ARREST, PSH17A, SEXUAL, PROVIDE, RA, CIDI, CGNEED, CWWREP
+</td>
+<td style="text-align:right;">
+298
+</td>
+<td style="text-align:right;">
+2460
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol style="list-style-type: decimal">
+<li>Nearest 1-1
+</td>
+<td style="text-align:left;">
+RA, CIDI, CGNEED, CWWREP
+</td>
+<td style="text-align:right;">
+295
+</td>
+<td style="text-align:right;">
+232
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>Nearest 1-2
+</td>
+<td style="text-align:left;">
+RA, CIDI, CGNEED, CWWREP
+</td>
+<td style="text-align:right;">
+295
+</td>
+<td style="text-align:right;">
+232
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="3" style="list-style-type: decimal">
+<li>Mahalanobis 1
+</td>
+<td style="text-align:left;">
+OPEN, MENTAL, ARREST, PSH17A, RA, CIDI, CGNEED, CWWREP
+</td>
+<td style="text-align:right;">
+298
+</td>
+<td style="text-align:right;">
+298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="4" style="list-style-type: decimal">
+<li>Mahalanobis 1 with p-score added
+</td>
+<td style="text-align:left;">
+OPEN, MENTAL, ARREST, PSH17A, RA, CIDI, CGNEED, CWWREP
+</td>
+<td style="text-align:right;">
+298
+</td>
+<td style="text-align:right;">
+298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="5" style="list-style-type: decimal">
+<li>Nearest 2-1
+</td>
+<td style="text-align:left;">
+RA, CWWREP
+</td>
+<td style="text-align:right;">
+294
+</td>
+<td style="text-align:right;">
+130
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="6" style="list-style-type: decimal">
+<li>Nearest 2-2
+</td>
+<td style="text-align:left;">
+RA, CWWREP
+</td>
+<td style="text-align:right;">
+287
+</td>
+<td style="text-align:right;">
+130
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="7" style="list-style-type: decimal">
+<li>Mahalanobis 2
+</td>
+<td style="text-align:left;">
+OPEN, CRA47A, MENTAL, ARREST, PSH17A, RA, CIDI, CWWREP
+</td>
+<td style="text-align:right;">
+298
+</td>
+<td style="text-align:right;">
+298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="8" style="list-style-type: decimal">
+<li>Mahalanobis 2 with p-score added
+</td>
+<td style="text-align:left;">
+RA, CWWREP
+</td>
+<td style="text-align:right;">
+287
+</td>
+<td style="text-align:right;">
+130
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="9" style="list-style-type: decimal">
+<li>Nearest 3-1
+</td>
+<td style="text-align:left;">
+CIDI, CWWREP
+</td>
+<td style="text-align:right;">
+298
+</td>
+<td style="text-align:right;">
+196
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="10" style="list-style-type: decimal">
+<li>Nearest 3-2
+</td>
+<td style="text-align:left;">
+CWWREP
+</td>
+<td style="text-align:right;">
+295
+</td>
+<td style="text-align:right;">
+196
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="11" style="list-style-type: decimal">
+<li>Mahalanobis 3
+</td>
+<td style="text-align:left;">
+OPEN, CRA47A, MENTAL, ARREST, PSH17A, RA, CIDI, CWWREP
+</td>
+<td style="text-align:right;">
+298
+</td>
+<td style="text-align:right;">
+298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="12" style="list-style-type: decimal">
+<li>Mahalanobis 3 with p-score added
+</td>
+<td style="text-align:left;">
+OPEN, CGRAGE2, MENTAL, ARREST, PSH17A, RA, CIDI, CWWREP
+</td>
+<td style="text-align:right;">
+298
+</td>
+<td style="text-align:right;">
+298
+</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+</div>
+<div id="kaplan-meier-and-significance-test-of-difference-on-survivor-function" class="section level2" number="5.8">
+<h2><span class="header-section-number">5.8</span> Kaplan-Meier and significance test of difference on survivor function</h2>
+<div id="all" class="section level3" number="5.8.1">
+<h3><span class="header-section-number">5.8.1</span> All</h3>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="04_Section5.8.1.html#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all</span></span>
+<span id="cb117-2"><a href="04_Section5.8.1.html#cb117-2" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_all.dta&quot;</span>)</span>
+<span id="cb117-3"><a href="04_Section5.8.1.html#cb117-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-4"><a href="04_Section5.8.1.html#cb117-4" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb117-5"><a href="04_Section5.8.1.html#cb117-5" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds)</span>
+<span id="cb117-6"><a href="04_Section5.8.1.html#cb117-6" aria-hidden="true" tabindex="-1"></a>fit</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds)
+## 
+##              n events median 0.95LCL 0.95UCL
+## aodserv=0 2429    448     NA      NA      NA
+## aodserv=1  294     84     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="04_Section5.8.1.html#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit, <span class="at">probs =</span> <span class="fl">0.15</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                  15
+## aodserv=0 13.552092
+## aodserv=1  7.645611
+## 
+## $lower
+##                  15
+## aodserv=0 12.600492
+## aodserv=1  5.972108
+## 
+## $upper
+##                 15
+## aodserv=0 15.06153
+## aodserv=1 10.43478</code></pre>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="04_Section5.8.1.html#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb121-2"><a href="04_Section5.8.1.html#cb121-2" aria-hidden="true" tabindex="-1"></a>fit.test <span class="ot">&lt;-</span> survival<span class="sc">::</span><span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb121-3"><a href="04_Section5.8.1.html#cb121-3" aria-hidden="true" tabindex="-1"></a>fit.test</span></code></pre></div>
+<pre><code>## Call:
+## survival::survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds, 
+##     rho = 0)
+## 
+##              N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 2429      448    478.2      1.91      18.9
+## aodserv=1  294       84     53.8     16.95      18.9
+## 
+##  Chisq= 18.9  on 1 degrees of freedom, p= 1e-05</code></pre>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="04_Section5.8.1.html#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit)) <span class="co"># the first n row is the Gehan-Breslow generalized Wilcoxon test</span></span></code></pre></div>
+<pre><code>##                     Q        Var      Z pNorm
+## 1          3.0201e+01 4.8338e+01 4.3440     6
+## n          7.5476e+04 2.9252e+08 4.4130     2
+## sqrtN      1.5091e+03 1.1865e+05 4.3812     5
+## S1         2.7758e+01 3.9630e+01 4.4094     4
+## S2         2.7747e+01 3.9597e+01 4.4094     3
+## FH_p=1_q=1 2.1482e+00 4.3656e-01 3.2513     1
+##               maxAbsZ        Var      Q pSupBr
+## 1          3.0201e+01 4.8338e+01 4.3440      6
+## n          7.5476e+04 2.9252e+08 4.4130      2
+## sqrtN      1.5091e+03 1.1865e+05 4.3812      5
+## S1         2.7758e+01 3.9630e+01 4.4094      4
+## S2         2.7747e+01 3.9597e+01 4.4094      3
+## FH_p=1_q=1 2.1482e+00 4.3656e-01 3.2513      1</code></pre>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="04_Section5.8.1.html#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot </span></span>
+<span id="cb125-2"><a href="04_Section5.8.1.html#cb125-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit, <span class="at">data =</span> ds, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+</div>
+<div id="scheme-1" class="section level3" number="5.8.2">
+<h3><span class="header-section-number">5.8.2</span> Scheme 1</h3>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="04_Section5.8.1.html#cb126-1" aria-hidden="true" tabindex="-1"></a>ds1 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_1.dta&quot;</span>)</span>
+<span id="cb126-2"><a href="04_Section5.8.1.html#cb126-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb126-3"><a href="04_Section5.8.1.html#cb126-3" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb126-4"><a href="04_Section5.8.1.html#cb126-4" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds1)</span>
+<span id="cb126-5"><a href="04_Section5.8.1.html#cb126-5" aria-hidden="true" tabindex="-1"></a>fit1</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds1)
+## 
+##    9 observations deleted due to missingness 
+##             n events median 0.95LCL 0.95UCL
+## aodserv=0 277     73     NA      NA      NA
+## aodserv=1 278     79     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="04_Section5.8.1.html#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit1, <span class="at">probs =</span> <span class="fl">0.15</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                 15
+## aodserv=0 9.483183
+## aodserv=1 7.448728
+## 
+## $lower
+##                 15
+## aodserv=0 7.186218
+## aodserv=1 5.742412
+## 
+## $upper
+##                 15
+## aodserv=0 12.17391
+## aodserv=1 10.53322</code></pre>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="04_Section5.8.1.html#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb130-2"><a href="04_Section5.8.1.html#cb130-2" aria-hidden="true" tabindex="-1"></a>fit1.test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds1, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb130-3"><a href="04_Section5.8.1.html#cb130-3" aria-hidden="true" tabindex="-1"></a>fit1.test</span></code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds1, rho = 0)
+## 
+## n=555, 9 observations deleted due to missingness.
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 277       73     76.9     0.194     0.394
+## aodserv=1 278       79     75.1     0.199     0.394
+## 
+##  Chisq= 0.4  on 1 degrees of freedom, p= 0.5</code></pre>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="04_Section5.8.1.html#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit1)) </span></code></pre></div>
+<pre><code>##                     Q        Var        Z pNorm
+## 1          3.8659e+00 3.7981e+01 0.627292     5
+## n          2.1150e+03 8.7738e+06 0.714029     3
+## sqrtN      9.0488e+01 1.8173e+04 0.671248     4
+## S1         3.8181e+00 2.8463e+01 0.715660     2
+## S2         3.8111e+00 2.8345e+01 0.715832     1
+## FH_p=1_q=1 7.1132e-02 5.9633e-01 0.092114     6
+##               maxAbsZ        Var       Q pSupBr
+## 1          6.2567e+00 3.7981e+01 1.01522      5
+## n          3.2300e+03 8.7738e+06 1.09046      1
+## sqrtN      1.4209e+02 1.8173e+04 1.05401      4
+## S1         5.8074e+00 2.8463e+01 1.08853      3
+## S2         5.7962e+00 2.8345e+01 1.08868      2
+## FH_p=1_q=1 4.7369e-01 5.9633e-01 0.61341      6</code></pre>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="04_Section5.8.1.html#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb134-2"><a href="04_Section5.8.1.html#cb134-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit1, <span class="at">data =</span> ds1, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+</div>
+<div id="scheme-2" class="section level3" number="5.8.3">
+<h3><span class="header-section-number">5.8.3</span> Scheme 2</h3>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="04_Section5.8.1.html#cb135-1" aria-hidden="true" tabindex="-1"></a>ds2 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_2.dta&quot;</span>)</span>
+<span id="cb135-2"><a href="04_Section5.8.1.html#cb135-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb135-3"><a href="04_Section5.8.1.html#cb135-3" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds2)</span>
+<span id="cb135-4"><a href="04_Section5.8.1.html#cb135-4" aria-hidden="true" tabindex="-1"></a>fit2</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds2)
+## 
+##    9 observations deleted due to missingness 
+##             n events median 0.95LCL 0.95UCL
+## aodserv=0 276     70     NA      NA      NA
+## aodserv=1 277     79     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="04_Section5.8.1.html#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit2, <span class="at">probs =</span> <span class="fl">0.15</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                  15
+## aodserv=0 10.205086
+## aodserv=1  7.645611
+## 
+## $lower
+##                 15
+## aodserv=0 7.711239
+## aodserv=1 5.742412
+## 
+## $upper
+##                 15
+## aodserv=0 12.92863
+## aodserv=1 10.53322</code></pre>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="04_Section5.8.1.html#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb139-2"><a href="04_Section5.8.1.html#cb139-2" aria-hidden="true" tabindex="-1"></a>fit2.test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds2, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb139-3"><a href="04_Section5.8.1.html#cb139-3" aria-hidden="true" tabindex="-1"></a>fit2.test</span></code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds2, rho = 0)
+## 
+## n=553, 9 observations deleted due to missingness.
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 276       70     75.5     0.401     0.814
+## aodserv=1 277       79     73.5     0.412     0.814
+## 
+##  Chisq= 0.8  on 1 degrees of freedom, p= 0.4</code></pre>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="04_Section5.8.1.html#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit2)) </span></code></pre></div>
+<pre><code>##                     Q        Var       Z pNorm
+## 1          5.5027e+00 3.7230e+01 0.90183     5
+## n          2.8410e+03 8.5777e+06 0.97003     3
+## sqrtN      1.2491e+02 1.7793e+04 0.93643     4
+## S1         5.1543e+00 2.8035e+01 0.97345     2
+## S2         5.1443e+00 2.7919e+01 0.97359     1
+## FH_p=1_q=1 3.0002e-01 5.7032e-01 0.39727     6
+##               maxAbsZ        Var       Q pSupBr
+## 1          7.2715e+00 3.7230e+01 1.19171      5
+## n          3.7380e+03 8.5777e+06 1.27630      1
+## sqrtN      1.6484e+02 1.7793e+04 1.23576      4
+## S1         6.7453e+00 2.8035e+01 1.27394      3
+## S2         6.7322e+00 2.7919e+01 1.27411      2
+## FH_p=1_q=1 4.9779e-01 5.7032e-01 0.65915      6</code></pre>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="04_Section5.8.1.html#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb143-2"><a href="04_Section5.8.1.html#cb143-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit2, <span class="at">data =</span> ds2, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+</div>
+<div id="scheme-3" class="section level3" number="5.8.4">
+<h3><span class="header-section-number">5.8.4</span> Scheme 3</h3>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="04_Section5.8.1.html#cb144-1" aria-hidden="true" tabindex="-1"></a>ds3 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_3.dta&quot;</span>)</span>
+<span id="cb144-2"><a href="04_Section5.8.1.html#cb144-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb144-3"><a href="04_Section5.8.1.html#cb144-3" aria-hidden="true" tabindex="-1"></a>fit3 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds3)</span>
+<span id="cb144-4"><a href="04_Section5.8.1.html#cb144-4" aria-hidden="true" tabindex="-1"></a>fit3</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds3)
+## 
+##    9 observations deleted due to missingness 
+##             n events median 0.95LCL 0.95UCL
+## aodserv=0 261     52     NA      NA      NA
+## aodserv=1 261     77     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="04_Section5.8.1.html#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit3, <span class="at">probs =</span> <span class="fl">0.15</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                  15
+## aodserv=0 12.108285
+## aodserv=1  7.645611
+## 
+## $lower
+##                  15
+## aodserv=0 10.205086
+## aodserv=1  5.742412
+## 
+## $upper
+##                 15
+## aodserv=0       NA
+## aodserv=1 10.63167</code></pre>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="04_Section5.8.1.html#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb148-2"><a href="04_Section5.8.1.html#cb148-2" aria-hidden="true" tabindex="-1"></a>fit3.test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds3, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb148-3"><a href="04_Section5.8.1.html#cb148-3" aria-hidden="true" tabindex="-1"></a>fit3.test</span></code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds3, rho = 0)
+## 
+## n=522, 9 observations deleted due to missingness.
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 261       52     66.7      3.23      6.69
+## aodserv=1 261       77     62.3      3.45      6.69
+## 
+##  Chisq= 6.7  on 1 degrees of freedom, p= 0.01</code></pre>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="04_Section5.8.1.html#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit3)) </span></code></pre></div>
+<pre><code>##                     Q        Var      Z pNorm
+## 1          1.4674e+01 3.2190e+01 2.5863     4
+## n          6.7630e+03 6.7873e+06 2.5959     2
+## sqrtN      3.1472e+02 1.4730e+04 2.5931     3
+## S1         1.2955e+01 2.4836e+01 2.5995     1
+## S2         1.2927e+01 2.4728e+01 2.5995     1
+## FH_p=1_q=1 1.4200e+00 4.3025e-01 2.1649     5
+##               maxAbsZ        Var      Q pSupBr
+## 1          1.4674e+01 3.2190e+01 2.5863      4
+## n          6.7630e+03 6.7873e+06 2.5959      2
+## sqrtN      3.1472e+02 1.4730e+04 2.5931      3
+## S1         1.2955e+01 2.4836e+01 2.5995      1
+## S2         1.2927e+01 2.4728e+01 2.5995      1
+## FH_p=1_q=1 1.4200e+00 4.3025e-01 2.1649      5</code></pre>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="04_Section5.8.1.html#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb152-2"><a href="04_Section5.8.1.html#cb152-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit3, <span class="at">data =</span> ds3, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+</div>
+<div id="scheme-4" class="section level3" number="5.8.5">
+<h3><span class="header-section-number">5.8.5</span> Scheme 4</h3>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="04_Section5.8.1.html#cb153-1" aria-hidden="true" tabindex="-1"></a>ds4 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_4.dta&quot;</span>)</span>
+<span id="cb153-2"><a href="04_Section5.8.1.html#cb153-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb153-3"><a href="04_Section5.8.1.html#cb153-3" aria-hidden="true" tabindex="-1"></a>fit4 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds4)</span>
+<span id="cb153-4"><a href="04_Section5.8.1.html#cb153-4" aria-hidden="true" tabindex="-1"></a>fit4</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds4)
+## 
+##    9 observations deleted due to missingness 
+##             n events median 0.95LCL 0.95UCL
+## aodserv=0 261     52     NA      NA      NA
+## aodserv=1 261     75     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="04_Section5.8.1.html#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit4, <span class="at">probs =</span> <span class="fl">0.15</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                  15
+## aodserv=0 12.108285
+## aodserv=1  7.645611
+## 
+## $lower
+##                  15
+## aodserv=0 10.205086
+## aodserv=1  5.578343
+## 
+## $upper
+##                 15
+## aodserv=0       NA
+## aodserv=1 10.53322</code></pre>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="04_Section5.8.1.html#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb157-2"><a href="04_Section5.8.1.html#cb157-2" aria-hidden="true" tabindex="-1"></a>fit4.test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds4, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb157-3"><a href="04_Section5.8.1.html#cb157-3" aria-hidden="true" tabindex="-1"></a>fit4.test</span></code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds4, rho = 0)
+## 
+## n=522, 9 observations deleted due to missingness.
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 261       52     65.6      2.82      5.85
+## aodserv=1 261       75     61.4      3.02      5.85
+## 
+##  Chisq= 5.8  on 1 degrees of freedom, p= 0.02</code></pre>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="04_Section5.8.1.html#cb159-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit4)) </span></code></pre></div>
+<pre><code>##                     Q        Var      Z pNorm
+## 1          1.3613e+01 3.1696e+01 2.4181     5
+## n          6.3540e+03 6.7105e+06 2.4528     3
+## sqrtN      2.9383e+02 1.4535e+04 2.4372     4
+## S1         1.2174e+01 2.4555e+01 2.4567     2
+## S2         1.2148e+01 2.4448e+01 2.4568     1
+## FH_p=1_q=1 1.1979e+00 4.1344e-01 1.8631     6
+##               maxAbsZ        Var      Q pSupBr
+## 1          1.3613e+01 3.1696e+01 2.4181      5
+## n          6.3540e+03 6.7105e+06 2.4528      3
+## sqrtN      2.9383e+02 1.4535e+04 2.4372      4
+## S1         1.2174e+01 2.4555e+01 2.4567      2
+## S2         1.2148e+01 2.4448e+01 2.4568      1
+## FH_p=1_q=1 1.1979e+00 4.1344e-01 1.8631      6</code></pre>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="04_Section5.8.1.html#cb161-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb161-2"><a href="04_Section5.8.1.html#cb161-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit4, <span class="at">data =</span> ds4, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+</div>
+<div id="scheme-5" class="section level3" number="5.8.6">
+<h3><span class="header-section-number">5.8.6</span> Scheme 5</h3>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="04_Section5.8.1.html#cb162-1" aria-hidden="true" tabindex="-1"></a>ds5 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_5.dta&quot;</span>)</span>
+<span id="cb162-2"><a href="04_Section5.8.1.html#cb162-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb162-3"><a href="04_Section5.8.1.html#cb162-3" aria-hidden="true" tabindex="-1"></a>fit5 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds5)</span>
+<span id="cb162-4"><a href="04_Section5.8.1.html#cb162-4" aria-hidden="true" tabindex="-1"></a>fit5</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds5)
+## 
+##    4 observations deleted due to missingness 
+##             n events median 0.95LCL 0.95UCL
+## aodserv=0 164     41     NA      NA      NA
+## aodserv=1 160     48     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="04_Section5.8.1.html#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit5, <span class="at">probs =</span> <span class="fl">0.15</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                 15
+## aodserv=0 9.515997
+## aodserv=1 7.547170
+## 
+## $lower
+##                 15
+## aodserv=0 5.512715
+## aodserv=1 5.053322
+## 
+## $upper
+##                 15
+## aodserv=0 13.35521
+## aodserv=1 11.28794</code></pre>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="04_Section5.8.1.html#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb166-2"><a href="04_Section5.8.1.html#cb166-2" aria-hidden="true" tabindex="-1"></a>fit5.test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds5, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb166-3"><a href="04_Section5.8.1.html#cb166-3" aria-hidden="true" tabindex="-1"></a>fit5.test</span></code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds5, rho = 0)
+## 
+## n=324, 4 observations deleted due to missingness.
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 164       41     45.6     0.461     0.946
+## aodserv=1 160       48     43.4     0.484     0.946
+## 
+##  Chisq= 0.9  on 1 degrees of freedom, p= 0.3</code></pre>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="04_Section5.8.1.html#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit5)) </span></code></pre></div>
+<pre><code>##                     Q        Var       Z pNorm
+## 1          4.5849e+00 2.2226e+01 0.97251     2
+## n          1.2030e+03 1.7512e+06 0.90906     6
+## sqrtN      7.4286e+01 6.2104e+03 0.94264     3
+## S1         3.7094e+00 1.6628e+01 0.90967     4
+## S2         3.6953e+00 1.6511e+01 0.90943     5
+## FH_p=1_q=1 7.1015e-01 3.4820e-01 1.20347     1
+##               maxAbsZ        Var      Q pSupBr
+## 1          5.0699e+00 2.2226e+01 1.0754      2
+## n          1.3460e+03 1.7512e+06 1.0171      4
+## sqrtN      8.2656e+01 6.2104e+03 1.0488      3
+## S1         4.1350e+00 1.6628e+01 1.0140      5
+## S2         4.1195e+00 1.6511e+01 1.0138      6
+## FH_p=1_q=1 7.6877e-01 3.4820e-01 1.3028      1</code></pre>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="04_Section5.8.1.html#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb170-2"><a href="04_Section5.8.1.html#cb170-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit5, <span class="at">data =</span> ds5, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+</div>
+<div id="scheme-6" class="section level3" number="5.8.7">
+<h3><span class="header-section-number">5.8.7</span> Scheme 6</h3>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="04_Section5.8.1.html#cb171-1" aria-hidden="true" tabindex="-1"></a>ds6 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_6.dta&quot;</span>)</span>
+<span id="cb171-2"><a href="04_Section5.8.1.html#cb171-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb171-3"><a href="04_Section5.8.1.html#cb171-3" aria-hidden="true" tabindex="-1"></a>fit6 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds6)</span>
+<span id="cb171-4"><a href="04_Section5.8.1.html#cb171-4" aria-hidden="true" tabindex="-1"></a>fit6</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds6)
+## 
+##    4 observations deleted due to missingness 
+##             n events median 0.95LCL 0.95UCL
+## aodserv=0 163     41     NA      NA      NA
+## aodserv=1 159     47     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="04_Section5.8.1.html#cb173-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit6, <span class="at">probs =</span> <span class="fl">0.15</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                 15
+## aodserv=0 9.515997
+## aodserv=1 8.761280
+## 
+## $lower
+##                 15
+## aodserv=0 5.184578
+## aodserv=1 5.250205
+## 
+## $upper
+##                 15
+## aodserv=0 13.35521
+## aodserv=1 11.94422</code></pre>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="04_Section5.8.1.html#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb175-2"><a href="04_Section5.8.1.html#cb175-2" aria-hidden="true" tabindex="-1"></a>fit6.test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds6, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb175-3"><a href="04_Section5.8.1.html#cb175-3" aria-hidden="true" tabindex="-1"></a>fit6.test</span></code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds6, rho = 0)
+## 
+## n=322, 4 observations deleted due to missingness.
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 163       41     44.9     0.340     0.696
+## aodserv=1 159       47     43.1     0.355     0.696
+## 
+##  Chisq= 0.7  on 1 degrees of freedom, p= 0.4</code></pre>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="04_Section5.8.1.html#cb177-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit6)) </span></code></pre></div>
+<pre><code>##                     Q        Var       Z pNorm
+## 1          3.9103e+00 2.1982e+01 0.83402     2
+## n          9.8500e+02 1.7122e+06 0.75277     6
+## sqrtN      6.2073e+01 6.1069e+03 0.79431     3
+## S1         3.0711e+00 1.6468e+01 0.75680     4
+## S2         3.0590e+00 1.6351e+01 0.75649     5
+## FH_p=1_q=1 6.6073e-01 3.4163e-01 1.13044     1
+##               maxAbsZ        Var       Q pSupBr
+## 1          3.9564e+00 2.1982e+01 0.84386      2
+## n          1.0310e+03 1.7122e+06 0.78792      4
+## sqrtN      6.3915e+01 6.1069e+03 0.81788      3
+## S1         3.1854e+00 1.6468e+01 0.78497      5
+## S2         3.1732e+00 1.6351e+01 0.78476      6
+## FH_p=1_q=1 6.6073e-01 3.4163e-01 1.13044      1</code></pre>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="04_Section5.8.1.html#cb179-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb179-2"><a href="04_Section5.8.1.html#cb179-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit6, <span class="at">data =</span> ds6, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+</div>
+<div id="scheme-7" class="section level3" number="5.8.8">
+<h3><span class="header-section-number">5.8.8</span> Scheme 7</h3>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="04_Section5.8.1.html#cb180-1" aria-hidden="true" tabindex="-1"></a>ds7 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_7.dta&quot;</span>)</span>
+<span id="cb180-2"><a href="04_Section5.8.1.html#cb180-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb180-3"><a href="04_Section5.8.1.html#cb180-3" aria-hidden="true" tabindex="-1"></a>fit7 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds7)</span>
+<span id="cb180-4"><a href="04_Section5.8.1.html#cb180-4" aria-hidden="true" tabindex="-1"></a>fit7</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds7)
+## 
+##    5 observations deleted due to missingness 
+##             n events median 0.95LCL 0.95UCL
+## aodserv=0 181     43     NA      NA      NA
+## aodserv=1 178     50     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="04_Section5.8.1.html#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit7, <span class="at">probs =</span> <span class="fl">0.15</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                 15
+## aodserv=0 9.909762
+## aodserv=1 7.842494
+## 
+## $lower
+##                 15
+## aodserv=0 6.365874
+## aodserv=1 5.742412
+## 
+## $upper
+##                 15
+## aodserv=0 13.65053
+## aodserv=1 11.94422</code></pre>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="04_Section5.8.1.html#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb184-2"><a href="04_Section5.8.1.html#cb184-2" aria-hidden="true" tabindex="-1"></a>fit7.test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds7, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb184-3"><a href="04_Section5.8.1.html#cb184-3" aria-hidden="true" tabindex="-1"></a>fit7.test</span></code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds7, rho = 0)
+## 
+## n=359, 5 observations deleted due to missingness.
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 181       43     47.3     0.384     0.782
+## aodserv=1 178       50     45.7     0.397     0.782
+## 
+##  Chisq= 0.8  on 1 degrees of freedom, p= 0.4</code></pre>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="04_Section5.8.1.html#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit7)) </span></code></pre></div>
+<pre><code>##                     Q        Var       Z pNorm
+## 1          4.2622e+00 2.3240e+01 0.88412     2
+## n          1.2360e+03 2.2889e+06 0.81697     6
+## sqrtN      7.2516e+01 7.2654e+03 0.85075     3
+## S1         3.4533e+00 1.7690e+01 0.82107     4
+## S2         3.4415e+00 1.7578e+01 0.82084     5
+## FH_p=1_q=1 6.3117e-01 3.3362e-01 1.09275     1
+##               maxAbsZ        Var       Q pSupBr
+## 1          4.2622e+00 2.3240e+01 0.88412      2
+## n          1.2360e+03 2.2889e+06 0.81697      6
+## sqrtN      7.2516e+01 7.2654e+03 0.85075      3
+## S1         3.4533e+00 1.7690e+01 0.82107      4
+## S2         3.4415e+00 1.7578e+01 0.82084      5
+## FH_p=1_q=1 6.3117e-01 3.3362e-01 1.09275      1</code></pre>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="04_Section5.8.1.html#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb188-2"><a href="04_Section5.8.1.html#cb188-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit7, <span class="at">data =</span> ds7, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+</div>
+<div id="scheme-8" class="section level3" number="5.8.9">
+<h3><span class="header-section-number">5.8.9</span> Scheme 8</h3>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="04_Section5.8.1.html#cb189-1" aria-hidden="true" tabindex="-1"></a>ds8 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_8.dta&quot;</span>)</span>
+<span id="cb189-2"><a href="04_Section5.8.1.html#cb189-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb189-3"><a href="04_Section5.8.1.html#cb189-3" aria-hidden="true" tabindex="-1"></a>fit8 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds8)</span>
+<span id="cb189-4"><a href="04_Section5.8.1.html#cb189-4" aria-hidden="true" tabindex="-1"></a>fit8</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds8)
+## 
+##    5 observations deleted due to missingness 
+##             n events median 0.95LCL 0.95UCL
+## aodserv=0 181     43     NA      NA      NA
+## aodserv=1 178     49     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="04_Section5.8.1.html#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit8, <span class="at">probs =</span> <span class="fl">0.15</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                 15
+## aodserv=0 9.909762
+## aodserv=1 7.251846
+## 
+## $lower
+##                 15
+## aodserv=0 6.365874
+## aodserv=1 5.217391
+## 
+## $upper
+##                 15
+## aodserv=0 13.65053
+## aodserv=1 12.46924</code></pre>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="04_Section5.8.1.html#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb193-2"><a href="04_Section5.8.1.html#cb193-2" aria-hidden="true" tabindex="-1"></a>fit8.test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds8, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb193-3"><a href="04_Section5.8.1.html#cb193-3" aria-hidden="true" tabindex="-1"></a>fit8.test</span></code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds8, rho = 0)
+## 
+## n=359, 5 observations deleted due to missingness.
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 181       43     46.9     0.317     0.645
+## aodserv=1 178       49     45.1     0.328     0.645
+## 
+##  Chisq= 0.6  on 1 degrees of freedom, p= 0.4</code></pre>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="04_Section5.8.1.html#cb195-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit8)) </span></code></pre></div>
+<pre><code>##                     Q        Var       Z pNorm
+## 1          3.8510e+00 2.2987e+01 0.80320     1
+## n          1.1720e+03 2.2716e+06 0.77761     6
+## sqrtN      6.7077e+01 7.1991e+03 0.79055     3
+## S1         3.2670e+00 1.7547e+01 0.77992     4
+## S2         3.2563e+00 1.7436e+01 0.77983     5
+## FH_p=1_q=1 4.5504e-01 3.2435e-01 0.79900     2
+##               maxAbsZ        Var       Q pSupBr
+## 1          3.8510e+00 2.2987e+01 0.80320      1
+## n          1.1720e+03 2.2716e+06 0.77761      6
+## sqrtN      6.7077e+01 7.1991e+03 0.79055      3
+## S1         3.2670e+00 1.7547e+01 0.77992      4
+## S2         3.2563e+00 1.7436e+01 0.77983      5
+## FH_p=1_q=1 4.5504e-01 3.2435e-01 0.79900      2</code></pre>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="04_Section5.8.1.html#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb197-2"><a href="04_Section5.8.1.html#cb197-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit8, <span class="at">data =</span> ds8, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+</div>
+<div id="scheme-9" class="section level3" number="5.8.10">
+<h3><span class="header-section-number">5.8.10</span> Scheme 9</h3>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="04_Section5.8.1.html#cb198-1" aria-hidden="true" tabindex="-1"></a>ds9 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_9.dta&quot;</span>)</span>
+<span id="cb198-2"><a href="04_Section5.8.1.html#cb198-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb198-3"><a href="04_Section5.8.1.html#cb198-3" aria-hidden="true" tabindex="-1"></a>fit9 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds9)</span>
+<span id="cb198-4"><a href="04_Section5.8.1.html#cb198-4" aria-hidden="true" tabindex="-1"></a>fit9</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds9)
+## 
+##    8 observations deleted due to missingness 
+##             n events median 0.95LCL 0.95UCL
+## aodserv=0 241     49     NA      NA      NA
+## aodserv=1 241     69     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="04_Section5.8.1.html#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit9, <span class="at">probs =</span> <span class="fl">0.15</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                  15
+## aodserv=0 12.698934
+## aodserv=1  7.645611
+## 
+## $lower
+##                  15
+## aodserv=0 10.926989
+## aodserv=1  5.578343
+## 
+## $upper
+##                 15
+## aodserv=0 17.26005
+## aodserv=1 10.43478</code></pre>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="04_Section5.8.1.html#cb202-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb202-2"><a href="04_Section5.8.1.html#cb202-2" aria-hidden="true" tabindex="-1"></a>fit9.test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds9, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb202-3"><a href="04_Section5.8.1.html#cb202-3" aria-hidden="true" tabindex="-1"></a>fit9.test</span></code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds9, rho = 0)
+## 
+## n=482, 8 observations deleted due to missingness.
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 241       49       61      2.36      4.88
+## aodserv=1 241       69       57      2.52      4.88
+## 
+##  Chisq= 4.9  on 1 degrees of freedom, p= 0.03</code></pre>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="04_Section5.8.1.html#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit9)) </span></code></pre></div>
+<pre><code>##                     Q        Var      Z pNorm
+## 1          1.1988e+01 2.9446e+01 2.2091     5
+## n          5.2650e+03 5.2896e+06 2.2892     1
+## sqrtN      2.5117e+02 1.2436e+04 2.2524     4
+## S1         1.0901e+01 2.2775e+01 2.2842     3
+## S2         1.0876e+01 2.2668e+01 2.2844     2
+## FH_p=1_q=1 9.5097e-01 3.8852e-01 1.5257     6
+##               maxAbsZ        Var      Q pSupBr
+## 1          1.3613e+01 2.9446e+01 2.5086      5
+## n          5.9200e+03 5.2896e+06 2.5740      1
+## sqrtN      2.8382e+02 1.2436e+04 2.5451      4
+## S1         1.2252e+01 2.2775e+01 2.5673      3
+## S2         1.2224e+01 2.2668e+01 2.5674      2
+## FH_p=1_q=1 1.1797e+00 3.8852e-01 1.8926      6</code></pre>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="04_Section5.8.1.html#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb206-2"><a href="04_Section5.8.1.html#cb206-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit9, <span class="at">data =</span> ds9, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+</div>
+<div id="scheme-10" class="section level3" number="5.8.11">
+<h3><span class="header-section-number">5.8.11</span> Scheme 10</h3>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="04_Section5.8.1.html#cb207-1" aria-hidden="true" tabindex="-1"></a>ds10 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_10.dta&quot;</span>)</span>
+<span id="cb207-2"><a href="04_Section5.8.1.html#cb207-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb207-3"><a href="04_Section5.8.1.html#cb207-3" aria-hidden="true" tabindex="-1"></a>fit10 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds10)</span>
+<span id="cb207-4"><a href="04_Section5.8.1.html#cb207-4" aria-hidden="true" tabindex="-1"></a>fit10</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds10)
+## 
+##    8 observations deleted due to missingness 
+##             n events median 0.95LCL 0.95UCL
+## aodserv=0 241     49     NA      NA      NA
+## aodserv=1 241     70     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="04_Section5.8.1.html#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit10, <span class="at">probs =</span> <span class="fl">0.15</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                  15
+## aodserv=0 12.698934
+## aodserv=1  7.645611
+## 
+## $lower
+##                  15
+## aodserv=0 10.926989
+## aodserv=1  5.283019
+## 
+## $upper
+##                 15
+## aodserv=0 17.26005
+## aodserv=1 11.15669</code></pre>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="04_Section5.8.1.html#cb211-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb211-2"><a href="04_Section5.8.1.html#cb211-2" aria-hidden="true" tabindex="-1"></a>fit10.test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds10, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb211-3"><a href="04_Section5.8.1.html#cb211-3" aria-hidden="true" tabindex="-1"></a>fit10.test</span></code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds10, rho = 0)
+## 
+## n=482, 8 observations deleted due to missingness.
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 241       49     61.4      2.51      5.19
+## aodserv=1 241       70     57.6      2.67      5.19
+## 
+##  Chisq= 5.2  on 1 degrees of freedom, p= 0.02</code></pre>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="04_Section5.8.1.html#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit10)) </span></code></pre></div>
+<pre><code>##                     Q        Var      Z pNorm
+## 1          1.2410e+01 2.9701e+01 2.2771     5
+## n          5.3880e+03 5.3103e+06 2.3381     1
+## sqrtN      2.5841e+02 1.2511e+04 2.3103     4
+## S1         1.1177e+01 2.2915e+01 2.3348     3
+## S2         1.1151e+01 2.2808e+01 2.3349     2
+## FH_p=1_q=1 1.0460e+00 3.9736e-01 1.6593     6
+##               maxAbsZ        Var      Q pSupBr
+## 1          1.3044e+01 2.9701e+01 2.3935      5
+## n          5.6880e+03 5.3103e+06 2.4683      1
+## sqrtN      2.7231e+02 1.2511e+04 2.4345      4
+## S1         1.1774e+01 2.2915e+01 2.4596      3
+## S2         1.1747e+01 2.2808e+01 2.4597      2
+## FH_p=1_q=1 1.0946e+00 3.9736e-01 1.7365      6</code></pre>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="04_Section5.8.1.html#cb215-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb215-2"><a href="04_Section5.8.1.html#cb215-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit10, <span class="at">data =</span> ds10, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+</div>
+<div id="scheme-11" class="section level3" number="5.8.12">
+<h3><span class="header-section-number">5.8.12</span> Scheme 11</h3>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="04_Section5.8.1.html#cb216-1" aria-hidden="true" tabindex="-1"></a>ds11 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_11.dta&quot;</span>)</span>
+<span id="cb216-2"><a href="04_Section5.8.1.html#cb216-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb216-3"><a href="04_Section5.8.1.html#cb216-3" aria-hidden="true" tabindex="-1"></a>fit11 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds11)</span>
+<span id="cb216-4"><a href="04_Section5.8.1.html#cb216-4" aria-hidden="true" tabindex="-1"></a>fit11</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds11)
+## 
+##    7 observations deleted due to missingness 
+##             n events median 0.95LCL 0.95UCL
+## aodserv=0 232     46     NA      NA      NA
+## aodserv=1 231     62     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="04_Section5.8.1.html#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit11, <span class="at">probs =</span> <span class="fl">0.1</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                 10
+## aodserv=0 7.645611
+## aodserv=1 5.283019
+## 
+## $lower
+##                 10
+## aodserv=0 4.757998
+## aodserv=1 4.495488
+## 
+## $upper
+##                  10
+## aodserv=0 11.386382
+## aodserv=1  7.645611</code></pre>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="04_Section5.8.1.html#cb220-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb220-2"><a href="04_Section5.8.1.html#cb220-2" aria-hidden="true" tabindex="-1"></a>fit11.test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds11, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb220-3"><a href="04_Section5.8.1.html#cb220-3" aria-hidden="true" tabindex="-1"></a>fit11.test</span></code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds11, rho = 0)
+## 
+## n=463, 7 observations deleted due to missingness.
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 232       46     55.2      1.55      3.17
+## aodserv=1 231       62     52.8      1.62      3.17
+## 
+##  Chisq= 3.2  on 1 degrees of freedom, p= 0.07</code></pre>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="04_Section5.8.1.html#cb222-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit11)) </span></code></pre></div>
+<pre><code>##                     Q        Var      Z pNorm
+## 1          9.2489e+00 2.6974e+01 1.7808     1
+## n          3.7510e+03 4.5446e+06 1.7595     5
+## sqrtN      1.8613e+02 1.1039e+04 1.7716     2
+## S1         8.0927e+00 2.1121e+01 1.7609     3
+## S2         8.0728e+00 2.1019e+01 1.7608     4
+## FH_p=1_q=1 9.5997e-01 3.2902e-01 1.6736     6
+##               maxAbsZ        Var      Q pSupBr
+## 1          9.2489e+00 2.6974e+01 1.7808      1
+## n          3.7510e+03 4.5446e+06 1.7595      5
+## sqrtN      1.8613e+02 1.1039e+04 1.7716      2
+## S1         8.0927e+00 2.1121e+01 1.7609      3
+## S2         8.0728e+00 2.1019e+01 1.7608      4
+## FH_p=1_q=1 9.5997e-01 3.2902e-01 1.6736      6</code></pre>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="04_Section5.8.1.html#cb224-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb224-2"><a href="04_Section5.8.1.html#cb224-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit11, <span class="at">data =</span> ds11, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
+</div>
+<div id="scheme-12" class="section level3" number="5.8.13">
+<h3><span class="header-section-number">5.8.13</span> Scheme 12</h3>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="04_Section5.8.1.html#cb225-1" aria-hidden="true" tabindex="-1"></a>ds12 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/svl_12.dta&quot;</span>)</span>
+<span id="cb225-2"><a href="04_Section5.8.1.html#cb225-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KM survival analysis</span></span>
+<span id="cb225-3"><a href="04_Section5.8.1.html#cb225-3" aria-hidden="true" tabindex="-1"></a>fit12 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds12)</span>
+<span id="cb225-4"><a href="04_Section5.8.1.html#cb225-4" aria-hidden="true" tabindex="-1"></a>fit12</span></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(durm, rrpt) ~ aodserv, data = ds12)
+## 
+##    7 observations deleted due to missingness 
+##             n events median 0.95LCL 0.95UCL
+## aodserv=0 232     46     NA      NA      NA
+## aodserv=1 231     64     NA      NA      NA</code></pre>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="04_Section5.8.1.html#cb227-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(fit12, <span class="at">probs =</span> <span class="fl">0.1</span>)</span></code></pre></div>
+<pre><code>## $quantile
+##                 10
+## aodserv=0 7.645611
+## aodserv=1 5.972108
+## 
+## $lower
+##                 10
+## aodserv=0 4.757998
+## aodserv=1 4.495488
+## 
+## $upper
+##                 10
+## aodserv=0 11.38638
+## aodserv=1  8.76128</code></pre>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="04_Section5.8.1.html#cb229-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log-rank or Mantel-Haenszel test</span></span>
+<span id="cb229-2"><a href="04_Section5.8.1.html#cb229-2" aria-hidden="true" tabindex="-1"></a>fit12.test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(durm, rrpt) <span class="sc">~</span> aodserv, <span class="at">data =</span> ds12, <span class="at">rho =</span> <span class="dv">0</span>)</span>
+<span id="cb229-3"><a href="04_Section5.8.1.html#cb229-3" aria-hidden="true" tabindex="-1"></a>fit12.test</span></code></pre></div>
+<pre><code>## Call:
+## survdiff(formula = Surv(durm, rrpt) ~ aodserv, data = ds12, rho = 0)
+## 
+## n=463, 7 observations deleted due to missingness.
+## 
+##             N Observed Expected (O-E)^2/E (O-E)^2/V
+## aodserv=0 232       46     56.3      1.89      3.87
+## aodserv=1 231       64     53.7      1.98      3.87
+## 
+##  Chisq= 3.9  on 1 degrees of freedom, p= 0.05</code></pre>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="04_Section5.8.1.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comp</span>(<span class="fu">ten</span>(fit12)) </span></code></pre></div>
+<pre><code>##                     Q        Var      Z pNorm
+## 1          1.0305e+01 2.7473e+01 1.9660     2
+## n          4.0950e+03 4.6009e+06 1.9091     6
+## sqrtN      2.0522e+02 1.1207e+04 1.9386     3
+## S1         8.8610e+00 2.1412e+01 1.9149     4
+## S2         8.8387e+00 2.1308e+01 1.9148     5
+## FH_p=1_q=1 1.1738e+00 3.4510e-01 1.9980     1
+##               maxAbsZ        Var      Q pSupBr
+## 1          1.0305e+01 2.7473e+01 1.9660      2
+## n          4.0950e+03 4.6009e+06 1.9091      6
+## sqrtN      2.0522e+02 1.1207e+04 1.9386      3
+## S1         8.8610e+00 2.1412e+01 1.9149      4
+## S2         8.8387e+00 2.1308e+01 1.9148      5
+## FH_p=1_q=1 1.1738e+00 3.4510e-01 1.9980      1</code></pre>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="04_Section5.8.1.html#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb233-2"><a href="04_Section5.8.1.html#cb233-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit12, <span class="at">data =</span> ds12, <span class="at">pval =</span> F)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="03_Section4.4.3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="05_Section5.8.2_5.8.3_5.8.4.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

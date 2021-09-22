@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 Section 6.5.2 Subclassification &amp; Cox Proportional Hazards (PS) | R Code for Propensity Score Analysis</title>
+  <meta name="description" content="9 Section 6.5.2 Subclassification &amp; Cox Proportional Hazards (PS) | R Code for Propensity Score Analysis" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 Section 6.5.2 Subclassification &amp; Cox Proportional Hazards (PS) | R Code for Propensity Score Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 Section 6.5.2 Subclassification &amp; Cox Proportional Hazards (PS) | R Code for Propensity Score Analysis" />
+  
+  
+  
+
+<meta name="author" content="Shanshan Du, Peter Sun, and Shenyang Guo" />
+
+
+<meta name="date" content="2020-12-30" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="07_Section5.8.6.html"/>
+<link rel="next" href="09_Section7.3.1.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html"><i class="fa fa-check"></i><b>2</b> Section 4.4.1 Application of the Treatment Effect Model to Analysis of Observational Data (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#preparation"><i class="fa fa-check"></i><b>2.1</b> Preparation</a></li>
+<li class="chapter" data-level="2.2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#treatment-effect"><i class="fa fa-check"></i><b>2.2</b> Treatment Effect</a></li>
+<li class="chapter" data-level="2.3" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#bivariate-t-test"><i class="fa fa-check"></i><b>2.3</b> Bivariate t-test</a></li>
+<li class="chapter" data-level="2.4" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#regression-control"><i class="fa fa-check"></i><b>2.4</b> Regression Control</a></li>
+<li class="chapter" data-level="2.5" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#sample-description"><i class="fa fa-check"></i><b>2.5</b> Sample Description</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html"><i class="fa fa-check"></i><b>3</b> Section 4.4.2 Evaluation of Treatment Effects From a Program With a Group Randomization Design (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#preparation-1"><i class="fa fa-check"></i><b>3.1</b> Preparation</a></li>
+<li class="chapter" data-level="3.2" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#treatment-effect-using-robust-to-control-for-clustering"><i class="fa fa-check"></i><b>3.2</b> Treatment Effect: Using Robust to Control for Clustering</a></li>
+<li class="chapter" data-level="3.3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#bivariate-t-test-1"><i class="fa fa-check"></i><b>3.3</b> Bivariate t-test</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html"><i class="fa fa-check"></i><b>4</b> Section 4.4.3 Main Features of Treatreg (PS &amp; SD)</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#preparation-2"><i class="fa fa-check"></i><b>4.1</b> Preparation</a></li>
+<li class="chapter" data-level="4.2" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#run-models"><i class="fa fa-check"></i><b>4.2</b> Run Models</a></li>
+<li class="chapter" data-level="4.3" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#extract-coefficients"><i class="fa fa-check"></i><b>4.3</b> Extract Coefficients</a></li>
+<li class="chapter" data-level="4.4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#get-combined-results"><i class="fa fa-check"></i><b>4.4</b> Get Combined Results</a></li>
+<li class="chapter" data-level="4.5" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#results"><i class="fa fa-check"></i><b>4.5</b> Results</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html"><i class="fa fa-check"></i><b>5</b> Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#preparation-3"><i class="fa fa-check"></i><b>5.1</b> Preparation</a></li>
+<li class="chapter" data-level="5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#propensity-score-estimation"><i class="fa fa-check"></i><b>5.2</b> Propensity Score Estimation</a></li>
+<li class="chapter" data-level="5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-comparisons"><i class="fa fa-check"></i><b>5.3</b> Bivariate Comparisons</a></li>
+<li class="chapter" data-level="5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-covariate-balcance-check"><i class="fa fa-check"></i><b>5.4</b> PSM based on Logistic regression &amp; Covariate Balcance Check</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.4.1</b> Scheme 1 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.4.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.4.2</b> Scheme 2 - Nearest neighbor within caliper .1*SD</a></li>
+<li class="chapter" data-level="5.4.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.4.3</b> Scheme 3 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.4.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.4.4</b> Scheme 4 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-2"><i class="fa fa-check"></i><b>5.5</b> PSM based on Logistic regression 2</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.5.1</b> Scheme 5 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6---nearest-neighbor-within-caliper-.1sd-note-caliper-in-matchit-is-not-real-data"><i class="fa fa-check"></i><b>5.5.2</b> Scheme 6 - Nearest neighbor within caliper .1*SD (Note: caliper in MatchIt is not real data)</a></li>
+<li class="chapter" data-level="5.5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.5.3</b> Scheme 7 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.5.4</b> Scheme 8 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-3"><i class="fa fa-check"></i><b>5.6</b> PSM based on Logistic regression 3</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.6.1</b> Scheme 9 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.6.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.6.2</b> Scheme 10 - Nearest neighbor within caliper .1*SD</a></li>
+<li class="chapter" data-level="5.6.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.6.3</b> Scheme 11 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.6.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.6.4</b> Scheme 12 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-test-after-matching"><i class="fa fa-check"></i><b>5.7</b> Bivariate test after matching</a></li>
+<li class="chapter" data-level="5.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#kaplan-meier-and-significance-test-of-difference-on-survivor-function"><i class="fa fa-check"></i><b>5.8</b> Kaplan-Meier and significance test of difference on survivor function</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#all"><i class="fa fa-check"></i><b>5.8.1</b> All</a></li>
+<li class="chapter" data-level="5.8.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1"><i class="fa fa-check"></i><b>5.8.2</b> Scheme 1</a></li>
+<li class="chapter" data-level="5.8.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2"><i class="fa fa-check"></i><b>5.8.3</b> Scheme 2</a></li>
+<li class="chapter" data-level="5.8.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3"><i class="fa fa-check"></i><b>5.8.4</b> Scheme 3</a></li>
+<li class="chapter" data-level="5.8.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4"><i class="fa fa-check"></i><b>5.8.5</b> Scheme 4</a></li>
+<li class="chapter" data-level="5.8.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5"><i class="fa fa-check"></i><b>5.8.6</b> Scheme 5</a></li>
+<li class="chapter" data-level="5.8.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6"><i class="fa fa-check"></i><b>5.8.7</b> Scheme 6</a></li>
+<li class="chapter" data-level="5.8.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7"><i class="fa fa-check"></i><b>5.8.8</b> Scheme 7</a></li>
+<li class="chapter" data-level="5.8.9" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8"><i class="fa fa-check"></i><b>5.8.9</b> Scheme 8</a></li>
+<li class="chapter" data-level="5.8.10" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9"><i class="fa fa-check"></i><b>5.8.10</b> Scheme 9</a></li>
+<li class="chapter" data-level="5.8.11" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10"><i class="fa fa-check"></i><b>5.8.11</b> Scheme 10</a></li>
+<li class="chapter" data-level="5.8.12" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11"><i class="fa fa-check"></i><b>5.8.12</b> Scheme 11</a></li>
+<li class="chapter" data-level="5.8.13" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12"><i class="fa fa-check"></i><b>5.8.13</b> Scheme 12</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html"><i class="fa fa-check"></i><b>6</b> Section 5.8.2, 5.8.3, and 5.8.4 (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.2-optimal-matching"><i class="fa fa-check"></i><b>6.1</b> Section 5.8.2 Optimal Matching</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#load-data"><i class="fa fa-check"></i><b>6.1.1</b> Load Data</a></li>
+<li class="chapter" data-level="6.1.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#bivariate-comparisons-1"><i class="fa fa-check"></i><b>6.1.2</b> Bivariate Comparisons</a></li>
+<li class="chapter" data-level="6.1.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#outcome-without-bias-control"><i class="fa fa-check"></i><b>6.1.3</b> Outcome Without Bias Control</a></li>
+<li class="chapter" data-level="6.1.4" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#matching"><i class="fa fa-check"></i><b>6.1.4</b> Matching</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.3-post-full-matching-analysis-of-outcome"><i class="fa fa-check"></i><b>6.2</b> Section 5.8.3 Post-Full-Matching Analysis of Outcome</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#hodges-lehmann-aligned-rank-test"><i class="fa fa-check"></i><b>6.2.1</b> Hodges-Lehmann Aligned Rank Test</a></li>
+<li class="chapter" data-level="6.2.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cohens-d"><i class="fa fa-check"></i><b>6.2.2</b> Cohen’s d</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.4-post-matching-analysis-using-regression-of-difference-scores"><i class="fa fa-check"></i><b>6.3</b> Section 5.8.4 Post-Matching Analysis Using Regression of Difference Scores</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html"><i class="fa fa-check"></i><b>7</b> Section 5.8.5 Multilevel Propensity Score (PS)</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccpros57"><i class="fa fa-check"></i><b>7.1</b> cccpros57</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data"><i class="fa fa-check"></i><b>7.1.1</b> Import Data</a></li>
+<li class="chapter" data-level="7.1.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score"><i class="fa fa-check"></i><b>7.1.2</b> Obtain Single-Level p-score</a></li>
+<li class="chapter" data-level="7.1.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model"><i class="fa fa-check"></i><b>7.1.3</b> Obtain School-Level p-score Model</a></li>
+<li class="chapter" data-level="7.1.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check"><i class="fa fa-check"></i><b>7.1.4</b> Before-Matching Balance Check</a></li>
+<li class="chapter" data-level="7.1.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl"><i class="fa fa-check"></i><b>7.1.5</b> Matching with ps_sgl</a></li>
+<li class="chapter" data-level="7.1.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch"><i class="fa fa-check"></i><b>7.1.6</b> Matching with ps_sch</a></li>
+<li class="chapter" data-level="7.1.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc"><i class="fa fa-check"></i><b>7.1.7</b> Check ICC</a></li>
+<li class="chapter" data-level="7.1.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel"><i class="fa fa-check"></i><b>7.1.8</b> Outcome Analsis: Multilevel</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccragg24"><i class="fa fa-check"></i><b>7.2</b> cccragg24</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data-1"><i class="fa fa-check"></i><b>7.2.1</b> Import Data</a></li>
+<li class="chapter" data-level="7.2.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score-1"><i class="fa fa-check"></i><b>7.2.2</b> Obtain Single-Level p-score</a></li>
+<li class="chapter" data-level="7.2.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model-1"><i class="fa fa-check"></i><b>7.2.3</b> Obtain School-Level p-score Model</a></li>
+<li class="chapter" data-level="7.2.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check-1"><i class="fa fa-check"></i><b>7.2.4</b> Before-Matching Balance Check</a></li>
+<li class="chapter" data-level="7.2.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl-1"><i class="fa fa-check"></i><b>7.2.5</b> Matching with ps_sgl</a></li>
+<li class="chapter" data-level="7.2.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch-1"><i class="fa fa-check"></i><b>7.2.6</b> Matching with ps_sch</a></li>
+<li class="chapter" data-level="7.2.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc-1"><i class="fa fa-check"></i><b>7.2.7</b> Check ICC</a></li>
+<li class="chapter" data-level="7.2.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel-1"><i class="fa fa-check"></i><b>7.2.8</b> Outcome Analsis: Multilevel</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html"><i class="fa fa-check"></i><b>8</b> Section 5.8.6 Comparison of Rand-gbm and Stata-boost (PS)</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#import-data-2"><i class="fa fa-check"></i><b>8.1</b> Import Data</a></li>
+<li class="chapter" data-level="8.2" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-rand-gbm-ps"><i class="fa fa-check"></i><b>8.2</b> Optimal pair matching Using pscores generated by Rand-gbm (ps)</a></li>
+<li class="chapter" data-level="8.3" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-stata-boost-psb"><i class="fa fa-check"></i><b>8.3</b> Optimal pair matching Using pscores generated by Stata-boost (psb)</a></li>
+<li class="chapter" data-level="8.4" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#balance-checks"><i class="fa fa-check"></i><b>8.4</b> Balance Checks</a></li>
+<li class="chapter" data-level="8.5" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#postmatching-regression-analysis-using-difference-scores"><i class="fa fa-check"></i><b>8.5</b> Postmatching Regression Analysis Using Difference Scores</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html"><i class="fa fa-check"></i><b>9</b> Section 6.5.2 Subclassification &amp; Cox Proportional Hazards (PS)</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#import-data-3"><i class="fa fa-check"></i><b>9.1</b> Import Data</a></li>
+<li class="chapter" data-level="9.2" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-propensity-score-using-logistic"><i class="fa fa-check"></i><b>9.2</b> Create Propensity Score Using Logistic</a></li>
+<li class="chapter" data-level="9.3" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-conduct-balance-check-using-normalized-difference"><i class="fa fa-check"></i><b>9.3</b> Function to Conduct Balance Check Using Normalized Difference</a></li>
+<li class="chapter" data-level="9.4" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-normalized-difference"><i class="fa fa-check"></i><b>9.4</b> Balance Check on the Original Sample (Normalized Difference)</a></li>
+<li class="chapter" data-level="9.5" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-check-balance-using-chi-square-tests"><i class="fa fa-check"></i><b>9.5</b> Function to Check Balance Using Chi-Square Tests</a></li>
+<li class="chapter" data-level="9.6" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-chi-square"><i class="fa fa-check"></i><b>9.6</b> Balance Check on the Original Sample (Chi-Square)</a></li>
+<li class="chapter" data-level="9.7" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#get-quintiles"><i class="fa fa-check"></i><b>9.7</b> Get Quintiles</a></li>
+<li class="chapter" data-level="9.8" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-subclasses-using-quintiles"><i class="fa fa-check"></i><b>9.8</b> Create 5 Subclasses Using Quintiles</a></li>
+<li class="chapter" data-level="9.9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#check-imbalance-post-subclassification-5-subclasses"><i class="fa fa-check"></i><b>9.9</b> Check Imbalance Post-Subclassification (5 Subclasses)</a></li>
+<li class="chapter" data-level="9.10" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trimming-search-for-best-cutoff-alpha-for-overlap"><i class="fa fa-check"></i><b>9.10</b> Trimming: Search for Best Cutoff Alpha for Overlap</a></li>
+<li class="chapter" data-level="9.11" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trim-observations"><i class="fa fa-check"></i><b>9.11</b> Trim Observations</a></li>
+<li class="chapter" data-level="9.12" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-new-subclasses-and-check-imbalance"><i class="fa fa-check"></i><b>9.12</b> Create 5 New Subclasses and Check Imbalance</a></li>
+<li class="chapter" data-level="9.13" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#outcome-analysis-by-subclass"><i class="fa fa-check"></i><b>9.13</b> Outcome Analysis by Subclass</a></li>
+<li class="chapter" data-level="9.14" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#aggregate-results"><i class="fa fa-check"></i><b>9.14</b> Aggregate Results</a></li>
+<li class="chapter" data-level="9.15" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#subclassification-with-matchit"><i class="fa fa-check"></i><b>9.15</b> Subclassification with MatchIt</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html"><i class="fa fa-check"></i><b>10</b> Section 7.3.1 Propensity Score Weighting (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#preparation-4"><i class="fa fa-check"></i><b>10.1</b> Preparation</a></li>
+<li class="chapter" data-level="10.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-1-obtain-weights-with-weightit"><i class="fa fa-check"></i><b>10.2</b> Solution 1: Obtain Weights with WeightIt</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights"><i class="fa fa-check"></i><b>10.2.1</b> Weights</a></li>
+<li class="chapter" data-level="10.2.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights"><i class="fa fa-check"></i><b>10.2.2</b> PSW With ATE Weights</a></li>
+<li class="chapter" data-level="10.2.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights"><i class="fa fa-check"></i><b>10.2.3</b> PSW With ATT Weights</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-2-creating-the-weights-manually"><i class="fa fa-check"></i><b>10.3</b> Solution 2: Creating the Weights Manually</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights-1"><i class="fa fa-check"></i><b>10.3.1</b> Weights</a></li>
+<li class="chapter" data-level="10.3.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights-1"><i class="fa fa-check"></i><b>10.3.2</b> PSW With ATE Weights</a></li>
+<li class="chapter" data-level="10.3.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights-1"><i class="fa fa-check"></i><b>10.3.3</b> PSW With ATT Weights</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#imbalance-checks"><i class="fa fa-check"></i><b>10.4</b> Imbalance Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html"><i class="fa fa-check"></i><b>11</b> Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#preparation-5"><i class="fa fa-check"></i><b>11.1</b> Preparation</a></li>
+<li class="chapter" data-level="11.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#propensity-score-weighting"><i class="fa fa-check"></i><b>11.2</b> Propensity Score Weighting</a></li>
+<li class="chapter" data-level="11.3" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#cox-proportional-hazards-model"><i class="fa fa-check"></i><b>11.3</b> Cox Proportional Hazards Model</a></li>
+<li class="chapter" data-level="11.4" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#checking-imbalance"><i class="fa fa-check"></i><b>11.4</b> Checking Imbalance</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#chi-square-tests-original-sample"><i class="fa fa-check"></i><b>11.4.1</b> Chi-square Tests: Original Sample</a></li>
+<li class="chapter" data-level="11.4.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#weighted-logistic-regression"><i class="fa fa-check"></i><b>11.4.2</b> Weighted Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html"><i class="fa fa-check"></i><b>12</b> Section 8.4.1 Matching with Bias-Corrected and Robust Variance Estimators (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#preparation-6"><i class="fa fa-check"></i><b>12.1</b> Preparation</a></li>
+<li class="chapter" data-level="12.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#breusch-pagan-test-for-heteroskedasticity"><i class="fa fa-check"></i><b>12.2</b> Breusch-Pagan Test for Heteroskedasticity</a></li>
+<li class="chapter" data-level="12.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#matching-estimators"><i class="fa fa-check"></i><b>12.3</b> Matching Estimators</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-sate"><i class="fa fa-check"></i><b>12.3.1</b> Sample Average Treatment Effect (SATE)</a></li>
+<li class="chapter" data-level="12.3.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-pate"><i class="fa fa-check"></i><b>12.3.2</b> Population Average Treatment Effect (PATE)</a></li>
+<li class="chapter" data-level="12.3.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-treated-satt"><i class="fa fa-check"></i><b>12.3.3</b> Sample average treatment effect for the treated (SATT)</a></li>
+<li class="chapter" data-level="12.3.4" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-treated-patt"><i class="fa fa-check"></i><b>12.3.4</b> Population average treatment effect for the treated (PATT)</a></li>
+<li class="chapter" data-level="12.3.5" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-controls-satc"><i class="fa fa-check"></i><b>12.3.5</b> Sample average treatment effect for the controls (SATC)</a></li>
+<li class="chapter" data-level="12.3.6" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-controls-patc"><i class="fa fa-check"></i><b>12.3.6</b> Population average treatment effect for the controls (PATC)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html"><i class="fa fa-check"></i><b>13</b> Section 8.4.2 Efficacy Subset &amp; Matching Estimators (PS)</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#check-sample-sizes-and-get-summary-statistics"><i class="fa fa-check"></i><b>13.1</b> Check Sample Sizes and Get Summary Statistics</a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4adq"><i class="fa fa-check"></i><b>13.1.1</b> g4adq</a></li>
+<li class="chapter" data-level="13.1.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4hi"><i class="fa fa-check"></i><b>13.1.2</b> g4hi</a></li>
+<li class="chapter" data-level="13.1.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5adq"><i class="fa fa-check"></i><b>13.1.3</b> g5adq</a></li>
+<li class="chapter" data-level="13.1.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5hi"><i class="fa fa-check"></i><b>13.1.4</b> g5hi</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#functions-for-matching"><i class="fa fa-check"></i><b>13.2</b> Functions for Matching</a></li>
+<li class="chapter" data-level="13.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#define-matching-variables"><i class="fa fa-check"></i><b>13.3</b> Define Matching Variables</a></li>
+<li class="chapter" data-level="13.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#matching-1"><i class="fa fa-check"></i><b>13.4</b> Matching</a></li>
+<li class="chapter" data-level="13.5" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#function-to-aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.5</b> Function to Aggregate Using Rubin’s Rule</a></li>
+<li class="chapter" data-level="13.6" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.6</b> Aggregate Using Rubin’s Rule</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html"><i class="fa fa-check"></i><b>14</b> Section 10.6.1 Modeling Doses of Treatment (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#preparation-7"><i class="fa fa-check"></i><b>14.1</b> Preparation</a></li>
+<li class="chapter" data-level="14.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#create-treatment-variable"><i class="fa fa-check"></i><b>14.2</b> Create Treatment Variable</a></li>
+<li class="chapter" data-level="14.3" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#generalized-propensity-scores"><i class="fa fa-check"></i><b>14.3</b> Generalized Propensity Scores</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#mulitinomial-logit-model"><i class="fa fa-check"></i><b>14.3.1</b> Mulitinomial Logit Model</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#sampling-weights"><i class="fa fa-check"></i><b>14.4</b> Sampling Weights</a></li>
+<li class="chapter" data-level="14.5" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#dummy-variables"><i class="fa fa-check"></i><b>14.5</b> Dummy Variables</a></li>
+<li class="chapter" data-level="14.6" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#regression"><i class="fa fa-check"></i><b>14.6</b> Regression</a>
+<ul>
+<li class="chapter" data-level="14.6.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#without-control"><i class="fa fa-check"></i><b>14.6.1</b> Without Control</a></li>
+<li class="chapter" data-level="14.6.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#with-control"><i class="fa fa-check"></i><b>14.6.2</b> With Control</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html"><i class="fa fa-check"></i><b>15</b> Section 11.5.1 &amp; 11.5.2 Sensitivity Analysis of the Effects (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.1-sensitivity-analysis-of-the-effects"><i class="fa fa-check"></i><b>15.1</b> Section 11.5.1 Sensitivity Analysis of the Effects</a></li>
+<li class="chapter" data-level="15.2" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.2-sensitivity-analysis-pair-matching"><i class="fa fa-check"></i><b>15.2</b> Section 11.5.2 Sensitivity Analysis &amp; Pair Matching</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Code for <em>Propensity Score Analysis</em></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="section-6.5.2-subclassification-cox-proportional-hazards-ps" class="section level1" number="9">
+<h1><span class="header-section-number">9</span> Section 6.5.2 Subclassification &amp; Cox Proportional Hazards (PS)</h1>
+<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="08_Section6.5.2.html#cb434-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb434-2"><a href="08_Section6.5.2.html#cb434-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb434-3"><a href="08_Section6.5.2.html#cb434-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MatchIt)</span>
+<span id="cb434-4"><a href="08_Section6.5.2.html#cb434-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cobalt)</span>
+<span id="cb434-5"><a href="08_Section6.5.2.html#cb434-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjlabelled)</span>
+<span id="cb434-6"><a href="08_Section6.5.2.html#cb434-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb434-7"><a href="08_Section6.5.2.html#cb434-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb434-8"><a href="08_Section6.5.2.html#cb434-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(PSweight)</span>
+<span id="cb434-9"><a href="08_Section6.5.2.html#cb434-9" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span></code></pre></div>
+<div id="import-data-3" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> Import Data</h2>
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb435-1"><a href="08_Section6.5.2.html#cb435-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter6/sur_subclass.dta&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb435-2"><a href="08_Section6.5.2.html#cb435-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">zap_formats</span>()</span>
+<span id="cb435-3"><a href="08_Section6.5.2.html#cb435-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> sjlabelled<span class="sc">::</span><span class="fu">remove_all_labels</span>(df) <span class="sc">%&gt;%</span></span>
+<span id="cb435-4"><a href="08_Section6.5.2.html#cb435-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code></pre></div>
+</div>
+<div id="create-propensity-score-using-logistic" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> Create Propensity Score Using Logistic</h2>
+<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="08_Section6.5.2.html#cb436-1" aria-hidden="true" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="st">&quot;married + high + bahigh + poverty2 + poverty3 + poverty4 + poverty5 + employ + open + black + hispanic + natam + chdage1 + chdage2 + chdage3 + cgrage1 + cgrage2 + cgrage3 + CRA47A + mental + arrest + PSH17A  + sexual + provide + supervis + other + ra + cidi + cgneed&quot;</span></span>
+<span id="cb436-2"><a href="08_Section6.5.2.html#cb436-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;aodserv ~&quot;</span>, cov))</span>
+<span id="cb436-3"><a href="08_Section6.5.2.html#cb436-3" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(aodserv <span class="sc">~</span> married <span class="sc">+</span> high <span class="sc">+</span> bahigh <span class="sc">+</span> poverty2 <span class="sc">+</span> poverty3 <span class="sc">+</span> </span>
+<span id="cb436-4"><a href="08_Section6.5.2.html#cb436-4" aria-hidden="true" tabindex="-1"></a>          poverty4 <span class="sc">+</span> poverty5 <span class="sc">+</span> employ <span class="sc">+</span> open <span class="sc">+</span> black <span class="sc">+</span> hispanic <span class="sc">+</span> natam <span class="sc">+</span> chdage1 <span class="sc">+</span> </span>
+<span id="cb436-5"><a href="08_Section6.5.2.html#cb436-5" aria-hidden="true" tabindex="-1"></a>          chdage2 <span class="sc">+</span> chdage3 <span class="sc">+</span> cgrage1 <span class="sc">+</span> cgrage2 <span class="sc">+</span> cgrage3 <span class="sc">+</span> CRA47A <span class="sc">+</span> mental <span class="sc">+</span> </span>
+<span id="cb436-6"><a href="08_Section6.5.2.html#cb436-6" aria-hidden="true" tabindex="-1"></a>          arrest <span class="sc">+</span> PSH17A   <span class="sc">+</span> sexual <span class="sc">+</span> provide <span class="sc">+</span> supervis <span class="sc">+</span> other <span class="sc">+</span> ra <span class="sc">+</span> cidi <span class="sc">+</span> cgneed,</span>
+<span id="cb436-7"><a href="08_Section6.5.2.html#cb436-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> binomial,</span>
+<span id="cb436-8"><a href="08_Section6.5.2.html#cb436-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> df)</span>
+<span id="cb436-9"><a href="08_Section6.5.2.html#cb436-9" aria-hidden="true" tabindex="-1"></a>ps3 <span class="ot">&lt;-</span> <span class="fu">predict</span>(m1, <span class="at">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb436-10"><a href="08_Section6.5.2.html#cb436-10" aria-hidden="true" tabindex="-1"></a>sur_subclass1 <span class="ot">&lt;-</span> df</span>
+<span id="cb436-11"><a href="08_Section6.5.2.html#cb436-11" aria-hidden="true" tabindex="-1"></a>sur_subclass1<span class="sc">$</span>ps3 <span class="ot">&lt;-</span> ps3</span></code></pre></div>
+</div>
+<div id="function-to-conduct-balance-check-using-normalized-difference" class="section level2" number="9.3">
+<h2><span class="header-section-number">9.3</span> Function to Conduct Balance Check Using Normalized Difference</h2>
+<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb437-1"><a href="08_Section6.5.2.html#cb437-1" aria-hidden="true" tabindex="-1"></a>nd <span class="ot">&lt;-</span> <span class="cf">function</span>(cov, <span class="at">df =</span> sur_subclass1, <span class="at">tx =</span> <span class="st">&quot;aodserv&quot;</span>) {</span>
+<span id="cb437-2"><a href="08_Section6.5.2.html#cb437-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb437-3"><a href="08_Section6.5.2.html#cb437-3" aria-hidden="true" tabindex="-1"></a>  tx <span class="ot">&lt;-</span> <span class="fu">as.name</span>(tx)</span>
+<span id="cb437-4"><a href="08_Section6.5.2.html#cb437-4" aria-hidden="true" tabindex="-1"></a>  cov <span class="ot">&lt;-</span> <span class="fu">as.name</span>(cov)</span>
+<span id="cb437-5"><a href="08_Section6.5.2.html#cb437-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb437-6"><a href="08_Section6.5.2.html#cb437-6" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb437-7"><a href="08_Section6.5.2.html#cb437-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="sc">!!</span>tx) <span class="sc">%&gt;%</span></span>
+<span id="cb437-8"><a href="08_Section6.5.2.html#cb437-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">m =</span> <span class="fu">mean</span>(<span class="sc">!!</span>cov, <span class="at">na.rm =</span> T),</span>
+<span id="cb437-9"><a href="08_Section6.5.2.html#cb437-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">s =</span> <span class="fu">sd</span>(<span class="sc">!!</span>cov, <span class="at">na.rm =</span> T),</span>
+<span id="cb437-10"><a href="08_Section6.5.2.html#cb437-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb437-11"><a href="08_Section6.5.2.html#cb437-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="sc">!!</span>tx, <span class="at">values_from =</span> <span class="fu">c</span>(<span class="st">&quot;m&quot;</span>, <span class="st">&quot;s&quot;</span>), <span class="at">names_sep =</span> <span class="st">&quot;&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb437-12"><a href="08_Section6.5.2.html#cb437-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">nd =</span> (m1<span class="sc">-</span>m0)<span class="sc">/</span><span class="fu">sqrt</span>(s1<span class="sc">^</span><span class="dv">2</span><span class="sc">+</span>s0<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb437-13"><a href="08_Section6.5.2.html#cb437-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df<span class="sc">$</span>nd)</span>
+<span id="cb437-14"><a href="08_Section6.5.2.html#cb437-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="balance-check-on-the-original-sample-normalized-difference" class="section level2" number="9.4">
+<h2><span class="header-section-number">9.4</span> Balance Check on the Original Sample (Normalized Difference)</h2>
+<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb438-1"><a href="08_Section6.5.2.html#cb438-1" aria-hidden="true" tabindex="-1"></a>covs <span class="ot">&lt;-</span> <span class="fu">str_split</span>(cov, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">s[+]</span><span class="sc">\\</span><span class="st">s&quot;</span>)[[<span class="dv">1</span>]] <span class="co"># vector of covariates</span></span>
+<span id="cb438-2"><a href="08_Section6.5.2.html#cb438-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(covs, nd) <span class="co"># apply the function nd on each covariate</span></span></code></pre></div>
+<pre><code>##      married         high       bahigh     poverty2     poverty3     poverty4 
+## -0.083782572 -0.020944688 -0.117467895  0.047519781 -0.101591707 -0.058597578 
+##     poverty5       employ         open        black     hispanic        natam 
+## -0.031356128 -0.206390823  0.365698430  0.056512656 -0.030820121  0.113101585 
+##      chdage1      chdage2      chdage3      cgrage1      cgrage2      cgrage3 
+##  0.317144130 -0.061307219 -0.168353683 -0.058741019  0.028058160  0.026894624 
+##       CRA47A       mental       arrest       PSH17A       sexual      provide 
+##  0.178218682  0.400231469  0.492396125  0.457862846 -0.236493710  0.221219159 
+##     supervis        other           ra         cidi       cgneed 
+##  0.043210479  0.008817453  0.996042062  0.529662472  0.354842755</code></pre>
+</div>
+<div id="function-to-check-balance-using-chi-square-tests" class="section level2" number="9.5">
+<h2><span class="header-section-number">9.5</span> Function to Check Balance Using Chi-Square Tests</h2>
+<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb440-1"><a href="08_Section6.5.2.html#cb440-1" aria-hidden="true" tabindex="-1"></a>check_blc <span class="ot">&lt;-</span> <span class="cf">function</span>(cov, <span class="at">df =</span> sur_subclass1, <span class="at">tx =</span> <span class="st">&quot;aodserv&quot;</span>) {</span>
+<span id="cb440-2"><a href="08_Section6.5.2.html#cb440-2" aria-hidden="true" tabindex="-1"></a>  ct <span class="ot">&lt;-</span> <span class="fu">tidy</span>(</span>
+<span id="cb440-3"><a href="08_Section6.5.2.html#cb440-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">chisq.test</span>(</span>
+<span id="cb440-4"><a href="08_Section6.5.2.html#cb440-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">table</span>(df[[cov]], <span class="at">y =</span> df[[tx]]), <span class="at">correct =</span>F</span>
+<span id="cb440-5"><a href="08_Section6.5.2.html#cb440-5" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb440-6"><a href="08_Section6.5.2.html#cb440-6" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb440-7"><a href="08_Section6.5.2.html#cb440-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_column</span>(<span class="at">cov =</span> cov, <span class="at">.before =</span> <span class="st">&quot;statistic&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb440-8"><a href="08_Section6.5.2.html#cb440-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p.value =</span> <span class="fu">round</span>(p.value, <span class="dv">2</span>))</span>
+<span id="cb440-9"><a href="08_Section6.5.2.html#cb440-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(ct)</span>
+<span id="cb440-10"><a href="08_Section6.5.2.html#cb440-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="balance-check-on-the-original-sample-chi-square" class="section level2" number="9.6">
+<h2><span class="header-section-number">9.6</span> Balance Check on the Original Sample (Chi-Square)</h2>
+<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb441-1"><a href="08_Section6.5.2.html#cb441-1" aria-hidden="true" tabindex="-1"></a>covs2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;married&quot;</span>, <span class="st">&quot;educ&quot;</span>, <span class="st">&quot;pov&quot;</span>, <span class="st">&quot;employ&quot;</span>, <span class="st">&quot;open&quot;</span>, <span class="st">&quot;race&quot;</span>, <span class="st">&quot;chdage&quot;</span>,</span>
+<span id="cb441-2"><a href="08_Section6.5.2.html#cb441-2" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;cgage&quot;</span>, <span class="st">&quot;CRA47A&quot;</span>, <span class="st">&quot;mental&quot;</span>, <span class="st">&quot;arrest&quot;</span>, <span class="st">&quot;PSH17A&quot;</span>, <span class="st">&quot;maltx&quot;</span>, <span class="st">&quot;ra&quot;</span>,</span>
+<span id="cb441-3"><a href="08_Section6.5.2.html#cb441-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;cidi&quot;</span>, <span class="st">&quot;cgneed&quot;</span>)</span>
+<span id="cb441-4"><a href="08_Section6.5.2.html#cb441-4" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(covs2, check_blc)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 5
+##    cov     statistic p.value parameter method                    
+##    &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
+##  1 married      3.52    0.06         1 Pearson&#39;s Chi-squared test
+##  2 educ        10.2     0.01         2 Pearson&#39;s Chi-squared test
+##  3 pov         11.2     0.02         4 Pearson&#39;s Chi-squared test
+##  4 employ      21.5     0            1 Pearson&#39;s Chi-squared test
+##  5 open        60.6     0            1 Pearson&#39;s Chi-squared test
+##  6 race        11.6     0.01         3 Pearson&#39;s Chi-squared test
+##  7 chdage      56.0     0            3 Pearson&#39;s Chi-squared test
+##  8 cgage        4.00    0.26         3 Pearson&#39;s Chi-squared test
+##  9 CRA47A      17.7     0            1 Pearson&#39;s Chi-squared test
+## 10 mental      92.4     0            1 Pearson&#39;s Chi-squared test
+## 11 arrest     127.      0            1 Pearson&#39;s Chi-squared test
+## 12 PSH17A     171.      0            1 Pearson&#39;s Chi-squared test
+## 13 maltx       47.9     0            4 Pearson&#39;s Chi-squared test
+## 14 ra         584.      0            1 Pearson&#39;s Chi-squared test
+## 15 cidi       154.      0            1 Pearson&#39;s Chi-squared test
+## 16 cgneed     134.      0            1 Pearson&#39;s Chi-squared test</code></pre>
+</div>
+<div id="get-quintiles" class="section level2" number="9.7">
+<h2><span class="header-section-number">9.7</span> Get Quintiles</h2>
+<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb443-1"><a href="08_Section6.5.2.html#cb443-1" aria-hidden="true" tabindex="-1"></a>q5 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">round</span>(<span class="fu">quantile</span>(sur_subclass1<span class="sc">$</span>ps3, <span class="fu">c</span>(.<span class="dv">2</span>, .<span class="dv">4</span>, .<span class="dv">6</span>, .<span class="dv">8</span>), <span class="at">type =</span> <span class="dv">1</span>), <span class="dv">7</span>), <span class="dv">1</span>) <span class="co"># round to 7 digits to replicate Stata code</span></span>
+<span id="cb443-2"><a href="08_Section6.5.2.html#cb443-2" aria-hidden="true" tabindex="-1"></a>q5</span></code></pre></div>
+<pre><code>##                 20%       40%       60%       80%           
+## 0.0000000 0.0121536 0.0216452 0.0440495 0.1421116 1.0000000</code></pre>
+</div>
+<div id="create-5-subclasses-using-quintiles" class="section level2" number="9.8">
+<h2><span class="header-section-number">9.8</span> Create 5 Subclasses Using Quintiles</h2>
+<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb445-1"><a href="08_Section6.5.2.html#cb445-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cut 5 subclasses</span></span>
+<span id="cb445-2"><a href="08_Section6.5.2.html#cb445-2" aria-hidden="true" tabindex="-1"></a>subs <span class="ot">&lt;-</span> sur_subclass1 <span class="sc">%&gt;%</span></span>
+<span id="cb445-3"><a href="08_Section6.5.2.html#cb445-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(ps3) <span class="sc">%&gt;%</span></span>
+<span id="cb445-4"><a href="08_Section6.5.2.html#cb445-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">q =</span> <span class="fu">cut</span>(ps3, </span>
+<span id="cb445-5"><a href="08_Section6.5.2.html#cb445-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">include.lowest =</span> F,</span>
+<span id="cb445-6"><a href="08_Section6.5.2.html#cb445-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">right =</span> F,</span>
+<span id="cb445-7"><a href="08_Section6.5.2.html#cb445-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">dig.lab =</span> <span class="dv">7</span>,</span>
+<span id="cb445-8"><a href="08_Section6.5.2.html#cb445-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">breaks =</span> q5,</span>
+<span id="cb445-9"><a href="08_Section6.5.2.html#cb445-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">labels =</span> F))</span>
+<span id="cb445-10"><a href="08_Section6.5.2.html#cb445-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb445-11"><a href="08_Section6.5.2.html#cb445-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics of ps3 per subclass</span></span>
+<span id="cb445-12"><a href="08_Section6.5.2.html#cb445-12" aria-hidden="true" tabindex="-1"></a>subs <span class="sc">%&gt;%</span></span>
+<span id="cb445-13"><a href="08_Section6.5.2.html#cb445-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(q) <span class="sc">%&gt;%</span></span>
+<span id="cb445-14"><a href="08_Section6.5.2.html#cb445-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">obs =</span> <span class="fu">n</span>(),</span>
+<span id="cb445-15"><a href="08_Section6.5.2.html#cb445-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean =</span> <span class="fu">mean</span>(ps3),</span>
+<span id="cb445-16"><a href="08_Section6.5.2.html#cb445-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(ps3),</span>
+<span id="cb445-17"><a href="08_Section6.5.2.html#cb445-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(ps3),</span>
+<span id="cb445-18"><a href="08_Section6.5.2.html#cb445-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(ps3), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 6
+##       q   obs    mean      sd     min    max
+##   &lt;int&gt; &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+## 1     1   545 0.00813 0.00237 0.00263 0.0122
+## 2     2   545 0.0165  0.00271 0.0122  0.0216
+## 3     3   543 0.0308  0.00600 0.0217  0.0439
+## 4     4   546 0.0758  0.0264  0.0440  0.142 
+## 5     5   544 0.409   0.215   0.143   0.951</code></pre>
+<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb447-1"><a href="08_Section6.5.2.html#cb447-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter each subclass into its own tibble</span></span>
+<span id="cb447-2"><a href="08_Section6.5.2.html#cb447-2" aria-hidden="true" tabindex="-1"></a>sub1 <span class="ot">&lt;-</span> subs <span class="sc">%&gt;%</span> <span class="fu">filter</span>(q <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb447-3"><a href="08_Section6.5.2.html#cb447-3" aria-hidden="true" tabindex="-1"></a>sub2 <span class="ot">&lt;-</span> subs <span class="sc">%&gt;%</span> <span class="fu">filter</span>(q <span class="sc">==</span> <span class="dv">2</span>)</span>
+<span id="cb447-4"><a href="08_Section6.5.2.html#cb447-4" aria-hidden="true" tabindex="-1"></a>sub3 <span class="ot">&lt;-</span> subs <span class="sc">%&gt;%</span> <span class="fu">filter</span>(q <span class="sc">==</span> <span class="dv">3</span>)</span>
+<span id="cb447-5"><a href="08_Section6.5.2.html#cb447-5" aria-hidden="true" tabindex="-1"></a>sub4 <span class="ot">&lt;-</span> subs <span class="sc">%&gt;%</span> <span class="fu">filter</span>(q <span class="sc">==</span> <span class="dv">4</span>)</span>
+<span id="cb447-6"><a href="08_Section6.5.2.html#cb447-6" aria-hidden="true" tabindex="-1"></a>sub5 <span class="ot">&lt;-</span> subs <span class="sc">%&gt;%</span> <span class="fu">filter</span>(q <span class="sc">==</span> <span class="dv">5</span>)</span></code></pre></div>
+</div>
+<div id="check-imbalance-post-subclassification-5-subclasses" class="section level2" number="9.9">
+<h2><span class="header-section-number">9.9</span> Check Imbalance Post-Subclassification (5 Subclasses)</h2>
+<div class="sourceCode" id="cb448"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb448-1"><a href="08_Section6.5.2.html#cb448-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(covs2, check_blc, <span class="at">df =</span> sub1)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 5
+##    cov     statistic p.value parameter method                                  
+##    &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                                   
+##  1 married   0.506      0.48         1 Pearson&#39;s Chi-squared test              
+##  2 educ      0.955      0.62         2 Pearson&#39;s Chi-squared test              
+##  3 pov       2.35       0.67         4 Pearson&#39;s Chi-squared test              
+##  4 employ    0.478      0.49         1 Pearson&#39;s Chi-squared test              
+##  5 open      2.69       0.1          1 Pearson&#39;s Chi-squared test              
+##  6 race      0.673      0.88         3 Pearson&#39;s Chi-squared test              
+##  7 chdage    2.31       0.51         3 Pearson&#39;s Chi-squared test              
+##  8 cgage     3.59       0.17         2 Pearson&#39;s Chi-squared test              
+##  9 CRA47A    0.211      0.65         1 Pearson&#39;s Chi-squared test              
+## 10 mental    0.0303     0.86         1 Pearson&#39;s Chi-squared test              
+## 11 arrest    0.0402     0.84         1 Pearson&#39;s Chi-squared test              
+## 12 PSH17A    0.00741    0.93         1 Pearson&#39;s Chi-squared test              
+## 13 maltx     2.39       0.66         4 Pearson&#39;s Chi-squared test              
+## 14 ra      541.         0            1 Chi-squared test for given probabilities
+## 15 cidi      0.0323     0.86         1 Pearson&#39;s Chi-squared test              
+## 16 cgneed  541.         0            1 Chi-squared test for given probabilities</code></pre>
+<div class="sourceCode" id="cb450"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb450-1"><a href="08_Section6.5.2.html#cb450-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(covs2, check_blc, <span class="at">df =</span> sub2)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 5
+##    cov      statistic p.value parameter method                                  
+##    &lt;chr&gt;        &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                                   
+##  1 married   0.749       0.39         1 Pearson&#39;s Chi-squared test              
+##  2 educ      2.12        0.35         2 Pearson&#39;s Chi-squared test              
+##  3 pov       1.77        0.78         4 Pearson&#39;s Chi-squared test              
+##  4 employ    3.02        0.08         1 Pearson&#39;s Chi-squared test              
+##  5 open      2.21        0.14         1 Pearson&#39;s Chi-squared test              
+##  6 race      4.68        0.2          3 Pearson&#39;s Chi-squared test              
+##  7 chdage    5.67        0.13         3 Pearson&#39;s Chi-squared test              
+##  8 cgage     0.832       0.84         3 Pearson&#39;s Chi-squared test              
+##  9 CRA47A    1.81        0.18         1 Pearson&#39;s Chi-squared test              
+## 10 mental    1.03        0.31         1 Pearson&#39;s Chi-squared test              
+## 11 arrest    0.000198    0.99         1 Pearson&#39;s Chi-squared test              
+## 12 PSH17A    0.0789      0.78         1 Pearson&#39;s Chi-squared test              
+## 13 maltx     2.24        0.69         4 Pearson&#39;s Chi-squared test              
+## 14 ra      521.          0            1 Chi-squared test for given probabilities
+## 15 cidi      0.250       0.62         1 Pearson&#39;s Chi-squared test              
+## 16 cgneed   44.1         0            1 Pearson&#39;s Chi-squared test</code></pre>
+<div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb452-1"><a href="08_Section6.5.2.html#cb452-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(covs2, check_blc, <span class="at">df =</span> sub3)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 5
+##    cov     statistic p.value parameter method                    
+##    &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
+##  1 married   0.147      0.7          1 Pearson&#39;s Chi-squared test
+##  2 educ      2.85       0.24         2 Pearson&#39;s Chi-squared test
+##  3 pov       1.41       0.84         4 Pearson&#39;s Chi-squared test
+##  4 employ    1.93       0.17         1 Pearson&#39;s Chi-squared test
+##  5 open      0.260      0.61         1 Pearson&#39;s Chi-squared test
+##  6 race      3.90       0.27         3 Pearson&#39;s Chi-squared test
+##  7 chdage    1.07       0.78         3 Pearson&#39;s Chi-squared test
+##  8 cgage     3.15       0.37         3 Pearson&#39;s Chi-squared test
+##  9 CRA47A    0.428      0.51         1 Pearson&#39;s Chi-squared test
+## 10 mental    0.447      0.5          1 Pearson&#39;s Chi-squared test
+## 11 arrest    0.00553    0.94         1 Pearson&#39;s Chi-squared test
+## 12 PSH17A   10.5        0            1 Pearson&#39;s Chi-squared test
+## 13 maltx     3.94       0.41         4 Pearson&#39;s Chi-squared test
+## 14 ra        0.107      0.74         1 Pearson&#39;s Chi-squared test
+## 15 cidi      0.835      0.36         1 Pearson&#39;s Chi-squared test
+## 16 cgneed    3.18       0.07         1 Pearson&#39;s Chi-squared test</code></pre>
+<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb454-1"><a href="08_Section6.5.2.html#cb454-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(covs2, check_blc, <span class="at">df =</span> sub4)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 5
+##    cov     statistic p.value parameter method                    
+##    &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
+##  1 married  0.474       0.49         1 Pearson&#39;s Chi-squared test
+##  2 educ     3.22        0.2          2 Pearson&#39;s Chi-squared test
+##  3 pov      5.56        0.23         4 Pearson&#39;s Chi-squared test
+##  4 employ   0.495       0.48         1 Pearson&#39;s Chi-squared test
+##  5 open     1.12        0.29         1 Pearson&#39;s Chi-squared test
+##  6 race     0.315       0.96         3 Pearson&#39;s Chi-squared test
+##  7 chdage   0.725       0.87         3 Pearson&#39;s Chi-squared test
+##  8 cgage    0.299       0.96         3 Pearson&#39;s Chi-squared test
+##  9 CRA47A   0.466       0.49         1 Pearson&#39;s Chi-squared test
+## 10 mental   0.000123    0.99         1 Pearson&#39;s Chi-squared test
+## 11 arrest   3.57        0.06         1 Pearson&#39;s Chi-squared test
+## 12 PSH17A   1.95        0.16         1 Pearson&#39;s Chi-squared test
+## 13 maltx    1.25        0.87         4 Pearson&#39;s Chi-squared test
+## 14 ra       0.108       0.74         1 Pearson&#39;s Chi-squared test
+## 15 cidi     0.141       0.71         1 Pearson&#39;s Chi-squared test
+## 16 cgneed   4.11        0.04         1 Pearson&#39;s Chi-squared test</code></pre>
+<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb456-1"><a href="08_Section6.5.2.html#cb456-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(covs2, check_blc, <span class="at">df =</span> sub5)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 5
+##    cov     statistic p.value parameter method                    
+##    &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
+##  1 married     0.160    0.69         1 Pearson&#39;s Chi-squared test
+##  2 educ        2.66     0.26         2 Pearson&#39;s Chi-squared test
+##  3 pov         1.57     0.81         4 Pearson&#39;s Chi-squared test
+##  4 employ      0.623    0.43         1 Pearson&#39;s Chi-squared test
+##  5 open        5.30     0.02         1 Pearson&#39;s Chi-squared test
+##  6 race        1.98     0.58         3 Pearson&#39;s Chi-squared test
+##  7 chdage      2.88     0.41         3 Pearson&#39;s Chi-squared test
+##  8 cgage       0.848    0.84         3 Pearson&#39;s Chi-squared test
+##  9 CRA47A      0.203    0.65         1 Pearson&#39;s Chi-squared test
+## 10 mental      3.86     0.05         1 Pearson&#39;s Chi-squared test
+## 11 arrest      0.244    0.62         1 Pearson&#39;s Chi-squared test
+## 12 PSH17A      3.19     0.07         1 Pearson&#39;s Chi-squared test
+## 13 maltx       2.79     0.59         4 Pearson&#39;s Chi-squared test
+## 14 ra         19.8      0            1 Pearson&#39;s Chi-squared test
+## 15 cidi        9.98     0            1 Pearson&#39;s Chi-squared test
+## 16 cgneed      4.47     0.03         1 Pearson&#39;s Chi-squared test</code></pre>
+</div>
+<div id="trimming-search-for-best-cutoff-alpha-for-overlap" class="section level2" number="9.10">
+<h2><span class="header-section-number">9.10</span> Trimming: Search for Best Cutoff Alpha for Overlap</h2>
+<div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb458-1"><a href="08_Section6.5.2.html#cb458-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Program to search best cutoff value alpha for overlap (Crum et al., 2009)</span></span>
+<span id="cb458-2"><a href="08_Section6.5.2.html#cb458-2" aria-hidden="true" tabindex="-1"></a>trim <span class="ot">&lt;-</span> PSweight<span class="sc">::</span><span class="fu">PStrim</span>(</span>
+<span id="cb458-3"><a href="08_Section6.5.2.html#cb458-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">as.data.frame</span>(sur_subclass1), <span class="co"># fix for latest package update</span></span>
+<span id="cb458-4"><a href="08_Section6.5.2.html#cb458-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ps.formula =</span> f,</span>
+<span id="cb458-5"><a href="08_Section6.5.2.html#cb458-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimal =</span> T</span>
+<span id="cb458-6"><a href="08_Section6.5.2.html#cb458-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb458-7"><a href="08_Section6.5.2.html#cb458-7" aria-hidden="true" tabindex="-1"></a>trim<span class="sc">$</span>delta <span class="co"># or use .079 from the Stata results</span></span></code></pre></div>
+<pre><code>## [1] 0.07802586</code></pre>
+<div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb460-1"><a href="08_Section6.5.2.html#cb460-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span>trim<span class="sc">$</span>delta <span class="co"># or use .921 from the Stata results</span></span></code></pre></div>
+<pre><code>## [1] 0.9219741</code></pre>
+</div>
+<div id="trim-observations" class="section level2" number="9.11">
+<h2><span class="header-section-number">9.11</span> Trim Observations</h2>
+<div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb462-1"><a href="08_Section6.5.2.html#cb462-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sur_subclass1<span class="sc">$</span>ps3)</span></code></pre></div>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## 0.002628 0.014190 0.029990 0.107969 0.093391 0.950519</code></pre>
+<div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb464-1"><a href="08_Section6.5.2.html#cb464-1" aria-hidden="true" tabindex="-1"></a>sur_subclass2 <span class="ot">&lt;-</span> sur_subclass1 <span class="sc">%&gt;%</span></span>
+<span id="cb464-2"><a href="08_Section6.5.2.html#cb464-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ps3 <span class="sc">&gt;=</span> .<span class="dv">079</span> <span class="sc">&amp;</span> ps3 <span class="sc">&lt;=</span> .<span class="dv">921</span>)</span>
+<span id="cb464-3"><a href="08_Section6.5.2.html#cb464-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sur_subclass2<span class="sc">$</span>ps3)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## 0.07916 0.13539 0.24566 0.32245 0.47885 0.90917</code></pre>
+</div>
+<div id="create-5-new-subclasses-and-check-imbalance" class="section level2" number="9.12">
+<h2><span class="header-section-number">9.12</span> Create 5 New Subclasses and Check Imbalance</h2>
+<div class="sourceCode" id="cb466"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb466-1"><a href="08_Section6.5.2.html#cb466-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cut 5 subclasses (Type 2 and 5 in Quantile() are identical to Stata results)</span></span>
+<span id="cb466-2"><a href="08_Section6.5.2.html#cb466-2" aria-hidden="true" tabindex="-1"></a>subs_t <span class="ot">&lt;-</span> sur_subclass2 <span class="sc">%&gt;%</span></span>
+<span id="cb466-3"><a href="08_Section6.5.2.html#cb466-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(ps3) <span class="sc">%&gt;%</span></span>
+<span id="cb466-4"><a href="08_Section6.5.2.html#cb466-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">q =</span> <span class="fu">cut</span>(ps3, </span>
+<span id="cb466-5"><a href="08_Section6.5.2.html#cb466-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">include.lowest =</span> F,</span>
+<span id="cb466-6"><a href="08_Section6.5.2.html#cb466-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">right =</span> F,</span>
+<span id="cb466-7"><a href="08_Section6.5.2.html#cb466-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">dig.lab =</span> <span class="dv">7</span>,</span>
+<span id="cb466-8"><a href="08_Section6.5.2.html#cb466-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">round</span>(<span class="fu">quantile</span>(sur_subclass2<span class="sc">$</span>ps3, </span>
+<span id="cb466-9"><a href="08_Section6.5.2.html#cb466-9" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">c</span>(.<span class="dv">2</span>, .<span class="dv">4</span>, .<span class="dv">6</span>, .<span class="dv">8</span>), <span class="at">type =</span> <span class="dv">2</span>), <span class="dv">7</span>), <span class="dv">2</span>),</span>
+<span id="cb466-10"><a href="08_Section6.5.2.html#cb466-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">labels =</span> F))</span>
+<span id="cb466-11"><a href="08_Section6.5.2.html#cb466-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb466-12"><a href="08_Section6.5.2.html#cb466-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics of ps3 per subclass</span></span>
+<span id="cb466-13"><a href="08_Section6.5.2.html#cb466-13" aria-hidden="true" tabindex="-1"></a>subs_t <span class="sc">%&gt;%</span></span>
+<span id="cb466-14"><a href="08_Section6.5.2.html#cb466-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(q) <span class="sc">%&gt;%</span></span>
+<span id="cb466-15"><a href="08_Section6.5.2.html#cb466-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">obs =</span> <span class="fu">n</span>(),</span>
+<span id="cb466-16"><a href="08_Section6.5.2.html#cb466-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean =</span> <span class="fu">mean</span>(ps3),</span>
+<span id="cb466-17"><a href="08_Section6.5.2.html#cb466-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(ps3),</span>
+<span id="cb466-18"><a href="08_Section6.5.2.html#cb466-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(ps3),</span>
+<span id="cb466-19"><a href="08_Section6.5.2.html#cb466-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(ps3), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 6
+##       q   obs   mean     sd    min   max
+##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1     1   149 0.0959 0.0102 0.0792 0.115
+## 2     2   149 0.151  0.0212 0.115  0.190
+## 3     3   149 0.249  0.0386 0.190  0.317
+## 4     4   149 0.422  0.0675 0.318  0.546
+## 5     5   149 0.694  0.102  0.549  0.909</code></pre>
+<div class="sourceCode" id="cb468"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb468-1"><a href="08_Section6.5.2.html#cb468-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter each subclass into its own tibble</span></span>
+<span id="cb468-2"><a href="08_Section6.5.2.html#cb468-2" aria-hidden="true" tabindex="-1"></a>sub1_t <span class="ot">&lt;-</span> subs_t <span class="sc">%&gt;%</span> <span class="fu">filter</span>(q <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb468-3"><a href="08_Section6.5.2.html#cb468-3" aria-hidden="true" tabindex="-1"></a>sub2_t <span class="ot">&lt;-</span> subs_t <span class="sc">%&gt;%</span> <span class="fu">filter</span>(q <span class="sc">==</span> <span class="dv">2</span>)</span>
+<span id="cb468-4"><a href="08_Section6.5.2.html#cb468-4" aria-hidden="true" tabindex="-1"></a>sub3_t <span class="ot">&lt;-</span> subs_t <span class="sc">%&gt;%</span> <span class="fu">filter</span>(q <span class="sc">==</span> <span class="dv">3</span>)</span>
+<span id="cb468-5"><a href="08_Section6.5.2.html#cb468-5" aria-hidden="true" tabindex="-1"></a>sub4_t <span class="ot">&lt;-</span> subs_t <span class="sc">%&gt;%</span> <span class="fu">filter</span>(q <span class="sc">==</span> <span class="dv">4</span>)</span>
+<span id="cb468-6"><a href="08_Section6.5.2.html#cb468-6" aria-hidden="true" tabindex="-1"></a>sub5_t <span class="ot">&lt;-</span> subs_t <span class="sc">%&gt;%</span> <span class="fu">filter</span>(q <span class="sc">==</span> <span class="dv">5</span>)</span>
+<span id="cb468-7"><a href="08_Section6.5.2.html#cb468-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb468-8"><a href="08_Section6.5.2.html#cb468-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check imbalance</span></span>
+<span id="cb468-9"><a href="08_Section6.5.2.html#cb468-9" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(covs2, check_blc, <span class="at">df =</span> sub1_t)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 5
+##    cov     statistic p.value parameter method                    
+##    &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
+##  1 married   3.55       0.06         1 Pearson&#39;s Chi-squared test
+##  2 educ      3.05       0.22         2 Pearson&#39;s Chi-squared test
+##  3 pov       2.80       0.59         4 Pearson&#39;s Chi-squared test
+##  4 employ    0.697      0.4          1 Pearson&#39;s Chi-squared test
+##  5 open      1.28       0.26         1 Pearson&#39;s Chi-squared test
+##  6 race      1.50       0.68         3 Pearson&#39;s Chi-squared test
+##  7 chdage   11.6        0.01         3 Pearson&#39;s Chi-squared test
+##  8 cgage     0.346      0.95         3 Pearson&#39;s Chi-squared test
+##  9 CRA47A    0.158      0.69         1 Pearson&#39;s Chi-squared test
+## 10 mental    0.119      0.73         1 Pearson&#39;s Chi-squared test
+## 11 arrest    0.0235     0.88         1 Pearson&#39;s Chi-squared test
+## 12 PSH17A    1.14       0.29         1 Pearson&#39;s Chi-squared test
+## 13 maltx     1.52       0.82         4 Pearson&#39;s Chi-squared test
+## 14 ra        0.146      0.7          1 Pearson&#39;s Chi-squared test
+## 15 cidi      0.00627    0.94         1 Pearson&#39;s Chi-squared test
+## 16 cgneed    0.810      0.37         1 Pearson&#39;s Chi-squared test</code></pre>
+<div class="sourceCode" id="cb470"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb470-1"><a href="08_Section6.5.2.html#cb470-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(covs2, check_blc, <span class="at">df =</span> sub2_t)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 5
+##    cov     statistic p.value parameter method                    
+##    &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
+##  1 married   1.15       0.28         1 Pearson&#39;s Chi-squared test
+##  2 educ      3.50       0.17         2 Pearson&#39;s Chi-squared test
+##  3 pov       1.45       0.84         4 Pearson&#39;s Chi-squared test
+##  4 employ    0.882      0.35         1 Pearson&#39;s Chi-squared test
+##  5 open      2.79       0.1          1 Pearson&#39;s Chi-squared test
+##  6 race      0.320      0.96         3 Pearson&#39;s Chi-squared test
+##  7 chdage    1.45       0.69         3 Pearson&#39;s Chi-squared test
+##  8 cgage     5.59       0.13         3 Pearson&#39;s Chi-squared test
+##  9 CRA47A    0.00630    0.94         1 Pearson&#39;s Chi-squared test
+## 10 mental    0.276      0.6          1 Pearson&#39;s Chi-squared test
+## 11 arrest    3.07       0.08         1 Pearson&#39;s Chi-squared test
+## 12 PSH17A    0.903      0.34         1 Pearson&#39;s Chi-squared test
+## 13 maltx     3.60       0.46         4 Pearson&#39;s Chi-squared test
+## 14 ra        0.0639     0.8          1 Pearson&#39;s Chi-squared test
+## 15 cidi      0.563      0.45         1 Pearson&#39;s Chi-squared test
+## 16 cgneed    0.00555    0.94         1 Pearson&#39;s Chi-squared test</code></pre>
+<div class="sourceCode" id="cb472"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb472-1"><a href="08_Section6.5.2.html#cb472-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(covs2, check_blc, <span class="at">df =</span> sub3_t)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 5
+##    cov     statistic p.value parameter method                    
+##    &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
+##  1 married   0.0707     0.79         1 Pearson&#39;s Chi-squared test
+##  2 educ      5.38       0.07         2 Pearson&#39;s Chi-squared test
+##  3 pov      14.5        0.01         4 Pearson&#39;s Chi-squared test
+##  4 employ    1.15       0.28         1 Pearson&#39;s Chi-squared test
+##  5 open      0.0195     0.89         1 Pearson&#39;s Chi-squared test
+##  6 race      1.05       0.79         3 Pearson&#39;s Chi-squared test
+##  7 chdage    1.11       0.77         3 Pearson&#39;s Chi-squared test
+##  8 cgage     0.0411     1            3 Pearson&#39;s Chi-squared test
+##  9 CRA47A    0.00458    0.95         1 Pearson&#39;s Chi-squared test
+## 10 mental    1.37       0.24         1 Pearson&#39;s Chi-squared test
+## 11 arrest    3.34       0.07         1 Pearson&#39;s Chi-squared test
+## 12 PSH17A    0.0215     0.88         1 Pearson&#39;s Chi-squared test
+## 13 maltx     2.30       0.68         4 Pearson&#39;s Chi-squared test
+## 14 ra        1.30       0.25         1 Pearson&#39;s Chi-squared test
+## 15 cidi      1.02       0.31         1 Pearson&#39;s Chi-squared test
+## 16 cgneed    0.103      0.75         1 Pearson&#39;s Chi-squared test</code></pre>
+<div class="sourceCode" id="cb474"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb474-1"><a href="08_Section6.5.2.html#cb474-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(covs2, check_blc, <span class="at">df =</span> sub4_t)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 5
+##    cov     statistic p.value parameter method                    
+##    &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
+##  1 married    0.381     0.54         1 Pearson&#39;s Chi-squared test
+##  2 educ       4.39      0.11         2 Pearson&#39;s Chi-squared test
+##  3 pov        6.41      0.17         4 Pearson&#39;s Chi-squared test
+##  4 employ     0.475     0.49         1 Pearson&#39;s Chi-squared test
+##  5 open       0.136     0.71         1 Pearson&#39;s Chi-squared test
+##  6 race       0.471     0.93         3 Pearson&#39;s Chi-squared test
+##  7 chdage     0.640     0.89         3 Pearson&#39;s Chi-squared test
+##  8 cgage      0.196     0.98         3 Pearson&#39;s Chi-squared test
+##  9 CRA47A     1.84      0.18         1 Pearson&#39;s Chi-squared test
+## 10 mental     2.93      0.09         1 Pearson&#39;s Chi-squared test
+## 11 arrest     0.147     0.7          1 Pearson&#39;s Chi-squared test
+## 12 PSH17A     0.134     0.71         1 Pearson&#39;s Chi-squared test
+## 13 maltx      1.60      0.81         4 Pearson&#39;s Chi-squared test
+## 14 ra         1.00      0.32         1 Pearson&#39;s Chi-squared test
+## 15 cidi       0.0107    0.92         1 Pearson&#39;s Chi-squared test
+## 16 cgneed     3.79      0.05         1 Pearson&#39;s Chi-squared test</code></pre>
+<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb476-1"><a href="08_Section6.5.2.html#cb476-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(covs2, check_blc, <span class="at">df =</span> sub5_t)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 5
+##    cov     statistic p.value parameter method                    
+##    &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
+##  1 married     0.766    0.38         1 Pearson&#39;s Chi-squared test
+##  2 educ        3.03     0.22         2 Pearson&#39;s Chi-squared test
+##  3 pov         1.35     0.85         4 Pearson&#39;s Chi-squared test
+##  4 employ      0.335    0.56         1 Pearson&#39;s Chi-squared test
+##  5 open        0.105    0.75         1 Pearson&#39;s Chi-squared test
+##  6 race        3.13     0.37         3 Pearson&#39;s Chi-squared test
+##  7 chdage      1.70     0.64         3 Pearson&#39;s Chi-squared test
+##  8 cgage       1.02     0.8          3 Pearson&#39;s Chi-squared test
+##  9 CRA47A      0.698    0.4          1 Pearson&#39;s Chi-squared test
+## 10 mental      0.108    0.74         1 Pearson&#39;s Chi-squared test
+## 11 arrest      1.15     0.28         1 Pearson&#39;s Chi-squared test
+## 12 PSH17A      0.332    0.56         1 Pearson&#39;s Chi-squared test
+## 13 maltx       5.93     0.2          4 Pearson&#39;s Chi-squared test
+## 14 ra          0.116    0.73         1 Pearson&#39;s Chi-squared test
+## 15 cidi        4.26     0.04         1 Pearson&#39;s Chi-squared test
+## 16 cgneed      2.54     0.11         1 Pearson&#39;s Chi-squared test</code></pre>
+</div>
+<div id="outcome-analysis-by-subclass" class="section level2" number="9.13">
+<h2><span class="header-section-number">9.13</span> Outcome Analysis by Subclass</h2>
+<div class="sourceCode" id="cb478"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb478-1"><a href="08_Section6.5.2.html#cb478-1" aria-hidden="true" tabindex="-1"></a>f2 <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="st">&quot;Surv(durm, rrpt) ~ aodserv + married + high + bahigh + poverty2 + poverty3 + poverty4 + poverty5 + employ + open + black + hispanic + natam + chdage1 + chdage2 + chdage3 + CRA47A&quot;</span>)</span>
+<span id="cb478-2"><a href="08_Section6.5.2.html#cb478-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(survival<span class="sc">::</span><span class="fu">coxph</span>(f2, sub1_t))</span></code></pre></div>
+<pre><code>## # A tibble: 17 x 5
+##    term     estimate std.error statistic p.value
+##    &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+##  1 aodserv    1.28       0.523     2.45   0.0143
+##  2 married    0.0453     0.435     0.104  0.917 
+##  3 high      -0.223      0.450    -0.496  0.620 
+##  4 bahigh    -0.580      0.572    -1.01   0.310 
+##  5 poverty2  -0.245      0.488    -0.503  0.615 
+##  6 poverty3   0.748      0.535     1.40   0.162 
+##  7 poverty4   0.306      0.669     0.456  0.648 
+##  8 poverty5  -1.15       1.11     -1.03   0.301 
+##  9 employ     0.0966     0.414     0.233  0.816 
+## 10 open       0.339      0.520     0.652  0.515 
+## 11 black      0.428      0.465     0.921  0.357 
+## 12 hispanic   0.441      0.606     0.728  0.467 
+## 13 natam      0.372      0.625     0.595  0.552 
+## 14 chdage1   -1.40       0.551    -2.55   0.0109
+## 15 chdage2   -1.19       0.763    -1.56   0.119 
+## 16 chdage3   -0.924      0.555    -1.67   0.0955
+## 17 CRA47A     0.665      0.427     1.56   0.119</code></pre>
+<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb480-1"><a href="08_Section6.5.2.html#cb480-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(survival<span class="sc">::</span><span class="fu">coxph</span>(f2, sub2_t))</span></code></pre></div>
+<pre><code>## # A tibble: 17 x 5
+##    term     estimate std.error statistic p.value
+##    &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+##  1 aodserv   0.0990      0.443    0.224   0.823 
+##  2 married  -0.0473      0.403   -0.117   0.906 
+##  3 high      0.392       0.385    1.02    0.309 
+##  4 bahigh    0.489       0.500    0.979   0.328 
+##  5 poverty2  0.369       0.417    0.884   0.377 
+##  6 poverty3 -2.09        1.08    -1.92    0.0544
+##  7 poverty4  0.0632      0.580    0.109   0.913 
+##  8 poverty5 -1.25        1.10    -1.14    0.256 
+##  9 employ    0.251       0.358    0.701   0.483 
+## 10 open     -0.345       0.379   -0.910   0.363 
+## 11 black    -0.123       0.496   -0.247   0.805 
+## 12 hispanic  0.307       0.456    0.672   0.501 
+## 13 natam     0.390       0.586    0.666   0.505 
+## 14 chdage1  -0.162       0.472   -0.343   0.732 
+## 15 chdage2  -0.544       0.657   -0.827   0.408 
+## 16 chdage3   0.342       0.555    0.616   0.538 
+## 17 CRA47A    0.00356     0.335    0.0106  0.992</code></pre>
+<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb482-1"><a href="08_Section6.5.2.html#cb482-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(survival<span class="sc">::</span><span class="fu">coxph</span>(f2, sub3_t))</span></code></pre></div>
+<pre><code>## # A tibble: 17 x 5
+##    term     estimate std.error statistic p.value
+##    &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+##  1 aodserv   -0.168      0.449   -0.375   0.708 
+##  2 married   -0.800      0.561   -1.43    0.154 
+##  3 high      -0.0488     0.452   -0.108   0.914 
+##  4 bahigh    -0.188      0.570   -0.329   0.742 
+##  5 poverty2   0.0219     0.486    0.0451  0.964 
+##  6 poverty3  -0.309      0.692   -0.447   0.655 
+##  7 poverty4  -0.281      0.844   -0.332   0.740 
+##  8 poverty5  -0.586      0.702   -0.836   0.403 
+##  9 employ    -0.341      0.443   -0.772   0.440 
+## 10 open       0.259      0.440    0.589   0.556 
+## 11 black     -0.500      0.460   -1.09    0.277 
+## 12 hispanic  -1.24       0.679   -1.82    0.0687
+## 13 natam     -0.118      0.735   -0.160   0.873 
+## 14 chdage1   -0.0163     0.504   -0.0324  0.974 
+## 15 chdage2    0.554      0.716    0.774   0.439 
+## 16 chdage3   -0.486      0.700   -0.694   0.488 
+## 17 CRA47A     0.664      0.382    1.74    0.0820</code></pre>
+<div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb484-1"><a href="08_Section6.5.2.html#cb484-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(survival<span class="sc">::</span><span class="fu">coxph</span>(f2, sub4_t))</span></code></pre></div>
+<pre><code>## # A tibble: 17 x 5
+##    term     estimate std.error statistic p.value
+##    &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+##  1 aodserv    0.245      0.377    0.649    0.516
+##  2 married    0.694      0.428    1.62     0.105
+##  3 high       0.512      0.426    1.20     0.230
+##  4 bahigh    -0.323      0.711   -0.454    0.650
+##  5 poverty2   0.315      0.478    0.658    0.510
+##  6 poverty3  -0.132      0.672   -0.196    0.844
+##  7 poverty4   0.350      0.928    0.377    0.706
+##  8 poverty5  -0.988      0.855   -1.16     0.248
+##  9 employ    -0.301      0.393   -0.767    0.443
+## 10 open       0.361      0.484    0.746    0.456
+## 11 black     -0.0424     0.457   -0.0927   0.926
+## 12 hispanic   0.0690     0.664    0.104    0.917
+## 13 natam     -1.66       1.07    -1.56     0.119
+## 14 chdage1   -0.644      0.520   -1.24     0.216
+## 15 chdage2    0.318      0.602    0.528    0.598
+## 16 chdage3   -0.406      0.568   -0.715    0.474
+## 17 CRA47A     0.569      0.402    1.42     0.157</code></pre>
+<div class="sourceCode" id="cb486"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb486-1"><a href="08_Section6.5.2.html#cb486-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(survival<span class="sc">::</span><span class="fu">coxph</span>(f2, sub5_t))</span></code></pre></div>
+<pre><code>## # A tibble: 17 x 5
+##    term     estimate std.error statistic p.value
+##    &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+##  1 aodserv    0.419      0.403     1.04   0.298 
+##  2 married    0.116      0.449     0.258  0.796 
+##  3 high      -0.696      0.425    -1.64   0.101 
+##  4 bahigh    -1.13       0.649    -1.74   0.0824
+##  5 poverty2   0.910      0.402     2.27   0.0235
+##  6 poverty3  -1.18       1.09     -1.09   0.276 
+##  7 poverty4  -0.609      0.818    -0.744  0.457 
+##  8 poverty5   0.0969     0.642     0.151  0.880 
+##  9 employ     0.127      0.405     0.313  0.755 
+## 10 open       0.492      0.638     0.772  0.440 
+## 11 black     -1.07       0.466    -2.29   0.0220
+## 12 hispanic  -0.526      0.514    -1.02   0.306 
+## 13 natam     -0.107      0.544    -0.197  0.844 
+## 14 chdage1   -0.407      0.665    -0.613  0.540 
+## 15 chdage2    0.872      0.694     1.26   0.209 
+## 16 chdage3    0.491      0.729     0.674  0.500 
+## 17 CRA47A     0.0749     0.359     0.209  0.835</code></pre>
+</div>
+<div id="aggregate-results" class="section level2" number="9.14">
+<h2><span class="header-section-number">9.14</span> Aggregate Results</h2>
+<div class="sourceCode" id="cb488"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb488-1"><a href="08_Section6.5.2.html#cb488-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fl">0.37513328</span>)</span></code></pre></div>
+<pre><code>## [1] 1.455185</code></pre>
+<div class="sourceCode" id="cb490"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb490-1"><a href="08_Section6.5.2.html#cb490-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1</span><span class="sc">-</span><span class="fu">pnorm</span>(<span class="fl">1.899353989</span>))<span class="sc">*</span><span class="dv">2</span> <span class="co"># p = .05751795</span></span></code></pre></div>
+<pre><code>## [1] 0.05751795</code></pre>
+<div class="sourceCode" id="cb492"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb492-1"><a href="08_Section6.5.2.html#cb492-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(survival<span class="sc">::</span><span class="fu">coxph</span>(f2, df))</span></code></pre></div>
+<pre><code>## # A tibble: 17 x 5
+##    term     estimate std.error statistic      p.value
+##    &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+##  1 aodserv    0.436     0.123      3.54  0.000404    
+##  2 married   -0.200     0.105     -1.90  0.0570      
+##  3 high      -0.217     0.100     -2.16  0.0305      
+##  4 bahigh    -0.0187    0.125     -0.149 0.881       
+##  5 poverty2  -0.112     0.110     -1.02  0.308       
+##  6 poverty3  -0.331     0.143     -2.32  0.0203      
+##  7 poverty4  -0.453     0.174     -2.60  0.00922     
+##  8 poverty5  -0.649     0.183     -3.55  0.000391    
+##  9 employ    -0.0660    0.0948    -0.696 0.487       
+## 10 open       0.201     0.0940     2.13  0.0329      
+## 11 black     -0.248     0.109     -2.27  0.0231      
+## 12 hispanic  -0.233     0.132     -1.77  0.0761      
+## 13 natam     -0.0536    0.193     -0.279 0.781       
+## 14 chdage1   -0.352     0.125     -2.82  0.00473     
+## 15 chdage2    0.0579    0.137      0.422 0.673       
+## 16 chdage3   -0.104     0.123     -0.847 0.397       
+## 17 CRA47A     0.526     0.0921     5.71  0.0000000113</code></pre>
+</div>
+<div id="subclassification-with-matchit" class="section level2" number="9.15">
+<h2><span class="header-section-number">9.15</span> Subclassification with MatchIt</h2>
+<div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb494-1"><a href="08_Section6.5.2.html#cb494-1" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> MatchIt<span class="sc">::</span><span class="fu">matchit</span>(f, df, <span class="at">method =</span> <span class="st">&quot;subclass&quot;</span>, <span class="at">subclass =</span> <span class="dv">5</span>)</span>
+<span id="cb494-2"><a href="08_Section6.5.2.html#cb494-2" aria-hidden="true" tabindex="-1"></a><span class="fu">love.plot</span>(mm, <span class="at">binary =</span> <span class="st">&quot;std&quot;</span>, <span class="at">disp.subclass =</span> T)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-97-1.png" width="672" /></p>
+<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb495-1"><a href="08_Section6.5.2.html#cb495-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bal.tab</span>(mm, <span class="at">un =</span> T, <span class="at">binary =</span> <span class="st">&quot;std&quot;</span>, <span class="at">disp.subclass =</span> T)</span></code></pre></div>
+<pre><code>## Call
+##  MatchIt::matchit(formula = f, data = df, method = &quot;subclass&quot;, 
+##     subclass = 5)
+## 
+## Balance by subclass
+##  - - - Subclass 1 - - - 
+##              Type Diff.Adj
+## distance Distance   0.1004
+## married    Binary   0.0019
+## high       Binary  -0.1296
+## bahigh     Binary   0.1385
+## poverty2   Binary  -0.1337
+## poverty3   Binary   0.0069
+## poverty4   Binary  -0.0942
+## poverty5   Binary   0.0016
+## employ     Binary  -0.1496
+## open       Binary   0.2167
+## black      Binary  -0.0522
+## hispanic   Binary  -0.1573
+## natam      Binary   0.1054
+## chdage1    Binary   0.2348
+## chdage2    Binary  -0.0648
+## chdage3    Binary  -0.1786
+## cgrage1    Binary  -0.1987
+## cgrage2    Binary   0.1653
+## cgrage3    Binary  -0.0007
+## CRA47A     Binary   0.1883
+## mental     Binary   0.2233
+## arrest     Binary   0.5853
+## PSH17A     Binary   0.2839
+## sexual     Binary  -0.1967
+## provide    Binary   0.1416
+## supervis   Binary   0.1216
+## other      Binary  -0.0225
+## ra         Binary   0.0114
+## cidi       Binary   0.2453
+## cgneed     Binary   0.2427
+## 
+##  - - - Subclass 2 - - - 
+##              Type Diff.Adj
+## distance Distance   0.1188
+## married    Binary  -0.2288
+## high       Binary   0.0708
+## bahigh     Binary  -0.2186
+## poverty2   Binary   0.1363
+## poverty3   Binary  -0.0619
+## poverty4   Binary   0.0678
+## poverty5   Binary  -0.1715
+## employ     Binary  -0.2305
+## open       Binary   0.1832
+## black      Binary   0.2759
+## hispanic   Binary   0.0786
+## natam      Binary  -0.1183
+## chdage1    Binary   0.0229
+## chdage2    Binary  -0.0415
+## chdage3    Binary   0.0015
+## cgrage1    Binary   0.2587
+## cgrage2    Binary  -0.3458
+## cgrage3    Binary   0.0723
+## CRA47A     Binary  -0.0331
+## mental     Binary  -0.1763
+## arrest     Binary  -0.1005
+## PSH17A     Binary   0.0598
+## sexual     Binary  -0.0758
+## provide    Binary  -0.0004
+## supervis   Binary   0.0833
+## other      Binary  -0.2021
+## ra         Binary   0.3748
+## cidi       Binary  -0.0102
+## cgneed     Binary  -0.0775
+## 
+##  - - - Subclass 3 - - - 
+##              Type Diff.Adj
+## distance Distance   0.0517
+## married    Binary   0.0807
+## high       Binary   0.3018
+## bahigh     Binary  -0.1770
+## poverty2   Binary  -0.0041
+## poverty3   Binary  -0.1898
+## poverty4   Binary   0.2086
+## poverty5   Binary   0.2580
+## employ     Binary   0.1896
+## open       Binary  -0.0839
+## black      Binary  -0.0586
+## hispanic   Binary   0.0110
+## natam      Binary  -0.0113
+## chdage1    Binary   0.1550
+## chdage2    Binary   0.0819
+## chdage3    Binary  -0.1957
+## cgrage1    Binary  -0.1763
+## cgrage2    Binary   0.1605
+## cgrage3    Binary   0.1128
+## CRA47A     Binary  -0.2136
+## mental     Binary   0.1753
+## arrest     Binary  -0.1023
+## PSH17A     Binary   0.0243
+## sexual     Binary   0.0510
+## provide    Binary  -0.0124
+## supervis   Binary   0.0325
+## other      Binary   0.0121
+## ra         Binary   0.0944
+## cidi       Binary  -0.1646
+## cgneed     Binary  -0.1342
+## 
+##  - - - Subclass 4 - - - 
+##              Type Diff.Adj
+## distance Distance   0.0773
+## married    Binary   0.1316
+## high       Binary  -0.2141
+## bahigh     Binary   0.1601
+## poverty2   Binary  -0.2027
+## poverty3   Binary   0.2446
+## poverty4   Binary  -0.2026
+## poverty5   Binary   0.2254
+## employ     Binary  -0.0780
+## open       Binary  -0.0974
+## black      Binary  -0.2136
+## hispanic   Binary  -0.0038
+## natam      Binary   0.2969
+## chdage1    Binary  -0.1638
+## chdage2    Binary  -0.0279
+## chdage3    Binary   0.3581
+## cgrage1    Binary   0.1318
+## cgrage2    Binary   0.1132
+## cgrage3    Binary  -0.3836
+## CRA47A     Binary  -0.0432
+## mental     Binary   0.0070
+## arrest     Binary  -0.1881
+## PSH17A     Binary  -0.1891
+## sexual     Binary   0.0000
+## provide    Binary  -0.1871
+## supervis   Binary  -0.2469
+## other      Binary   0.2729
+## ra         Binary   0.0185
+## cidi       Binary   0.4220
+## cgneed     Binary   0.2198
+## 
+##  - - - Subclass 5 - - - 
+##              Type Diff.Adj
+## distance Distance   0.1617
+## married    Binary  -0.0115
+## high       Binary  -0.3409
+## bahigh     Binary   0.0120
+## poverty2   Binary   0.3926
+## poverty3   Binary  -0.1355
+## poverty4   Binary  -0.2126
+## poverty5   Binary  -0.3593
+## employ     Binary   0.1860
+## open       Binary   0.0958
+## black      Binary  -0.0931
+## hispanic   Binary   0.2813
+## natam      Binary  -0.1636
+## chdage1    Binary   0.0566
+## chdage2    Binary   0.0220
+## chdage3    Binary  -0.1238
+## cgrage1    Binary  -0.0767
+## cgrage2    Binary   0.0593
+## cgrage3    Binary   0.1251
+## CRA47A     Binary   0.2930
+## mental     Binary   0.3001
+## arrest     Binary   0.0676
+## PSH17A     Binary  -0.1499
+## sexual     Binary  -0.1802
+## provide    Binary   0.1060
+## supervis   Binary  -0.1284
+## other      Binary   0.1314
+## ra         Binary  -0.0723
+## cidi       Binary   0.1358
+## cgneed     Binary   0.1843
+## 
+## Balance measures across subclasses
+##              Type Diff.Un Diff.Adj
+## distance Distance  1.2108   0.1021
+## married    Binary -0.1222  -0.0055
+## high       Binary -0.0297  -0.0636
+## bahigh     Binary -0.1783  -0.0165
+## poverty2   Binary  0.0665   0.0378
+## poverty3   Binary -0.1543  -0.0266
+## poverty4   Binary -0.0875  -0.0475
+## poverty5   Binary -0.0455  -0.0101
+## employ     Binary -0.2986  -0.0172
+## open       Binary  0.5687   0.0634
+## black      Binary  0.0784  -0.0282
+## hispanic   Binary -0.0446   0.0421
+## natam      Binary  0.1418   0.0219
+## chdage1    Binary  0.4342   0.0608
+## chdage2    Binary -0.0907  -0.0063
+## chdage3    Binary -0.2565  -0.0271
+## cgrage1    Binary -0.0819  -0.0117
+## cgrage2    Binary  0.0393   0.0301
+## cgrage3    Binary  0.0368  -0.0152
+## CRA47A     Binary  0.2431   0.0392
+## mental     Binary  0.5279   0.1056
+## arrest     Binary  0.6797   0.0529
+## PSH17A     Binary  0.5286   0.0057
+## sexual     Binary -0.4638  -0.0808
+## provide    Binary  0.2904   0.0096
+## supervis   Binary  0.0603  -0.0278
+## other      Binary  0.0124   0.0384
+## ra         Binary  1.2000   0.0853
+## cidi       Binary  0.7081   0.1266
+## cgneed     Binary  0.3880   0.0878
+## 
+## Sample sizes by subclass
+##            1   2   3  4  5  All
+## Control 1980 286  97 39 27 2429
+## Treated   59  59  58 59 59  294
+## Total   2039 345 155 98 86 2723</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="07_Section5.8.6.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="09_Section7.3.1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

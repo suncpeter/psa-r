@@ -1,0 +1,86 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\Peter\Box\PhD\Research\PSA-R\Data\Data_Chapter11\data\ex11_1.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}25 Jun 2020, 16:40:22
+{txt}
+{com}. 
+. use rbtest, clear
+{txt}
+{com}. list
+{txt}
+     {c TLC}{hline 7}{c -}{hline 7}{c TRC}
+     {c |} {res}strat   dlead {txt}{c |}
+     {c LT}{hline 7}{c -}{hline 7}{c RT}
+  1. {c |} {res}    1      22 {txt}{c |}
+  2. {c |} {res}    2       5 {txt}{c |}
+  3. {c |} {res}    3      23 {txt}{c |}
+  4. {c |} {res}    4      -6 {txt}{c |}
+  5. {c |} {res}    5      18 {txt}{c |}
+     {c LT}{hline 7}{c -}{hline 7}{c RT}
+  6. {c |} {res}    6      25 {txt}{c |}
+  7. {c |} {res}    7      13 {txt}{c |}
+  8. {c |} {res}    8      47 {txt}{c |}
+  9. {c |} {res}    9      15 {txt}{c |}
+ 10. {c |} {res}   10      16 {txt}{c |}
+     {c LT}{hline 7}{c -}{hline 7}{c RT}
+ 11. {c |} {res}   11       6 {txt}{c |}
+ 12. {c |} {res}   12       1 {txt}{c |}
+ 13. {c |} {res}   13       2 {txt}{c |}
+ 14. {c |} {res}   14       7 {txt}{c |}
+ 15. {c |} {res}   15       0 {txt}{c |}
+     {c LT}{hline 7}{c -}{hline 7}{c RT}
+ 16. {c |} {res}   16       4 {txt}{c |}
+ 17. {c |} {res}   17      -9 {txt}{c |}
+ 18. {c |} {res}   18      -3 {txt}{c |}
+ 19. {c |} {res}   19      36 {txt}{c |}
+ 20. {c |} {res}   20      25 {txt}{c |}
+     {c LT}{hline 7}{c -}{hline 7}{c RT}
+ 21. {c |} {res}   21       1 {txt}{c |}
+ 22. {c |} {res}   22      16 {txt}{c |}
+ 23. {c |} {res}   23      42 {txt}{c |}
+ 24. {c |} {res}   24      30 {txt}{c |}
+ 25. {c |} {res}   25      25 {txt}{c |}
+     {c LT}{hline 7}{c -}{hline 7}{c RT}
+ 26. {c |} {res}   26      23 {txt}{c |}
+ 27. {c |} {res}   27      32 {txt}{c |}
+ 28. {c |} {res}   28      17 {txt}{c |}
+ 29. {c |} {res}   29       9 {txt}{c |}
+ 30. {c |} {res}   30      -3 {txt}{c |}
+     {c LT}{hline 7}{c -}{hline 7}{c RT}
+ 31. {c |} {res}   31      60 {txt}{c |}
+ 32. {c |} {res}   32      14 {txt}{c |}
+ 33. {c |} {res}   33      14 {txt}{c |}
+     {c BLC}{hline 7}{c -}{hline 7}{c BRC}
+
+{com}. rbounds dlead, gamma(1 (1) 4 4.25 5 6)
+
+{txt}Rosenbaum bounds for {res}dlead{txt} (N = {res}33{txt} matched pairs)
+
+Gamma           sig+      sig-    t-hat+    t-hat-       CI+       CI-
+----------------------------------------------------------------------
+{res}    1        5.1e-06   5.1e-06        15        15       9.5      20.5  
+    2         .00179   5.5e-11     10.25      19.5       4.5      27.5  
+    3        .013615   6.7e-16         8        23         1      32.5  
+    4         .03879         0       6.5        25        -1        37  
+ 4.25        .046825         0         6        25      -1.5      38.5  
+    5        .073991         0         5      26.5        -3        42  
+    6         .11502         0         4        28        -6        48  
+
+{txt}* gamma  - log odds of differential assignment due to unobserved factors
+  sig+   - upper bound significance level
+  sig-   - lower bound significance level
+  t-hat+ - upper bound Hodges-Lehmann point estimate
+  t-hat- - lower bound Hodges-Lehmann point estimate
+  CI+    - upper bound confidence interval (a={res}  .95{txt})
+  CI-    - lower bound confidence interval (a={res}  .95{txt})
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\Peter\Box\PhD\Research\PSA-R\Data\Data_Chapter11\data\ex11_1.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}25 Jun 2020, 16:40:22
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

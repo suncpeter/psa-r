@@ -1,0 +1,591 @@
+# Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD & PS)
+
+```{r message=F, warning=F, error=F}
+library(MatchIt)
+library(cobalt)
+library(gmodels)
+library(ggplot2)
+library(survival)
+library(survMisc)
+library(survminer)
+library(knitr)
+library(kableExtra)
+library(tidyverse)
+select <- dplyr::select
+```
+
+## Preparation
+
+```{r}
+# load data
+d <- haven::read_dta("data/Data_Chapter5/chpt5_1_original.dta")
+
+# make convenient objects
+## names of match vars
+match_vars1 <- colnames(select(d, PSH17A:other, -aodserv))
+match_vars2 <- colnames(select(d, PSH17A:cwwrep, -aodserv))
+match_vars3 <- colnames(select(d, PSH17A:cgneed, -aodserv))
+
+## PS formula
+psform1 <- f.build("aodserv", match_vars1)
+psform2 <- f.build("aodserv", match_vars2)
+psform3 <- f.build("aodserv", match_vars3)
+
+# Function for balance check
+get_bal <- function(out)
+  cobalt::love.plot(out,
+    binary = "std",
+    stats = c("mean.diffs"),
+    threshold = c(.1),
+    var.order = "unadjusted",
+    line = TRUE
+)
+```
+
+## Propensity Score Estimation 
+
+```{r}
+# logistic 1
+psmodel1 <- glm(psform1, data = d, family = binomial())
+summary(psmodel1)
+d$p1 <- predict(psmodel1, newdata = d, type = "response")
+d$ps1 <- log((1 - d$p1) / (d$p1))
+
+# logistic 2
+psmodel2 <- glm(psform2, data = d, family = binomial())
+summary(psmodel2)
+d$p2 <- predict(psmodel2, newdata = d, type = "response")
+d$ps2 <- log((1 - d$p2) / (d$p2))
+
+# logistic 3
+psmodel3 <- glm(psform3, data = d, family = binomial())
+summary(psmodel3)
+d$p3 <- predict(psmodel3, newdata = d, type = "response")
+d$ps3 <- log((1 - d$p3) / (d$p3))
+```
+
+## Bivariate Comparisons
+
+```{r warning=F, error=F, message=F}
+d %>%
+  select(married, educ, pov, employ, open, race, chdage, cgage, CRA47A, mental, 
+         arrest, PSH17A, maltx, ra, cidi, cgneed, cwwrep, aodserv) %>%
+  pivot_longer(-aodserv, names_to = "variable") %>%
+  group_by(variable) %>%
+  nest() %>%
+  mutate(bivariate.test = map(data, ~chisq.test(.$aodserv, .$value, correct = F))) %>%
+  mutate(statistic = map(bivariate.test, ~round(.$statistic, 3))) %>%
+  mutate(p.value = map(bivariate.test, ~round(.$p.value, 3))) %>%
+  unnest(cols = c(statistic, p.value)) %>%
+  select(variable, statistic, p.value)
+```
+
+Bivariate tests with contingency tables can also be accomplished with:
+
+```{r eval=F}
+gmodels::CrossTable(d$married, d$aodserv, prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+```
+
+## PSM based on Logistic regression & Covariate Balcance Check   
+
+**Note: The matching results here are slightly different from the results in STATA. With R, we also prefer to use plots to check balances, which is different from the approach in STATA.**
+
+### Scheme 1 - Nearest neighbor within caliper .25*SD
+
+```{r message=F, warning=F, error=F}
+# PSM based on Logistic regression 1 & Covariate Balance Check
+set.seed(100)
+m_nc1_1.out <-
+  matchit(psform1,
+    data = d,
+    method = "nearest",
+    distance = d$ps1,
+    m.order = "random",
+    caliper = .25,
+    replace = T
+  )
+m_nc1_1.out
+m_nc1_1.data <- MatchIt::match.data(m_nc1_1.out)
+get_bal(m_nc1_1.out)
+```
+
+### Scheme 2 - Nearest neighbor within caliper .1*SD 
+
+```{r message=F, warning=F, error=F}
+# Note: Unlike Stata, the default caliper setting in matchit() is in standard deviation units (i.e., caliper = 0.1 is 0.1*SD)
+set.seed(100)
+m_nc1_2.out <-
+  matchit(psform1,
+    data = d,
+    method = "nearest",
+    distance = d$ps1,
+    m.order = "random",
+    caliper = .1,
+    replace = T
+  )
+m_nc1_2.out
+m_nc1_2.data <- match.data(m_nc1_2.out)
+get_bal(m_nc1_2.out)
+```
+
+### Scheme 3 - Mahalanobis without propensity score
+
+```{r message=F, warning=F, error=F}
+set.seed(100)
+m_m1.out <- matchit(psform1,
+  data = d,
+  distance = "mahalanobis",
+  m.order = "random"
+)
+m_m1.out
+m_m1.data <- match.data(m_m1.out)
+get_bal(m_m1.out)
+```
+
+### Scheme 4 - Mahalanobis with propensity score
+
+```{r message=F, warning=F, error=F}
+match_vars1m <- colnames(select(d, PSH17A:other, ps1, -aodserv))
+psform1m <- f.build("aodserv", match_vars1m)
+set.seed(100)
+m_mp1.out <- matchit(psform1m,
+  data = d,
+  distance = "mahalanobis"
+)
+m_mp1.out
+m_mp1.data <- match.data(m_mp1.out)
+get_bal(m_mp1.out)
+```
+
+## PSM based on Logistic regression 2
+
+### Scheme 5 - Nearest neighbor within caliper .25*SD
+
+```{r message=F, warning=F, error=F}
+set.seed(100)
+m_nc2_1.out <-
+  matchit(psform2,
+    data = d,
+    method = "nearest",
+    distance = d$ps2,
+    m.order = "random",
+    caliper = .25,
+    replace = T
+  )
+m_nc2_1.out
+m_nc2_1.data <- match.data(m_nc2_1.out) 
+get_bal(m_nc2_1.out)
+```
+
+### Scheme 6 - Nearest neighbor within caliper .1*SD (Note: caliper in MatchIt is not real data)
+
+```{r message=F, warning=F, error=F}
+set.seed(100) 
+m_nc2_2.out <-
+  matchit(psform2, 
+    data = d,
+    method = "nearest", 
+    distance = d$ps2, 
+    m.order = "random", 
+    caliper = .1,
+    replace = T
+  )
+m_nc2_2.out
+m_mp2.data <- match.data(m_nc2_2.out)
+get_bal(m_nc2_2.out)
+```
+
+### Scheme 7 - Mahalanobis without propensity score
+
+```{r message=F, warning=F, error=F}
+set.seed(100)
+m_m2.out <- matchit(psform2,
+  data = d,
+  distance = "mahalanobis",
+  m.order = "random"
+)
+m_m2.out
+m_m2.data <- match.data(m_m2.out) 
+get_bal(m_m2.out)
+```
+
+### Scheme 8 - Mahalanobis with propensity score 
+
+```{r eval=F}
+vars2m <- colnames(select(d, PSH17A:cwwrep, ps2, -aodserv))
+psform2m <- f.build("aodserv", vars2m)
+
+set.seed(100)
+m_mp2.out <- matchit(psform2m,
+  data = d,
+  distance = "mahalanobis"
+)
+m_mp2.out
+m_mp2.data <- match.data(m_mp2.out)
+get_bal(m_mp2.out)
+```
+
+## PSM based on Logistic regression 3 
+
+### Scheme 9 - Nearest neighbor within caliper .25*SD
+
+```{r message=F, warning=F, error=F}
+set.seed(100) 
+m_nc3_1.out <-
+  matchit(psform3, 
+    data = d,
+    method = "nearest", 
+    distance = d$ps3, 
+    m.order = "random", 
+    caliper = .25,
+    replace = T
+  )
+m_nc3_1.out
+m_nc3_1.data <- match.data(m_nc3_1.out) 
+get_bal(m_nc3_1.out)
+```
+
+### Scheme 10 - Nearest neighbor within caliper .1*SD
+
+```{r message=F, warning=F, error=F}
+set.seed(100) 
+m_nc3_2.out <-
+  matchit(psform3, 
+    data = d,
+    method = "nearest", 
+    distance = d$ps3, 
+    m.order = "random", 
+    caliper = .1,
+    replace = T
+  )
+m_nc3_2.out
+m_nc3_2.data <- match.data(m_nc3_2.out) 
+get_bal(m_nc3_2.out)
+```
+
+### Scheme 11 - Mahalanobis without propensity score
+
+```{r message=F, warning=F, error=F}
+set.seed(100)
+m_m3.out <- matchit(psform3,
+  data = d,
+  distance = "mahalanobis",
+  m.order = "random"
+)
+m_m3.out
+m_m3.data <- match.data(m_m3.out) 
+get_bal(m_m3.out)
+```
+
+### Scheme 12 - Mahalanobis with propensity score
+
+```{r message=F, warning=F, error=F}
+match_vars3m <- colnames(select(d, PSH17A:cgneed, ps3, -aodserv))
+psform3m <- f.build("aodserv", match_vars3m)
+set.seed(100)
+m_mp3.out <- matchit(psform3m,
+  data = d,
+  distance = "mahalanobis"
+)
+m_mp3.out
+m_mp3.data <- match.data(m_mp3.out)
+get_bal(m_mp3.out)
+```
+
+## Bivariate test after matching
+
+```{r message=F, warning=F, error=F}
+# Check balance using chi-squared tests
+check_balance <- function(df) {
+
+  # List of covariates to check balance
+  covs <- c("married", "high", "bahigh",  "poverty2", "poverty3",
+            "poverty4", "poverty5", "employ", "open", "black", "hispanic",
+            "natam",  "cgrage1", "cgrage2", "cgrage3", 
+            "chdage1", "chdage2", "chdage3", "CRA47A", "mental",  
+            "arrest", "PSH17A", "sexual", "provide", "supervis", 
+            "other",  "ra", "cidi", "cgneed", "cwwrep")
+  
+  # Function to calculate chisq.test p-values
+  calc <- function(cov) {
+    return(data.frame(covariate = cov,
+                  p = chisq.test(df[cov], df$aodserv)$p.value))
+  }
+  
+  # Calculate chisq.test for each covariate
+  results <- map_dfr(covs, calc) %>%
+    mutate(sig = ifelse(p < 0.05, "sig", "not sig")) %>%
+    mutate(p = round(p, 2))
+  
+  # Get covariates that did not overlap sufficiently (p < .05)
+  results_sig <- results %>%
+    filter(sig == "sig")
+  
+  # Return results
+  return(list(table = results, sig = toupper(results_sig$covariate)))
+    
+}
+```
+
+```{r message=F, warning=F, error=F}
+# Combine tables 5.5 and 5.6
+get_table <- function(scheme, df) {
+  sig_vars <- ifelse(is.data.frame(df), paste(check_balance(df)$sig, collapse = ", "), df)
+  treated_n <- ifelse(is.data.frame(df), nrow(filter(df, aodserv == 1)), NA)
+  control_n <- ifelse(is.data.frame(df), nrow(filter(df, aodserv == 0)), NA)
+  results <- tibble(Scheme = scheme,
+                    SigCovariates = sig_vars,
+                    Treated = treated_n,
+                    Control = control_n)
+}
+table_schemes <- c("Original", "1. Nearest 1-1", "2. Nearest 1-2", 
+                       "3. Mahalanobis 1", "4. Mahalanobis 1 with p-score added",
+                       "5. Nearest 2-1", "6. Nearest 2-2",
+                       "7. Mahalanobis 2", "8. Mahalanobis 2 with p-score added",
+                       "9. Nearest 3-1", "10. Nearest 3-2",
+                       "11. Mahalanobis 3", "12. Mahalanobis 3 with p-score added")
+table_dfs <- list(d, m_nc1_1.data, m_nc1_2.data, # Original, Schemes 1, 2
+                      m_m1.data, m_mp1.data, # Schemes 3, 4
+                      m_nc2_1.data, m_mp2.data, # Schemes 5, 6
+                      m_m2.data, m_mp2.data , # Schemes 7, 8
+                      m_nc3_1.data, m_nc3_2.data, # Schemes 9, 10
+                      m_m3.data, m_mp3.data) # Schemes 11, 12
+table_summary <- map2_dfr(table_schemes, table_dfs, get_table)
+options(knitr.kable.NA = "") # Do not display NAs in kable
+table_summary %>%
+  kbl(format = "html", 
+      col.names = c("Scheme", 
+ "Covariate Distributions Did Not Overlap Sufficiently: Covariates Significant After Matching p < .05",
+ "Treated", "Control")) %>%
+  add_header_above(c(" " = 2, "N of the New Sample" = 2))
+```
+
+## Kaplan-Meier and significance test of difference on survivor function
+
+### All
+
+```{r message=F, warning=F, error=F}
+# all
+ds <- haven::read_dta("data/Data_Chapter5/svl_all.dta")
+
+## KM survival analysis
+fit <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds)
+fit
+quantile(fit, probs = 0.15)
+
+## Log-rank or Mantel-Haenszel test
+fit.test <- survival::survdiff(Surv(durm, rrpt) ~ aodserv, data = ds, rho = 0)
+fit.test
+comp(ten(fit)) # the first n row is the Gehan-Breslow generalized Wilcoxon test
+
+## plot 
+ggsurvplot(fit, data = ds, pval = F)
+```
+
+### Scheme 1
+
+```{r message=F, warning=F, error=F}
+ds1 <- haven::read_dta("data/Data_Chapter5/svl_1.dta")
+
+## KM survival analysis
+fit1 <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds1)
+fit1
+quantile(fit1, probs = 0.15)
+
+## Log-rank or Mantel-Haenszel test
+fit1.test <- survdiff(Surv(durm, rrpt) ~ aodserv, data = ds1, rho = 0)
+fit1.test
+comp(ten(fit1)) 
+
+## plot
+ggsurvplot(fit1, data = ds1, pval = F)
+```
+
+### Scheme 2
+
+```{r message=F, warning=F, error=F}
+ds2 <- haven::read_dta("data/Data_Chapter5/svl_2.dta")
+## KM survival analysis
+fit2 <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds2)
+fit2
+quantile(fit2, probs = 0.15)
+
+## Log-rank or Mantel-Haenszel test
+fit2.test <- survdiff(Surv(durm, rrpt) ~ aodserv, data = ds2, rho = 0)
+fit2.test
+comp(ten(fit2)) 
+
+## plot
+ggsurvplot(fit2, data = ds2, pval = F)
+```
+
+### Scheme 3
+
+```{r message=F, warning=F, error=F}
+ds3 <- haven::read_dta("data/Data_Chapter5/svl_3.dta")
+## KM survival analysis
+fit3 <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds3)
+fit3
+quantile(fit3, probs = 0.15)
+## Log-rank or Mantel-Haenszel test
+fit3.test <- survdiff(Surv(durm, rrpt) ~ aodserv, data = ds3, rho = 0)
+fit3.test
+comp(ten(fit3)) 
+
+## plot
+ggsurvplot(fit3, data = ds3, pval = F)
+```
+
+### Scheme 4
+
+```{r message=F, warning=F, error=F}
+ds4 <- haven::read_dta("data/Data_Chapter5/svl_4.dta")
+## KM survival analysis
+fit4 <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds4)
+fit4
+quantile(fit4, probs = 0.15)
+## Log-rank or Mantel-Haenszel test
+fit4.test <- survdiff(Surv(durm, rrpt) ~ aodserv, data = ds4, rho = 0)
+fit4.test
+comp(ten(fit4)) 
+
+## plot
+ggsurvplot(fit4, data = ds4, pval = F)
+```
+
+### Scheme 5
+
+```{r message=F, warning=F, error=F}
+ds5 <- haven::read_dta("data/Data_Chapter5/svl_5.dta")
+## KM survival analysis
+fit5 <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds5)
+fit5
+quantile(fit5, probs = 0.15)
+## Log-rank or Mantel-Haenszel test
+fit5.test <- survdiff(Surv(durm, rrpt) ~ aodserv, data = ds5, rho = 0)
+fit5.test
+comp(ten(fit5)) 
+
+## plot
+ggsurvplot(fit5, data = ds5, pval = F)
+```
+
+### Scheme 6
+
+```{r message=F, warning=F, error=F}
+ds6 <- haven::read_dta("data/Data_Chapter5/svl_6.dta")
+## KM survival analysis
+fit6 <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds6)
+fit6
+quantile(fit6, probs = 0.15)
+## Log-rank or Mantel-Haenszel test
+fit6.test <- survdiff(Surv(durm, rrpt) ~ aodserv, data = ds6, rho = 0)
+fit6.test
+comp(ten(fit6)) 
+
+## plot
+ggsurvplot(fit6, data = ds6, pval = F)
+```
+
+### Scheme 7
+
+```{r message=F, warning=F, error=F}
+ds7 <- haven::read_dta("data/Data_Chapter5/svl_7.dta")
+## KM survival analysis
+fit7 <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds7)
+fit7
+quantile(fit7, probs = 0.15)
+## Log-rank or Mantel-Haenszel test
+fit7.test <- survdiff(Surv(durm, rrpt) ~ aodserv, data = ds7, rho = 0)
+fit7.test
+comp(ten(fit7)) 
+
+## plot
+ggsurvplot(fit7, data = ds7, pval = F)
+```
+
+### Scheme 8
+
+```{r message=F, warning=F, error=F}
+ds8 <- haven::read_dta("data/Data_Chapter5/svl_8.dta")
+## KM survival analysis
+fit8 <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds8)
+fit8
+quantile(fit8, probs = 0.15)
+## Log-rank or Mantel-Haenszel test
+fit8.test <- survdiff(Surv(durm, rrpt) ~ aodserv, data = ds8, rho = 0)
+fit8.test
+comp(ten(fit8)) 
+
+## plot
+ggsurvplot(fit8, data = ds8, pval = F)
+```
+
+
+### Scheme 9
+
+```{r message=F, warning=F, error=F}
+ds9 <- haven::read_dta("data/Data_Chapter5/svl_9.dta")
+## KM survival analysis
+fit9 <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds9)
+fit9
+quantile(fit9, probs = 0.15)
+## Log-rank or Mantel-Haenszel test
+fit9.test <- survdiff(Surv(durm, rrpt) ~ aodserv, data = ds9, rho = 0)
+fit9.test
+comp(ten(fit9)) 
+
+## plot
+ggsurvplot(fit9, data = ds9, pval = F)
+```
+
+### Scheme 10
+
+```{r message=F, warning=F, error=F}
+ds10 <- haven::read_dta("data/Data_Chapter5/svl_10.dta")
+## KM survival analysis
+fit10 <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds10)
+fit10
+quantile(fit10, probs = 0.15)
+## Log-rank or Mantel-Haenszel test
+fit10.test <- survdiff(Surv(durm, rrpt) ~ aodserv, data = ds10, rho = 0)
+fit10.test
+comp(ten(fit10)) 
+
+## plot
+ggsurvplot(fit10, data = ds10, pval = F)
+```
+
+### Scheme 11
+
+```{r message=F, warning=F, error=F}
+ds11 <- haven::read_dta("data/Data_Chapter5/svl_11.dta")
+## KM survival analysis
+fit11 <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds11)
+fit11
+quantile(fit11, probs = 0.1)
+## Log-rank or Mantel-Haenszel test
+fit11.test <- survdiff(Surv(durm, rrpt) ~ aodserv, data = ds11, rho = 0)
+fit11.test
+comp(ten(fit11)) 
+
+## plot
+ggsurvplot(fit11, data = ds11, pval = F)
+```
+
+### Scheme 12
+
+```{r message=F, warning=F, error=F}
+ds12 <- haven::read_dta("data/Data_Chapter5/svl_12.dta")
+## KM survival analysis
+fit12 <- survfit(Surv(durm, rrpt) ~ aodserv, data = ds12)
+fit12
+quantile(fit12, probs = 0.1)
+## Log-rank or Mantel-Haenszel test
+fit12.test <- survdiff(Surv(durm, rrpt) ~ aodserv, data = ds12, rho = 0)
+fit12.test
+comp(ten(fit12)) 
+
+## plot
+ggsurvplot(fit12, data = ds12, pval = F)
+```

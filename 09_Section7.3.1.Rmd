@@ -1,0 +1,110 @@
+# Section 7.3.1 Propensity Score Weighting (SD & PS)
+
+## Preparation
+
+```{r message=F, warning=F, error=F}
+library(WeightIt)
+library(broom)
+library(cobalt)
+library(sandwich)
+library(stargazer)
+library(tidyverse)
+library(lmtest)
+
+# Load data
+d <- haven::read_dta("data/Data_Chapter7/chpt5_2_original.dta")
+```
+
+## Solution 1: Obtain Weights with WeightIt
+
+### Weights 
+
+```{r message=FALSE, warning=FALSE}
+# ATE weight
+w1.out <- WeightIt::weightit(kuse ~ male + black + age97 + pcged97 + mratio96,
+                             data = d,
+                             ps = d$ps,
+                             estimand = "ATE")
+summary(w1.out)
+
+# ATT weight
+w2.out <- WeightIt::weightit(kuse ~ male + black + age97 + pcged97 + mratio96,
+                             data = d,
+                             ps = d$ps,
+                             estimand = "ATT")
+summary(w2.out)
+```
+
+Visual balance checks may be carried out with:
+
+```{r eval=F}
+cobalt::bal.tab(w1.out, m.threshold = .05, disp.v.ratio = TRUE)
+cobalt::bal.tab(w2.out, m.threshold = .05, disp.v.ratio = TRUE)
+```
+
+### PSW With ATE Weights
+
+```{r message=FALSE, warning=FALSE}
+m1 <- lm(lwss97~ kuse + male + black + age97 + pcged97 + mratio96, data = d, weights = w1.out$weights) 
+lmtest::coeftest(m1, vcov. = vcovCL(m1, cluster = d$pcg_id))
+```
+
+### PSW With ATT Weights
+
+```{r message=FALSE, warning=FALSE}
+m2 <- lm(lwss97~ kuse + male + black + age97 + pcged97 + mratio96, data = d, weights = w2.out$weights)
+lmtest::coeftest(m2, vcov. = vcovCL(m2, cluster = d$pcg_id))
+```
+
+## Solution 2: Creating the Weights Manually 
+
+### Weights
+
+```{r message=FALSE, warning=FALSE}
+d.weights <- d %>%
+  mutate(ate_w = ifelse(kuse == 0, 1/(1-ps), 1/ps),
+         att_w = ifelse(kuse == 0, ps/(1-ps), 1))
+```
+
+### PSW With ATE Weights
+
+```{r message=FALSE, warning=FALSE}
+# psw with ate_w weights
+m3 <- lm(lwss97~ kuse + male + black + age97 + pcged97 + mratio96, data = d.weights, weights = ate_w) 
+lmtest::coeftest(m3, vcov. = vcovCL(m3, cluster = d.weights$pcg_id))
+```
+
+### PSW With ATT Weights
+
+```{r message=FALSE, warning=FALSE}
+m4 <- lm(lwss97~ kuse + male + black + age97 + pcged97 + mratio96, data = d.weights, weights = att_w)
+lmtest::coeftest(m4, vcov. = vcovCL(m4, cluster = d.weights$pcg_id))
+```
+
+## Imbalance Checks
+
+The balance check used regression for a continuous dependent variable and logistic regression for a dichotomous dependent variable.
+
+```{r}
+c1 <- glm(male ~ kuse, family = quasibinomial, data = d.weights, weights = ate_w)
+lmtest::coeftest(c1, vcov. = vcovCL(c1, cluster = d.weights$pcg_id))
+c2 <- glm(male ~ kuse, family = quasibinomial, data = d.weights, weights = att_w)
+lmtest::coeftest(c2, vcov. = vcovCL(c2, cluster = d.weights$pcg_id))
+c3 <- glm(black ~ kuse, family = quasibinomial, data = d.weights, weights = ate_w)
+lmtest::coeftest(c3, vcov. = vcovCL(c3, cluster = d.weights$pcg_id))
+c4 <- glm(black ~ kuse, family = quasibinomial, data = d.weights, weights = att_w)
+lmtest::coeftest(c4, vcov. = vcovCL(c4, cluster = d.weights$pcg_id))
+
+c5 <- lm(age97 ~ kuse, weights = ate_w, data = d.weights)
+lmtest::coeftest(c5, vcov. = vcovCL(c5, cluster = d.weights$pcg_id))
+c6 <- lm(age97 ~ kuse, weights = att_w, data = d.weights)
+lmtest::coeftest(c6, vcov. = vcovCL(c6, cluster = d.weights$pcg_id))
+c7 <- lm(pcged97 ~ kuse, weights = ate_w, data = d.weights)
+lmtest::coeftest(c7, vcov. = vcovCL(c7, cluster = d.weights$pcg_id))
+c8 <- lm(pcged97 ~ kuse, weights = att_w, data = d.weights)
+lmtest::coeftest(c8, vcov. = vcovCL(c8, cluster = d.weights$pcg_id))
+c9 <- lm(mratio96 ~ kuse, weights = ate_w, data = d.weights)
+lmtest::coeftest(c9, vcov. = vcovCL(c9, cluster = d.weights$pcg_id))
+c10 <- lm(mratio96 ~ kuse, weights = att_w, data = d.weights)
+lmtest::coeftest(c10, vcov. = vcovCL(c10, cluster = d.weights$pcg_id))
+```

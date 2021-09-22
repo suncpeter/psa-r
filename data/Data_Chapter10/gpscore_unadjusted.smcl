@@ -1,0 +1,20 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\Peter\Box\PhD\Research\PSA-R\Data\Data_Chapter10\data\gpscore_unadjusted.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}25 Jun 2020, 10:08:15
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\Peter\AppData\Local\Temp\STD201c_000000.tmp"
+{txt}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\Peter\Box\PhD\Research\PSA-R\Data\Data_Chapter10\data\gpscore_unadjusted.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}25 Jun 2020, 10:09:15
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

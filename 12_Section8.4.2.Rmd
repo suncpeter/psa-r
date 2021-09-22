@@ -1,0 +1,319 @@
+# Section 8.4.2 Efficacy Subset & Matching Estimators (PS) 
+
+```{r message=F, warning=F, error=F}
+library(tidyverse)
+library(glue)
+library(haven)
+library(scales)
+library(knitr)
+library(kableExtra)
+library(MatchIt)
+library(broom)
+library(lmtest)
+library(sandwich)
+library(Matching)
+library(rlang)
+library(tidyr)
+options(scipen=999)
+options(knitr.kable.NA = "") # Do not display NAs in kable
+select <- dplyr::select
+```
+
+## Check Sample Sizes and Get Summary Statistics
+
+```{r}
+# Pattern to match every file except "cds_pcss97.dta"
+f.pattern <- "^(data/Data_Chapter8/)([:alpha:]+\\d?[:alpha:]+)(\\d+).dta$"
+
+# Match all filenames in Data_Chapter8 and load data
+df.f <- list.files(path = "data/Data_Chapter8/", full.names = T) %>%
+  enframe(value = "path", name = NULL) %>%
+  mutate(filename = str_match(path, f.pattern)[,3]) %>%
+  mutate(filename_no = str_match(path, f.pattern)[,4]) %>%
+  drop_na() %>% # Remove"cds_pcss97.dta"
+  mutate(data = lapply(path, read_dta))
+
+# Inspect head
+head(df.f)
+
+# Function to get summary statistics
+# Note: Stata codes missing values larger than any nonmissing values, hence the mcmin comparisons have been altered to adjust for this discrepancy
+get_sum <- function(f, var_sum, var_freq, adq1, adq2, adq_val1, adq3, adq_val2, hi1, hi_val1, hi2, hi3, hi_val2, flag) {
+  
+  var_sum <- as.name(var_sum) # `2` in the Stata code
+  var_freq <- as.name(var_freq) # `3` in the Stata code
+  
+  df <- df.f %>%
+    filter(filename == f) %>%
+    mutate(data = map(data, . %>% 
+                        filter(!is.na(!!var_sum)) %>%
+                        mutate(!!var_freq := 
+                              ifelse(flag == "adq" & mcmin >= adq1 & mcmin < adq2, adq_val1,
+                              ifelse(flag == "adq" & mcmin >= adq3, adq_val2,
+                              ifelse(flag == "hi" & (mcmin >= hi1 | is.na(mcmin)), hi_val1, # note that a . in this condition will be 1 in Stata 
+                              ifelse(flag == "hi" & mcmin > hi2 & mcmin < hi3, hi_val2, 0))))) %>%
+                        summarise(obs = n(),
+                                  var_name = as.character(var_sum),
+                                  var_mean = mean(!!var_sum, na.rm = T),
+                                  var_sd = sd(!!var_sum, na.rm = T),
+                                  var_min = min(!!var_sum),
+                                  var_max = max(!!var_sum),
+                                  var2_name = as.character(var_freq),
+                                  var2_freq_0 = sum(!!var_freq==0, na.rm = T),
+                                  var2_pct_0 = scales::percent(var2_freq_0/sum(!is.na(!!var_freq)), accuracy=.01),
+                                  var2_freq_1 = sum(!!var_freq==1, na.rm = T),
+                                  var2_pct_1 = scales::percent(var2_freq_1/sum(!is.na(!!var_freq)), accuracy=.01),
+                                  .groups = "drop") %>%
+                        select(obs, starts_with("var_"), starts_with("var2_"))
+                      )) %>%
+    unnest(data) %>%
+    mutate(filename_no = as.numeric(filename_no)) %>%
+    arrange(filename_no) %>%
+    mutate(file = glue("{filename}{filename_no}")) %>%
+    relocate(file, .before = "path") %>%
+    select(-path, -filename, -filename_no)
+  
+  return(df)
+}
+
+# Function to create tables with kbl()
+create_kab <- function(df) {
+  df %>%
+    kbl(format = "html", digits = 2) %>%
+    kable_paper() %>%
+    scroll_box(width = "100%", height = "500px")
+}
+
+# Define get_sum() arguments
+arg1 <- c("g4aca", "g4agg", "g4emrg", "g4int", "g4pros", "g4ragg", "g4scom")
+arg2 <- c("icsacach", "icsaggch", "cceregch", "icsintch", "ccprosch", "raggrch", "ccscomch")
+```
+
+### g4adq
+
+```{r}
+s1 <- map2_dfr(arg1, arg2, get_sum, 
+                    var_freq = "g4adq",
+                    adq1 = 240, adq2 = 380, adq_val1 = 1, adq3 = 380, adq_val2 = NA,
+                    hi1 = 380, hi_val1 = NA, hi2 = 240, hi3 = 380, hi_val2 = 1,
+                    flag = "adq")
+create_kab(s1)
+```
+
+### g4hi
+
+```{r}
+s2 <- map2_dfr(arg1, arg2, get_sum, 
+                    var_freq = "g4hi",
+                    adq1 = 380, adq2 = Inf, adq_val1 = 1, adq3 = 380, adq_val2 = 1,
+                    hi1 = 380, hi_val1 = 1, hi2 = 0, hi3 = 380, hi_val2 = NA,
+                    flag = "hi")
+create_kab(s2)
+```
+
+### g5adq
+
+```{r}
+# New arguments
+arg1_new <- str_replace_all(arg1, "4", "5")
+s3 <- map2_dfr(arg1_new, arg2, get_sum, 
+                    var_freq = "g5adq",
+                    adq1 = 240, adq2 = 380, adq_val1 = 1, adq3 = 380, adq_val2 = NA,
+                    hi1 = 380, hi_val1 = NA, hi2 = 240, hi3 = 380, hi_val2 = 1,
+                    flag = "adq")
+create_kab(s3)
+```
+
+### g5hi
+
+```{r}
+s4 <- map2_dfr(arg1_new, arg2, get_sum, 
+                    var_freq = "g5hi",
+                    adq1 = 380, adq2 = Inf, adq_val1 = 1, adq3 = 380, adq_val2 = 1,
+                    hi1 = 380, hi_val1 = 1, hi2 = 0, hi3 = 380, hi_val2 = NA,
+                    flag = "hi")
+create_kab(s4)
+```
+
+## Functions for Matching
+
+```{r}
+# Prepare data
+df.f2 <- df.f %>%
+  mutate(filename_no = as.numeric(filename_no)) %>%
+  arrange(filename, filename_no) %>%
+  mutate(filename2 = paste0(filename, filename_no)) %>%
+  select(filename, filename2, data)
+
+# Create adq treatment variable
+create_adq <- function(mcmin) {
+  adq <- tibble(mcmin = mcmin) %>%
+    mutate(adq = ifelse(mcmin >= 240 & mcmin < 380, 1,
+                  ifelse(mcmin >= 380, NA, 0)))
+  return(adq$adq)
+}
+
+# Create hi treatment variable
+create_hi <- function(mcmin) {
+  hi <- tibble(mcmin = mcmin) %>%
+    mutate(hi = ifelse(mcmin >= 380 | is.na(mcmin), 1,
+                  ifelse(mcmin > 0 & mcmin < 380, NA, 0)))
+  return(hi$hi)
+}
+
+# Function to perform matching
+get_model <- function(df, tx, dv, cov) {
+
+  # Drop missing model variables
+  df <- df %>%
+    select(all_of(c(tx, dv, cov))) %>%
+    drop_na()
+  
+  # Define arguments and match (SATT)
+  Y <- df[[dv]]
+  Tr <- df[[tx]]
+  X <- select(df, all_of(cov))
+  M <- Match(Y = Y, Tr = Tr, X = X, 
+             M = 4, estimand = "ATT", BiasAdjust = T, Var.calc = 4, sample = T)
+  
+  # Return results in a tibble
+  return(tibble(
+    se = as.numeric(M$se),
+    n = as.numeric(M$nobs),
+    c = as.numeric(M$est)
+  ))
+}
+
+# Function to use nested data to call get_model()
+get_matching_models <- function(data, f, tx1 = "intbl", tx2 = "g4adq", tx3 = "g4hi", dv, cov) {
+  
+  # Create column names
+  col1 = as.name(paste0(f, "_", dv, "_", tx1))
+  col2 = as.name(paste0(f, "_", dv, "_", tx2))
+  col3 = as.name(paste0(f, "_", dv, "_", tx3))
+  
+  # Create three treatment variables
+  df <- data %>%
+    filter(filename == f) %>%
+    mutate(data = map(data, . %>%
+                        mutate(g4adq = create_adq(mcmin),
+                                g4hi = create_hi(mcmin)))) %>%
+    
+    # Fit three models using the three treatment variables
+    mutate({{ col1 }} := map(data, ~get_model(., tx = tx1, dv = dv, cov = cov))) %>%
+    mutate({{ col2 }} := map(data, ~get_model(., tx = tx2, dv = dv, cov = cov))) %>%  
+    mutate({{ col3 }} := map(data, ~get_model(.,  tx = tx3, dv = dv, cov = cov)))
+  
+  # Return the dataset
+  return(df)
+
+}
+```
+
+## Define Matching Variables
+
+```{r}
+X_icsacach <- c("ageyc", "fmale", "blck", "whit", "hisp", 
+        "pcedu", "ipovl", "pcemft", "fthr", "tchange", "dicsagg2", 
+        "dicsint2", "dccereg2", "dccscom2", "dccpros2", "draggr2")
+X_icsaggch <- c("ageyc", "fmale", "blck", "whit", "hisp", 
+        "pcedu", "ipovl", "pcemft", "fthr", "tchange",
+        "dicsaca2", "dicsint2", "dccpros2")
+X_cceregch <- c("ageyc", "fmale", "blck", "whit", "hisp", 
+        "pcedu", "ipovl", "pcemft", "fthr", "tchange",
+        "dicsaca2", "dicsint2")
+X_icsintch <- c("ageyc", "fmale", "blck", "whit", "hisp", 
+        "pcedu", "ipovl", "pcemft", "fthr", "tchange",
+        "dicsagg2", "dicsaca2", "dccereg2", "dccscom2", "dccpros2", "draggr2")
+X_ccprosch <- c("ageyc", "fmale", "blck", "whit", "hisp", 
+        "pcedu", "ipovl", "pcemft", "fthr", "tchange",
+        "dicsagg2", "dicsaca2", "dicsint2")
+X_raggrch <- c("ageyc", "fmale", "blck", "whit", "hisp", 
+        "pcedu", "ipovl", "pcemft", "fthr", "tchange",
+        "dicsaca2", "dicsint2")
+X_ccscomch <- c("ageyc", "fmale", "blck", "whit", "hisp", 
+        "pcedu", "ipovl", "pcemft", "fthr", "tchange",
+        "dicsaca2", "dicsint2")
+```
+
+## Matching
+
+```{r}
+# Replicates 21 Stata programs (dv_g4aca_tot to dv_g4scom_hi)
+df.m1 <- get_matching_models(data = df.f2, f = "g4aca", dv = "icsacach", cov = X_icsacach)
+df.m2 <- get_matching_models(data = df.f2, f = "g4agg", dv = "icsaggch", cov = X_icsaggch)
+df.m3 <- get_matching_models(data = df.f2, f = "g4emrg", dv = "cceregch", cov = X_cceregch)
+df.m4 <- get_matching_models(data = df.f2, f = "g4int", dv = "icsintch", cov = X_icsintch)
+df.m5 <- get_matching_models(data = df.f2, f = "g4pros", dv = "ccprosch", cov = X_ccprosch)
+df.m6 <- get_matching_models(data = df.f2, f = "g4ragg", dv = "raggrch", cov = X_raggrch)
+df.m7 <- get_matching_models(data = df.f2, f = "g4scom", dv = "ccscomch", cov = X_ccscomch)
+
+# Replicates 21 Stata programs (dv_g5aca_tot to dv_g5scom_hi)
+df.m8 <- get_matching_models(data = df.f2, f = "g5aca", dv = "icsacach", cov = X_icsacach)
+df.m9 <- get_matching_models(data = df.f2, f = "g5agg", dv = "icsaggch", cov = X_icsaggch)
+df.m10 <- get_matching_models(data = df.f2, f = "g5emrg", dv = "cceregch", cov = X_cceregch)
+df.m11 <- get_matching_models(data = df.f2, f = "g5int", dv = "icsintch", cov = X_icsintch)
+df.m12 <- get_matching_models(data = df.f2, f = "g5pros", dv = "ccprosch", cov = X_ccprosch)
+df.m13 <- get_matching_models(data = df.f2, f = "g5ragg", dv = "raggrch", cov = X_raggrch)
+df.m14 <- get_matching_models(data = df.f2, f = "g5scom", dv = "ccscomch", cov = X_ccscomch)
+
+# Each tibble above contains 50 (imputed datasets) * 3 (treatment variable) = 150 ATTs
+df.m1
+df.m1$g4aca_icsacach_intbl[[1]]
+```
+
+## Function to Aggregate Using Rubin's Rule
+
+```{r}
+postmatch <- function(se, n, c1) {
+  pm <- tibble(se = se, n = n, c1 = c1) %>%
+    mutate(Q_ = mean(c1),
+           obs = mean(n),
+           var = se*se,
+           U_ = mean(var),
+           qj_q_2 = (c1-Q_)^2,
+           B = (1/(50-1))*sum(qj_q_2),
+           T = U_ + (1+(1/50))*B,
+           overall_se = sqrt(T),
+           t = Q_/overall_se,
+           xx = (1+(50*U_)/((50+1)*B))^2,
+           df = (50-1)*xx,
+           t_pvalue = pt(-abs(t), df = df)*2
+    ) %>%
+    slice(1) %>%
+    select(coef = Q_, p = t_pvalue, avg_obs = obs, df = df)
+  return(pm)
+}
+```
+
+## Aggregate Using Rubin's Rule
+
+```{r}
+# Unnest models for postmatch()
+get_postmatch <- function(df) {
+  df %>%
+    select(-filename, -data) %>%
+    pivot_longer(-filename2) %>%
+    group_by(name) %>%
+    nest() %>%
+    unnest(data) %>%
+    unnest(value) %>%
+    group_by(name) %>%
+    summarise(results = postmatch(se, n, c), .groups = "drop") %>%
+    tidyr::unpack(results)
+}
+
+# List of results
+dfs <- list(df.m1, df.m2, df.m3, df.m4, df.m5, df.m6, df.m7, 
+            df.m8, df.m9, df.m10, df.m11, df.m12, df.m13, df.m14)
+
+# Start post-match aggregation on the list of results
+results <- map_dfr(dfs, get_postmatch)
+results %>%
+  separate(name, into = c("file", "depvar", "tx"), sep = "_") %>%
+  mutate(tx = ifelse(tx == "intbl", "tot", tx)) %>%
+  kbl(col.names = c("File", "DV", "Treatment", "Coefficient", 
+                    "p-value", "Average Obs.", "df")) %>%
+  kable_paper() %>%
+  scroll_box(height = "600px")
+```

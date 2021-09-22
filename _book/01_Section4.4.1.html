@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Section 4.4.1 Application of the Treatment Effect Model to Analysis of Observational Data (SD &amp; PS) | R Code for Propensity Score Analysis</title>
+  <meta name="description" content="2 Section 4.4.1 Application of the Treatment Effect Model to Analysis of Observational Data (SD &amp; PS) | R Code for Propensity Score Analysis" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Section 4.4.1 Application of the Treatment Effect Model to Analysis of Observational Data (SD &amp; PS) | R Code for Propensity Score Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Section 4.4.1 Application of the Treatment Effect Model to Analysis of Observational Data (SD &amp; PS) | R Code for Propensity Score Analysis" />
+  
+  
+  
+
+<meta name="author" content="Shanshan Du, Peter Sun, and Shenyang Guo" />
+
+
+<meta name="date" content="2020-12-30" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="02_Section4.4.2.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html"><i class="fa fa-check"></i><b>2</b> Section 4.4.1 Application of the Treatment Effect Model to Analysis of Observational Data (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#preparation"><i class="fa fa-check"></i><b>2.1</b> Preparation</a></li>
+<li class="chapter" data-level="2.2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#treatment-effect"><i class="fa fa-check"></i><b>2.2</b> Treatment Effect</a></li>
+<li class="chapter" data-level="2.3" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#bivariate-t-test"><i class="fa fa-check"></i><b>2.3</b> Bivariate t-test</a></li>
+<li class="chapter" data-level="2.4" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#regression-control"><i class="fa fa-check"></i><b>2.4</b> Regression Control</a></li>
+<li class="chapter" data-level="2.5" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#sample-description"><i class="fa fa-check"></i><b>2.5</b> Sample Description</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html"><i class="fa fa-check"></i><b>3</b> Section 4.4.2 Evaluation of Treatment Effects From a Program With a Group Randomization Design (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#preparation-1"><i class="fa fa-check"></i><b>3.1</b> Preparation</a></li>
+<li class="chapter" data-level="3.2" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#treatment-effect-using-robust-to-control-for-clustering"><i class="fa fa-check"></i><b>3.2</b> Treatment Effect: Using Robust to Control for Clustering</a></li>
+<li class="chapter" data-level="3.3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#bivariate-t-test-1"><i class="fa fa-check"></i><b>3.3</b> Bivariate t-test</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html"><i class="fa fa-check"></i><b>4</b> Section 4.4.3 Main Features of Treatreg (PS &amp; SD)</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#preparation-2"><i class="fa fa-check"></i><b>4.1</b> Preparation</a></li>
+<li class="chapter" data-level="4.2" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#run-models"><i class="fa fa-check"></i><b>4.2</b> Run Models</a></li>
+<li class="chapter" data-level="4.3" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#extract-coefficients"><i class="fa fa-check"></i><b>4.3</b> Extract Coefficients</a></li>
+<li class="chapter" data-level="4.4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#get-combined-results"><i class="fa fa-check"></i><b>4.4</b> Get Combined Results</a></li>
+<li class="chapter" data-level="4.5" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#results"><i class="fa fa-check"></i><b>4.5</b> Results</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html"><i class="fa fa-check"></i><b>5</b> Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#preparation-3"><i class="fa fa-check"></i><b>5.1</b> Preparation</a></li>
+<li class="chapter" data-level="5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#propensity-score-estimation"><i class="fa fa-check"></i><b>5.2</b> Propensity Score Estimation</a></li>
+<li class="chapter" data-level="5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-comparisons"><i class="fa fa-check"></i><b>5.3</b> Bivariate Comparisons</a></li>
+<li class="chapter" data-level="5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-covariate-balcance-check"><i class="fa fa-check"></i><b>5.4</b> PSM based on Logistic regression &amp; Covariate Balcance Check</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.4.1</b> Scheme 1 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.4.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.4.2</b> Scheme 2 - Nearest neighbor within caliper .1*SD</a></li>
+<li class="chapter" data-level="5.4.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.4.3</b> Scheme 3 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.4.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.4.4</b> Scheme 4 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-2"><i class="fa fa-check"></i><b>5.5</b> PSM based on Logistic regression 2</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.5.1</b> Scheme 5 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6---nearest-neighbor-within-caliper-.1sd-note-caliper-in-matchit-is-not-real-data"><i class="fa fa-check"></i><b>5.5.2</b> Scheme 6 - Nearest neighbor within caliper .1*SD (Note: caliper in MatchIt is not real data)</a></li>
+<li class="chapter" data-level="5.5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.5.3</b> Scheme 7 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.5.4</b> Scheme 8 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-3"><i class="fa fa-check"></i><b>5.6</b> PSM based on Logistic regression 3</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.6.1</b> Scheme 9 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.6.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.6.2</b> Scheme 10 - Nearest neighbor within caliper .1*SD</a></li>
+<li class="chapter" data-level="5.6.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.6.3</b> Scheme 11 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.6.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.6.4</b> Scheme 12 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-test-after-matching"><i class="fa fa-check"></i><b>5.7</b> Bivariate test after matching</a></li>
+<li class="chapter" data-level="5.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#kaplan-meier-and-significance-test-of-difference-on-survivor-function"><i class="fa fa-check"></i><b>5.8</b> Kaplan-Meier and significance test of difference on survivor function</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#all"><i class="fa fa-check"></i><b>5.8.1</b> All</a></li>
+<li class="chapter" data-level="5.8.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1"><i class="fa fa-check"></i><b>5.8.2</b> Scheme 1</a></li>
+<li class="chapter" data-level="5.8.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2"><i class="fa fa-check"></i><b>5.8.3</b> Scheme 2</a></li>
+<li class="chapter" data-level="5.8.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3"><i class="fa fa-check"></i><b>5.8.4</b> Scheme 3</a></li>
+<li class="chapter" data-level="5.8.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4"><i class="fa fa-check"></i><b>5.8.5</b> Scheme 4</a></li>
+<li class="chapter" data-level="5.8.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5"><i class="fa fa-check"></i><b>5.8.6</b> Scheme 5</a></li>
+<li class="chapter" data-level="5.8.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6"><i class="fa fa-check"></i><b>5.8.7</b> Scheme 6</a></li>
+<li class="chapter" data-level="5.8.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7"><i class="fa fa-check"></i><b>5.8.8</b> Scheme 7</a></li>
+<li class="chapter" data-level="5.8.9" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8"><i class="fa fa-check"></i><b>5.8.9</b> Scheme 8</a></li>
+<li class="chapter" data-level="5.8.10" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9"><i class="fa fa-check"></i><b>5.8.10</b> Scheme 9</a></li>
+<li class="chapter" data-level="5.8.11" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10"><i class="fa fa-check"></i><b>5.8.11</b> Scheme 10</a></li>
+<li class="chapter" data-level="5.8.12" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11"><i class="fa fa-check"></i><b>5.8.12</b> Scheme 11</a></li>
+<li class="chapter" data-level="5.8.13" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12"><i class="fa fa-check"></i><b>5.8.13</b> Scheme 12</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html"><i class="fa fa-check"></i><b>6</b> Section 5.8.2, 5.8.3, and 5.8.4 (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.2-optimal-matching"><i class="fa fa-check"></i><b>6.1</b> Section 5.8.2 Optimal Matching</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#load-data"><i class="fa fa-check"></i><b>6.1.1</b> Load Data</a></li>
+<li class="chapter" data-level="6.1.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#bivariate-comparisons-1"><i class="fa fa-check"></i><b>6.1.2</b> Bivariate Comparisons</a></li>
+<li class="chapter" data-level="6.1.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#outcome-without-bias-control"><i class="fa fa-check"></i><b>6.1.3</b> Outcome Without Bias Control</a></li>
+<li class="chapter" data-level="6.1.4" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#matching"><i class="fa fa-check"></i><b>6.1.4</b> Matching</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.3-post-full-matching-analysis-of-outcome"><i class="fa fa-check"></i><b>6.2</b> Section 5.8.3 Post-Full-Matching Analysis of Outcome</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#hodges-lehmann-aligned-rank-test"><i class="fa fa-check"></i><b>6.2.1</b> Hodges-Lehmann Aligned Rank Test</a></li>
+<li class="chapter" data-level="6.2.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cohens-d"><i class="fa fa-check"></i><b>6.2.2</b> Cohen’s d</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.4-post-matching-analysis-using-regression-of-difference-scores"><i class="fa fa-check"></i><b>6.3</b> Section 5.8.4 Post-Matching Analysis Using Regression of Difference Scores</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html"><i class="fa fa-check"></i><b>7</b> Section 5.8.5 Multilevel Propensity Score (PS)</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccpros57"><i class="fa fa-check"></i><b>7.1</b> cccpros57</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data"><i class="fa fa-check"></i><b>7.1.1</b> Import Data</a></li>
+<li class="chapter" data-level="7.1.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score"><i class="fa fa-check"></i><b>7.1.2</b> Obtain Single-Level p-score</a></li>
+<li class="chapter" data-level="7.1.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model"><i class="fa fa-check"></i><b>7.1.3</b> Obtain School-Level p-score Model</a></li>
+<li class="chapter" data-level="7.1.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check"><i class="fa fa-check"></i><b>7.1.4</b> Before-Matching Balance Check</a></li>
+<li class="chapter" data-level="7.1.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl"><i class="fa fa-check"></i><b>7.1.5</b> Matching with ps_sgl</a></li>
+<li class="chapter" data-level="7.1.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch"><i class="fa fa-check"></i><b>7.1.6</b> Matching with ps_sch</a></li>
+<li class="chapter" data-level="7.1.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc"><i class="fa fa-check"></i><b>7.1.7</b> Check ICC</a></li>
+<li class="chapter" data-level="7.1.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel"><i class="fa fa-check"></i><b>7.1.8</b> Outcome Analsis: Multilevel</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccragg24"><i class="fa fa-check"></i><b>7.2</b> cccragg24</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data-1"><i class="fa fa-check"></i><b>7.2.1</b> Import Data</a></li>
+<li class="chapter" data-level="7.2.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score-1"><i class="fa fa-check"></i><b>7.2.2</b> Obtain Single-Level p-score</a></li>
+<li class="chapter" data-level="7.2.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model-1"><i class="fa fa-check"></i><b>7.2.3</b> Obtain School-Level p-score Model</a></li>
+<li class="chapter" data-level="7.2.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check-1"><i class="fa fa-check"></i><b>7.2.4</b> Before-Matching Balance Check</a></li>
+<li class="chapter" data-level="7.2.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl-1"><i class="fa fa-check"></i><b>7.2.5</b> Matching with ps_sgl</a></li>
+<li class="chapter" data-level="7.2.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch-1"><i class="fa fa-check"></i><b>7.2.6</b> Matching with ps_sch</a></li>
+<li class="chapter" data-level="7.2.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc-1"><i class="fa fa-check"></i><b>7.2.7</b> Check ICC</a></li>
+<li class="chapter" data-level="7.2.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel-1"><i class="fa fa-check"></i><b>7.2.8</b> Outcome Analsis: Multilevel</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html"><i class="fa fa-check"></i><b>8</b> Section 5.8.6 Comparison of Rand-gbm and Stata-boost (PS)</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#import-data-2"><i class="fa fa-check"></i><b>8.1</b> Import Data</a></li>
+<li class="chapter" data-level="8.2" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-rand-gbm-ps"><i class="fa fa-check"></i><b>8.2</b> Optimal pair matching Using pscores generated by Rand-gbm (ps)</a></li>
+<li class="chapter" data-level="8.3" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-stata-boost-psb"><i class="fa fa-check"></i><b>8.3</b> Optimal pair matching Using pscores generated by Stata-boost (psb)</a></li>
+<li class="chapter" data-level="8.4" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#balance-checks"><i class="fa fa-check"></i><b>8.4</b> Balance Checks</a></li>
+<li class="chapter" data-level="8.5" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#postmatching-regression-analysis-using-difference-scores"><i class="fa fa-check"></i><b>8.5</b> Postmatching Regression Analysis Using Difference Scores</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html"><i class="fa fa-check"></i><b>9</b> Section 6.5.2 Subclassification &amp; Cox Proportional Hazards (PS)</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#import-data-3"><i class="fa fa-check"></i><b>9.1</b> Import Data</a></li>
+<li class="chapter" data-level="9.2" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-propensity-score-using-logistic"><i class="fa fa-check"></i><b>9.2</b> Create Propensity Score Using Logistic</a></li>
+<li class="chapter" data-level="9.3" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-conduct-balance-check-using-normalized-difference"><i class="fa fa-check"></i><b>9.3</b> Function to Conduct Balance Check Using Normalized Difference</a></li>
+<li class="chapter" data-level="9.4" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-normalized-difference"><i class="fa fa-check"></i><b>9.4</b> Balance Check on the Original Sample (Normalized Difference)</a></li>
+<li class="chapter" data-level="9.5" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-check-balance-using-chi-square-tests"><i class="fa fa-check"></i><b>9.5</b> Function to Check Balance Using Chi-Square Tests</a></li>
+<li class="chapter" data-level="9.6" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-chi-square"><i class="fa fa-check"></i><b>9.6</b> Balance Check on the Original Sample (Chi-Square)</a></li>
+<li class="chapter" data-level="9.7" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#get-quintiles"><i class="fa fa-check"></i><b>9.7</b> Get Quintiles</a></li>
+<li class="chapter" data-level="9.8" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-subclasses-using-quintiles"><i class="fa fa-check"></i><b>9.8</b> Create 5 Subclasses Using Quintiles</a></li>
+<li class="chapter" data-level="9.9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#check-imbalance-post-subclassification-5-subclasses"><i class="fa fa-check"></i><b>9.9</b> Check Imbalance Post-Subclassification (5 Subclasses)</a></li>
+<li class="chapter" data-level="9.10" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trimming-search-for-best-cutoff-alpha-for-overlap"><i class="fa fa-check"></i><b>9.10</b> Trimming: Search for Best Cutoff Alpha for Overlap</a></li>
+<li class="chapter" data-level="9.11" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trim-observations"><i class="fa fa-check"></i><b>9.11</b> Trim Observations</a></li>
+<li class="chapter" data-level="9.12" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-new-subclasses-and-check-imbalance"><i class="fa fa-check"></i><b>9.12</b> Create 5 New Subclasses and Check Imbalance</a></li>
+<li class="chapter" data-level="9.13" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#outcome-analysis-by-subclass"><i class="fa fa-check"></i><b>9.13</b> Outcome Analysis by Subclass</a></li>
+<li class="chapter" data-level="9.14" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#aggregate-results"><i class="fa fa-check"></i><b>9.14</b> Aggregate Results</a></li>
+<li class="chapter" data-level="9.15" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#subclassification-with-matchit"><i class="fa fa-check"></i><b>9.15</b> Subclassification with MatchIt</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html"><i class="fa fa-check"></i><b>10</b> Section 7.3.1 Propensity Score Weighting (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#preparation-4"><i class="fa fa-check"></i><b>10.1</b> Preparation</a></li>
+<li class="chapter" data-level="10.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-1-obtain-weights-with-weightit"><i class="fa fa-check"></i><b>10.2</b> Solution 1: Obtain Weights with WeightIt</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights"><i class="fa fa-check"></i><b>10.2.1</b> Weights</a></li>
+<li class="chapter" data-level="10.2.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights"><i class="fa fa-check"></i><b>10.2.2</b> PSW With ATE Weights</a></li>
+<li class="chapter" data-level="10.2.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights"><i class="fa fa-check"></i><b>10.2.3</b> PSW With ATT Weights</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-2-creating-the-weights-manually"><i class="fa fa-check"></i><b>10.3</b> Solution 2: Creating the Weights Manually</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights-1"><i class="fa fa-check"></i><b>10.3.1</b> Weights</a></li>
+<li class="chapter" data-level="10.3.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights-1"><i class="fa fa-check"></i><b>10.3.2</b> PSW With ATE Weights</a></li>
+<li class="chapter" data-level="10.3.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights-1"><i class="fa fa-check"></i><b>10.3.3</b> PSW With ATT Weights</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#imbalance-checks"><i class="fa fa-check"></i><b>10.4</b> Imbalance Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html"><i class="fa fa-check"></i><b>11</b> Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#preparation-5"><i class="fa fa-check"></i><b>11.1</b> Preparation</a></li>
+<li class="chapter" data-level="11.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#propensity-score-weighting"><i class="fa fa-check"></i><b>11.2</b> Propensity Score Weighting</a></li>
+<li class="chapter" data-level="11.3" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#cox-proportional-hazards-model"><i class="fa fa-check"></i><b>11.3</b> Cox Proportional Hazards Model</a></li>
+<li class="chapter" data-level="11.4" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#checking-imbalance"><i class="fa fa-check"></i><b>11.4</b> Checking Imbalance</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#chi-square-tests-original-sample"><i class="fa fa-check"></i><b>11.4.1</b> Chi-square Tests: Original Sample</a></li>
+<li class="chapter" data-level="11.4.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#weighted-logistic-regression"><i class="fa fa-check"></i><b>11.4.2</b> Weighted Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html"><i class="fa fa-check"></i><b>12</b> Section 8.4.1 Matching with Bias-Corrected and Robust Variance Estimators (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#preparation-6"><i class="fa fa-check"></i><b>12.1</b> Preparation</a></li>
+<li class="chapter" data-level="12.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#breusch-pagan-test-for-heteroskedasticity"><i class="fa fa-check"></i><b>12.2</b> Breusch-Pagan Test for Heteroskedasticity</a></li>
+<li class="chapter" data-level="12.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#matching-estimators"><i class="fa fa-check"></i><b>12.3</b> Matching Estimators</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-sate"><i class="fa fa-check"></i><b>12.3.1</b> Sample Average Treatment Effect (SATE)</a></li>
+<li class="chapter" data-level="12.3.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-pate"><i class="fa fa-check"></i><b>12.3.2</b> Population Average Treatment Effect (PATE)</a></li>
+<li class="chapter" data-level="12.3.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-treated-satt"><i class="fa fa-check"></i><b>12.3.3</b> Sample average treatment effect for the treated (SATT)</a></li>
+<li class="chapter" data-level="12.3.4" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-treated-patt"><i class="fa fa-check"></i><b>12.3.4</b> Population average treatment effect for the treated (PATT)</a></li>
+<li class="chapter" data-level="12.3.5" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-controls-satc"><i class="fa fa-check"></i><b>12.3.5</b> Sample average treatment effect for the controls (SATC)</a></li>
+<li class="chapter" data-level="12.3.6" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-controls-patc"><i class="fa fa-check"></i><b>12.3.6</b> Population average treatment effect for the controls (PATC)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html"><i class="fa fa-check"></i><b>13</b> Section 8.4.2 Efficacy Subset &amp; Matching Estimators (PS)</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#check-sample-sizes-and-get-summary-statistics"><i class="fa fa-check"></i><b>13.1</b> Check Sample Sizes and Get Summary Statistics</a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4adq"><i class="fa fa-check"></i><b>13.1.1</b> g4adq</a></li>
+<li class="chapter" data-level="13.1.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4hi"><i class="fa fa-check"></i><b>13.1.2</b> g4hi</a></li>
+<li class="chapter" data-level="13.1.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5adq"><i class="fa fa-check"></i><b>13.1.3</b> g5adq</a></li>
+<li class="chapter" data-level="13.1.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5hi"><i class="fa fa-check"></i><b>13.1.4</b> g5hi</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#functions-for-matching"><i class="fa fa-check"></i><b>13.2</b> Functions for Matching</a></li>
+<li class="chapter" data-level="13.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#define-matching-variables"><i class="fa fa-check"></i><b>13.3</b> Define Matching Variables</a></li>
+<li class="chapter" data-level="13.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#matching-1"><i class="fa fa-check"></i><b>13.4</b> Matching</a></li>
+<li class="chapter" data-level="13.5" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#function-to-aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.5</b> Function to Aggregate Using Rubin’s Rule</a></li>
+<li class="chapter" data-level="13.6" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.6</b> Aggregate Using Rubin’s Rule</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html"><i class="fa fa-check"></i><b>14</b> Section 10.6.1 Modeling Doses of Treatment (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#preparation-7"><i class="fa fa-check"></i><b>14.1</b> Preparation</a></li>
+<li class="chapter" data-level="14.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#create-treatment-variable"><i class="fa fa-check"></i><b>14.2</b> Create Treatment Variable</a></li>
+<li class="chapter" data-level="14.3" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#generalized-propensity-scores"><i class="fa fa-check"></i><b>14.3</b> Generalized Propensity Scores</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#mulitinomial-logit-model"><i class="fa fa-check"></i><b>14.3.1</b> Mulitinomial Logit Model</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#sampling-weights"><i class="fa fa-check"></i><b>14.4</b> Sampling Weights</a></li>
+<li class="chapter" data-level="14.5" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#dummy-variables"><i class="fa fa-check"></i><b>14.5</b> Dummy Variables</a></li>
+<li class="chapter" data-level="14.6" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#regression"><i class="fa fa-check"></i><b>14.6</b> Regression</a>
+<ul>
+<li class="chapter" data-level="14.6.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#without-control"><i class="fa fa-check"></i><b>14.6.1</b> Without Control</a></li>
+<li class="chapter" data-level="14.6.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#with-control"><i class="fa fa-check"></i><b>14.6.2</b> With Control</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html"><i class="fa fa-check"></i><b>15</b> Section 11.5.1 &amp; 11.5.2 Sensitivity Analysis of the Effects (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.1-sensitivity-analysis-of-the-effects"><i class="fa fa-check"></i><b>15.1</b> Section 11.5.1 Sensitivity Analysis of the Effects</a></li>
+<li class="chapter" data-level="15.2" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.2-sensitivity-analysis-pair-matching"><i class="fa fa-check"></i><b>15.2</b> Section 11.5.2 Sensitivity Analysis &amp; Pair Matching</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Code for <em>Propensity Score Analysis</em></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="section-4.4.1-application-of-the-treatment-effect-model-to-analysis-of-observational-data-sd-ps" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Section 4.4.1 Application of the Treatment Effect Model to Analysis of Observational Data (SD &amp; PS)</h1>
+<div id="preparation" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Preparation</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="01_Section4.4.1.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb1-2"><a href="01_Section4.4.1.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sampleSelection)</span>
+<span id="cb1-3"><a href="01_Section4.4.1.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gmodels)</span>
+<span id="cb1-4"><a href="01_Section4.4.1.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-5"><a href="01_Section4.4.1.html#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="01_Section4.4.1.html#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
+<span id="cb1-7"><a href="01_Section4.4.1.html#cb1-7" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter4/chpt4_1.dta&quot;</span>) </span>
+<span id="cb1-8"><a href="01_Section4.4.1.html#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="01_Section4.4.1.html#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># rename</span></span>
+<span id="cb1-10"><a href="01_Section4.4.1.html#cb1-10" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb1-11"><a href="01_Section4.4.1.html#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb1-12"><a href="01_Section4.4.1.html#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">external3 =</span> bc3_ept,</span>
+<span id="cb1-13"><a href="01_Section4.4.1.html#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">internal3 =</span> bc3_ipt</span>
+<span id="cb1-14"><a href="01_Section4.4.1.html#cb1-14" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
+</div>
+<div id="treatment-effect" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Treatment Effect</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="01_Section4.4.1.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## tm1: external3</span></span>
+<span id="cb2-2"><a href="01_Section4.4.1.html#cb2-2" aria-hidden="true" tabindex="-1"></a>tm1 <span class="ot">&lt;-</span> sampleSelection<span class="sc">::</span><span class="fu">treatReg</span>(aodserv <span class="sc">~</span> cgrage1 <span class="sc">+</span> cgrage2 <span class="sc">+</span> cgrage3 <span class="sc">+</span> high <span class="sc">+</span> bahigh <span class="sc">+</span></span>
+<span id="cb2-3"><a href="01_Section4.4.1.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  employ <span class="sc">+</span> open <span class="sc">+</span> sexual <span class="sc">+</span> provide <span class="sc">+</span> supervis <span class="sc">+</span> other <span class="sc">+</span> cra47a <span class="sc">+</span></span>
+<span id="cb2-4"><a href="01_Section4.4.1.html#cb2-4" aria-hidden="true" tabindex="-1"></a>  mental <span class="sc">+</span> arrest <span class="sc">+</span> psh17a <span class="sc">+</span> cidi <span class="sc">+</span> cgneed,</span>
+<span id="cb2-5"><a href="01_Section4.4.1.html#cb2-5" aria-hidden="true" tabindex="-1"></a>external3 <span class="sc">~</span> aodserv <span class="sc">+</span> black <span class="sc">+</span> hispanic <span class="sc">+</span> natam <span class="sc">+</span> chdage2 <span class="sc">+</span> chdage3 <span class="sc">+</span> ra,</span>
+<span id="cb2-6"><a href="01_Section4.4.1.html#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">data =</span> d1</span>
+<span id="cb2-7"><a href="01_Section4.4.1.html#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-8"><a href="01_Section4.4.1.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tm1)</span></code></pre></div>
+<pre><code>## --------------------------------------------
+## Tobit treatment model (switching regression model)
+## Maximum Likelihood estimation
+## Newton-Raphson maximisation, 3 iterations
+## Return code 1: gradient close to zero (gradtol)
+## Log-Likelihood: -5779.918 
+## 1407 observations: 1295 non-participants (selection 0) and 112 participants (selection 1)
+## 
+## 28 free parameters (df = 1379)
+## Probit selection equation:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -1.75910    0.35352  -4.976 7.31e-07 ***
+## cgrage1     -0.76128    0.33057  -2.303 0.021429 *  
+## cgrage2     -0.68358    0.33400  -2.047 0.040880 *  
+## cgrage3     -0.70081    0.37681  -1.860 0.063121 .  
+## high        -0.11882    0.12992  -0.915 0.360609    
+## bahigh      -0.13220    0.16447  -0.804 0.421656    
+## employ      -0.14578    0.11867  -1.228 0.219499    
+## open         0.50951    0.13240   3.848 0.000124 ***
+## sexual      -0.23793    0.20419  -1.165 0.244125    
+## provide      0.04531    0.18550   0.244 0.807067    
+## supervis     0.17338    0.16051   1.080 0.280258    
+## other        0.10706    0.19382   0.552 0.580798    
+## cra47a      -0.01902    0.12132  -0.157 0.875439    
+## mental       0.36035    0.11964   3.012 0.002642 ** 
+## arrest       0.54352    0.11719   4.638 3.85e-06 ***
+## psh17a       0.62541    0.14106   4.434 1.00e-05 ***
+## cidi         0.69456    0.11677   5.948 3.43e-09 ***
+## cgneed       0.65257    0.18802   3.471 0.000535 ***
+## Outcome equation:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  59.8803     0.6491  92.247  &lt; 2e-16 ***
+## aodserv       8.6010     2.4749   3.475 0.000526 ***
+## black        -1.0393     0.7734  -1.344 0.179225    
+## hispanic     -3.1717     0.9226  -3.438 0.000604 ***
+## natam        -1.8137     1.5331  -1.183 0.236996    
+## chdage2      -3.5110     0.9259  -3.792 0.000156 ***
+## chdage3      -3.9853     0.7178  -5.552 3.38e-08 ***
+## ra           -1.4506     1.0688  -1.357 0.174925    
+##    Error terms:
+##       Estimate Std. Error t value Pr(&gt;|t|)    
+## sigma  12.1655     0.2473  49.199  &lt; 2e-16 ***
+## rho    -0.3603     0.1020  -3.532 0.000425 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## --------------------------------------------</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="01_Section4.4.1.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## tm2: internal3</span></span>
+<span id="cb4-2"><a href="01_Section4.4.1.html#cb4-2" aria-hidden="true" tabindex="-1"></a>tm2 <span class="ot">&lt;-</span> sampleSelection<span class="sc">::</span><span class="fu">treatReg</span>(aodserv <span class="sc">~</span> cgrage1 <span class="sc">+</span> cgrage2 <span class="sc">+</span> cgrage3 <span class="sc">+</span> high <span class="sc">+</span> bahigh <span class="sc">+</span></span>
+<span id="cb4-3"><a href="01_Section4.4.1.html#cb4-3" aria-hidden="true" tabindex="-1"></a>  employ <span class="sc">+</span> open <span class="sc">+</span> sexual <span class="sc">+</span> provide <span class="sc">+</span> supervis <span class="sc">+</span> other <span class="sc">+</span> cra47a <span class="sc">+</span></span>
+<span id="cb4-4"><a href="01_Section4.4.1.html#cb4-4" aria-hidden="true" tabindex="-1"></a>  mental <span class="sc">+</span> arrest <span class="sc">+</span> psh17a <span class="sc">+</span> cidi <span class="sc">+</span> cgneed,</span>
+<span id="cb4-5"><a href="01_Section4.4.1.html#cb4-5" aria-hidden="true" tabindex="-1"></a>internal3 <span class="sc">~</span> aodserv <span class="sc">+</span> black <span class="sc">+</span> hispanic <span class="sc">+</span> natam <span class="sc">+</span> chdage2 <span class="sc">+</span> chdage3 <span class="sc">+</span> ra,</span>
+<span id="cb4-6"><a href="01_Section4.4.1.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">data =</span> d1</span>
+<span id="cb4-7"><a href="01_Section4.4.1.html#cb4-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-8"><a href="01_Section4.4.1.html#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tm2)</span></code></pre></div>
+<pre><code>## --------------------------------------------
+## Tobit treatment model (switching regression model)
+## Maximum Likelihood estimation
+## Newton-Raphson maximisation, 4 iterations
+## Return code 1: gradient close to zero (gradtol)
+## Log-Likelihood: -5755.528 
+## 1407 observations: 1295 non-participants (selection 0) and 112 participants (selection 1)
+## 
+## 28 free parameters (df = 1379)
+## Probit selection equation:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -1.60843    0.35527  -4.527 6.49e-06 ***
+## cgrage1     -0.91208    0.32779  -2.782 0.005468 ** 
+## cgrage2     -0.80298    0.33282  -2.413 0.015967 *  
+## cgrage3     -0.82370    0.37797  -2.179 0.029480 *  
+## high        -0.16146    0.12893  -1.252 0.210660    
+## bahigh      -0.16131    0.16539  -0.975 0.329562    
+## employ      -0.14902    0.11792  -1.264 0.206514    
+## open         0.48758    0.13205   3.692 0.000231 ***
+## sexual      -0.17432    0.20311  -0.858 0.390906    
+## provide      0.11691    0.18172   0.643 0.520100    
+## supervis     0.21873    0.15834   1.381 0.167391    
+## other        0.12114    0.19441   0.623 0.533314    
+## cra47a      -0.02662    0.12079  -0.220 0.825571    
+## mental       0.38840    0.11934   3.255 0.001163 ** 
+## arrest       0.50687    0.11718   4.325 1.63e-05 ***
+## psh17a       0.63688    0.14022   4.542 6.06e-06 ***
+## cidi         0.71381    0.11593   6.157 9.70e-10 ***
+## cgneed       0.63948    0.18879   3.387 0.000726 ***
+## Outcome equation:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 54.925633   0.639980  85.824  &lt; 2e-16 ***
+## aodserv      7.283015   2.349753   3.099  0.00198 ** 
+## black       -2.425341   0.760232  -3.190  0.00145 ** 
+## hispanic    -2.140735   0.907547  -2.359  0.01847 *  
+## natam        1.007463   1.506590   0.669  0.50380    
+## chdage2     -1.967917   0.910989  -2.160  0.03093 *  
+## chdage3      0.007557   0.706326   0.011  0.99147    
+## ra          -0.852027   1.051672  -0.810  0.41799    
+##    Error terms:
+##       Estimate Std. Error t value Pr(&gt;|t|)    
+## sigma 11.98052    0.24369  49.163  &lt; 2e-16 ***
+## rho   -0.37884    0.09658  -3.923 9.19e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## --------------------------------------------</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="01_Section4.4.1.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## tm3: To request Inverse Mill’s Ratio</span></span>
+<span id="cb6-2"><a href="01_Section4.4.1.html#cb6-2" aria-hidden="true" tabindex="-1"></a>myprobit <span class="ot">&lt;-</span> <span class="fu">glm</span>(aodserv <span class="sc">~</span> cgrage1 <span class="sc">+</span> cgrage2 <span class="sc">+</span> cgrage3 <span class="sc">+</span> high <span class="sc">+</span> bahigh <span class="sc">+</span></span>
+<span id="cb6-3"><a href="01_Section4.4.1.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  employ <span class="sc">+</span> open <span class="sc">+</span> sexual <span class="sc">+</span> provide <span class="sc">+</span> supervis <span class="sc">+</span> other <span class="sc">+</span> cra47a <span class="sc">+</span></span>
+<span id="cb6-4"><a href="01_Section4.4.1.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  mental <span class="sc">+</span> arrest <span class="sc">+</span> psh17a <span class="sc">+</span> cidi <span class="sc">+</span> cgneed,</span>
+<span id="cb6-5"><a href="01_Section4.4.1.html#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">&quot;probit&quot;</span>),</span>
+<span id="cb6-6"><a href="01_Section4.4.1.html#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="at">data =</span> d1</span>
+<span id="cb6-7"><a href="01_Section4.4.1.html#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="01_Section4.4.1.html#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="01_Section4.4.1.html#cb6-9" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> d1 <span class="sc">%&gt;%</span></span>
+<span id="cb6-10"><a href="01_Section4.4.1.html#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">IMR =</span> <span class="fu">ifelse</span>(aodserv <span class="sc">==</span> <span class="dv">0</span>, <span class="sc">-</span>sampleSelection<span class="sc">::</span><span class="fu">invMillsRatio</span>(myprobit)<span class="sc">$</span>IMR0, sampleSelection<span class="sc">::</span><span class="fu">invMillsRatio</span>(myprobit)<span class="sc">$</span>IMR1))</span>
+<span id="cb6-11"><a href="01_Section4.4.1.html#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="01_Section4.4.1.html#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d1<span class="sc">$</span>IMR, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
+<pre><code>##  [1] -0.04965156 -0.16962811  2.09124856 -0.28590709 -0.11544331 -0.25318173
+##  [7] -0.02696082 -0.02306216 -0.05237780 -0.12828338</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="01_Section4.4.1.html#cb8-1" aria-hidden="true" tabindex="-1"></a>d1 <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="01_Section4.4.1.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">obs =</span> <span class="fu">n</span>(),</span>
+<span id="cb8-3"><a href="01_Section4.4.1.html#cb8-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean =</span> <span class="fu">mean</span>(IMR),</span>
+<span id="cb8-4"><a href="01_Section4.4.1.html#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(IMR),</span>
+<span id="cb8-5"><a href="01_Section4.4.1.html#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(IMR),</span>
+<span id="cb8-6"><a href="01_Section4.4.1.html#cb8-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(IMR), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 5
+##     obs          mean    sd   min   max
+##   &lt;int&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  1407 -0.0000000642 0.463 -1.52  2.60</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="01_Section4.4.1.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># To check saved statistics</span></span>
+<span id="cb10-2"><a href="01_Section4.4.1.html#cb10-2" aria-hidden="true" tabindex="-1"></a>tm1 <span class="ot">&lt;-</span> sampleSelection<span class="sc">::</span><span class="fu">treatReg</span>(aodserv <span class="sc">~</span> cgrage1 <span class="sc">+</span> cgrage2 <span class="sc">+</span> cgrage3 <span class="sc">+</span> high <span class="sc">+</span> bahigh <span class="sc">+</span></span>
+<span id="cb10-3"><a href="01_Section4.4.1.html#cb10-3" aria-hidden="true" tabindex="-1"></a>  employ <span class="sc">+</span> open <span class="sc">+</span> sexual <span class="sc">+</span> provide <span class="sc">+</span> supervis <span class="sc">+</span> other <span class="sc">+</span> cra47a <span class="sc">+</span></span>
+<span id="cb10-4"><a href="01_Section4.4.1.html#cb10-4" aria-hidden="true" tabindex="-1"></a>  mental <span class="sc">+</span> arrest <span class="sc">+</span> psh17a <span class="sc">+</span> cidi <span class="sc">+</span> cgneed,</span>
+<span id="cb10-5"><a href="01_Section4.4.1.html#cb10-5" aria-hidden="true" tabindex="-1"></a>external3 <span class="sc">~</span> aodserv <span class="sc">+</span> black <span class="sc">+</span> hispanic <span class="sc">+</span> natam <span class="sc">+</span> chdage2 <span class="sc">+</span> chdage3 <span class="sc">+</span> ra,</span>
+<span id="cb10-6"><a href="01_Section4.4.1.html#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="at">data =</span> d1</span>
+<span id="cb10-7"><a href="01_Section4.4.1.html#cb10-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-8"><a href="01_Section4.4.1.html#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tm1)</span></code></pre></div>
+<pre><code>## --------------------------------------------
+## Tobit treatment model (switching regression model)
+## Maximum Likelihood estimation
+## Newton-Raphson maximisation, 3 iterations
+## Return code 1: gradient close to zero (gradtol)
+## Log-Likelihood: -5779.918 
+## 1407 observations: 1295 non-participants (selection 0) and 112 participants (selection 1)
+## 
+## 28 free parameters (df = 1379)
+## Probit selection equation:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -1.75910    0.35352  -4.976 7.31e-07 ***
+## cgrage1     -0.76128    0.33057  -2.303 0.021429 *  
+## cgrage2     -0.68358    0.33400  -2.047 0.040880 *  
+## cgrage3     -0.70081    0.37681  -1.860 0.063121 .  
+## high        -0.11882    0.12992  -0.915 0.360609    
+## bahigh      -0.13220    0.16447  -0.804 0.421656    
+## employ      -0.14578    0.11867  -1.228 0.219499    
+## open         0.50951    0.13240   3.848 0.000124 ***
+## sexual      -0.23793    0.20419  -1.165 0.244125    
+## provide      0.04531    0.18550   0.244 0.807067    
+## supervis     0.17338    0.16051   1.080 0.280258    
+## other        0.10706    0.19382   0.552 0.580798    
+## cra47a      -0.01902    0.12132  -0.157 0.875439    
+## mental       0.36035    0.11964   3.012 0.002642 ** 
+## arrest       0.54352    0.11719   4.638 3.85e-06 ***
+## psh17a       0.62541    0.14106   4.434 1.00e-05 ***
+## cidi         0.69456    0.11677   5.948 3.43e-09 ***
+## cgneed       0.65257    0.18802   3.471 0.000535 ***
+## Outcome equation:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  59.8803     0.6491  92.247  &lt; 2e-16 ***
+## aodserv       8.6010     2.4749   3.475 0.000526 ***
+## black        -1.0393     0.7734  -1.344 0.179225    
+## hispanic     -3.1717     0.9226  -3.438 0.000604 ***
+## natam        -1.8137     1.5331  -1.183 0.236996    
+## chdage2      -3.5110     0.9259  -3.792 0.000156 ***
+## chdage3      -3.9853     0.7178  -5.552 3.38e-08 ***
+## ra           -1.4506     1.0688  -1.357 0.174925    
+##    Error terms:
+##       Estimate Std. Error t value Pr(&gt;|t|)    
+## sigma  12.1655     0.2473  49.199  &lt; 2e-16 ***
+## rho    -0.3603     0.1020  -3.532 0.000425 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## --------------------------------------------</code></pre>
+</div>
+<div id="bivariate-t-test" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Bivariate t-test</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="01_Section4.4.1.html#cb12-1" aria-hidden="true" tabindex="-1"></a>test1 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(external3 <span class="sc">~</span> aodserv, <span class="at">data =</span> d1, <span class="at">var.eq =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-2"><a href="01_Section4.4.1.html#cb12-2" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(test1)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 10
+##   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1    -1.04      56.9      58.0    -0.861   0.390      1405    -3.40      1.33
+## # ... with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="01_Section4.4.1.html#cb14-1" aria-hidden="true" tabindex="-1"></a>test2 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(internal3 <span class="sc">~</span> aodserv, <span class="at">data =</span> d1, <span class="at">var.eq =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-2"><a href="01_Section4.4.1.html#cb14-2" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(test2)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 10
+##   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1  -0.0889      54.1      54.2   -0.0757   0.940      1405    -2.39      2.21
+## # ... with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;</code></pre>
+</div>
+<div id="regression-control" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Regression Control</h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="01_Section4.4.1.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">## external</span></span>
+<span id="cb16-2"><a href="01_Section4.4.1.html#cb16-2" aria-hidden="true" tabindex="-1"></a>lm1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(external3 <span class="sc">~</span> aodserv <span class="sc">+</span> black <span class="sc">+</span> hispanic <span class="sc">+</span> natam <span class="sc">+</span> chdage2 <span class="sc">+</span> chdage3 <span class="sc">+</span> ra <span class="sc">+</span></span>
+<span id="cb16-3"><a href="01_Section4.4.1.html#cb16-3" aria-hidden="true" tabindex="-1"></a>  cgrage1 <span class="sc">+</span> cgrage2 <span class="sc">+</span> cgrage3 <span class="sc">+</span> high <span class="sc">+</span> bahigh <span class="sc">+</span></span>
+<span id="cb16-4"><a href="01_Section4.4.1.html#cb16-4" aria-hidden="true" tabindex="-1"></a>  employ <span class="sc">+</span> open <span class="sc">+</span> sexual <span class="sc">+</span> provide <span class="sc">+</span> supervis <span class="sc">+</span> other <span class="sc">+</span> cra47a <span class="sc">+</span></span>
+<span id="cb16-5"><a href="01_Section4.4.1.html#cb16-5" aria-hidden="true" tabindex="-1"></a>  mental <span class="sc">+</span> arrest <span class="sc">+</span> psh17a <span class="sc">+</span> cidi <span class="sc">+</span> cgneed,</span>
+<span id="cb16-6"><a href="01_Section4.4.1.html#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="at">data =</span> d1</span>
+<span id="cb16-7"><a href="01_Section4.4.1.html#cb16-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-8"><a href="01_Section4.4.1.html#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm1)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = external3 ~ aodserv + black + hispanic + natam + 
+##     chdage2 + chdage3 + ra + cgrage1 + cgrage2 + cgrage3 + high + 
+##     bahigh + employ + open + sexual + provide + supervis + other + 
+##     cra47a + mental + arrest + psh17a + cidi + cgneed, data = d1)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -30.348  -8.036   0.066   8.393  33.788 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 59.63256    2.50756  23.781  &lt; 2e-16 ***
+## aodserv     -0.07639    1.39550  -0.055 0.956356    
+## black       -1.18384    0.77819  -1.521 0.128418    
+## hispanic    -3.43055    0.93356  -3.675 0.000247 ***
+## natam       -2.04080    1.53283  -1.331 0.183280    
+## chdage2     -4.12914    0.97743  -4.224 2.55e-05 ***
+## chdage3     -4.19303    0.74541  -5.625 2.24e-08 ***
+## ra          -1.82419    1.10075  -1.657 0.097701 .  
+## cgrage1      2.14812    2.36725   0.907 0.364335    
+## cgrage2      0.74817    2.38893   0.313 0.754189    
+## cgrage3      1.26787    2.58228   0.491 0.623513    
+## high        -0.52629    0.76437  -0.689 0.491232    
+## bahigh      -1.34996    0.90995  -1.484 0.138154    
+## employ      -1.21689    0.67206  -1.811 0.070407 .  
+## open         1.85210    0.68703   2.696 0.007107 ** 
+## sexual      -1.26955    0.97772  -1.298 0.194337    
+## provide     -2.49281    1.03149  -2.417 0.015791 *  
+## supervis    -1.78870    0.91214  -1.961 0.050081 .  
+## other       -2.30187    1.07602  -2.139 0.032590 *  
+## cra47a      -0.85464    0.74812  -1.142 0.253496    
+## mental       1.26474    0.77729   1.627 0.103939    
+## arrest       1.50737    0.73360   2.055 0.040088 *  
+## psh17a       0.43293    1.17182   0.369 0.711848    
+## cidi         2.07327    0.74786   2.772 0.005641 ** 
+## cgneed       1.30013    1.67097   0.778 0.436660    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 11.93 on 1382 degrees of freedom
+## Multiple R-squared:  0.06632,    Adjusted R-squared:  0.0501 
+## F-statistic:  4.09 on 24 and 1382 DF,  p-value: 1.684e-10</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="01_Section4.4.1.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## internal</span></span>
+<span id="cb18-2"><a href="01_Section4.4.1.html#cb18-2" aria-hidden="true" tabindex="-1"></a>lm2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(internal3 <span class="sc">~</span> aodserv <span class="sc">+</span> black <span class="sc">+</span> hispanic <span class="sc">+</span> natam <span class="sc">+</span> chdage2 <span class="sc">+</span> chdage3 <span class="sc">+</span> ra <span class="sc">+</span></span>
+<span id="cb18-3"><a href="01_Section4.4.1.html#cb18-3" aria-hidden="true" tabindex="-1"></a>  cgrage1 <span class="sc">+</span> cgrage2 <span class="sc">+</span> cgrage3 <span class="sc">+</span> high <span class="sc">+</span> bahigh <span class="sc">+</span></span>
+<span id="cb18-4"><a href="01_Section4.4.1.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  employ <span class="sc">+</span> open <span class="sc">+</span> sexual <span class="sc">+</span> provide <span class="sc">+</span> supervis <span class="sc">+</span> other <span class="sc">+</span> cra47a <span class="sc">+</span></span>
+<span id="cb18-5"><a href="01_Section4.4.1.html#cb18-5" aria-hidden="true" tabindex="-1"></a>  mental <span class="sc">+</span> arrest <span class="sc">+</span> psh17a <span class="sc">+</span> cidi <span class="sc">+</span> cgneed,</span>
+<span id="cb18-6"><a href="01_Section4.4.1.html#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="at">data =</span> d1</span>
+<span id="cb18-7"><a href="01_Section4.4.1.html#cb18-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-8"><a href="01_Section4.4.1.html#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm2)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = internal3 ~ aodserv + black + hispanic + natam + 
+##     chdage2 + chdage3 + ra + cgrage1 + cgrage2 + cgrage3 + high + 
+##     bahigh + employ + open + sexual + provide + supervis + other + 
+##     cra47a + mental + arrest + psh17a + cidi + cgneed, data = d1)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -26.887  -8.335  -0.177   8.266  38.084 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 57.78878    2.45679  23.522  &lt; 2e-16 ***
+## aodserv     -2.04757    1.36724  -1.498 0.134468    
+## black       -2.39499    0.76243  -3.141 0.001718 ** 
+## hispanic    -2.21251    0.91465  -2.419 0.015694 *  
+## natam        0.96135    1.50180   0.640 0.522194    
+## chdage2     -1.99496    0.95764  -2.083 0.037417 *  
+## chdage3      0.10588    0.73032   0.145 0.884752    
+## ra          -1.55199    1.07846  -1.439 0.150355    
+## cgrage1     -2.79050    2.31932  -1.203 0.229122    
+## cgrage2     -2.53393    2.34056  -1.083 0.279168    
+## cgrage3     -1.39309    2.53000  -0.551 0.581978    
+## high        -0.82272    0.74889  -1.099 0.272141    
+## bahigh      -1.41785    0.89152  -1.590 0.111982    
+## employ      -1.42970    0.65845  -2.171 0.030078 *  
+## open         1.60614    0.67312   2.386 0.017161 *  
+## sexual      -0.28381    0.95792  -0.296 0.767059    
+## provide     -0.72467    1.01061  -0.717 0.473458    
+## supervis    -0.79821    0.89367  -0.893 0.371917    
+## other       -1.03314    1.05423  -0.980 0.327259    
+## cra47a      -0.69837    0.73298  -0.953 0.340867    
+## mental       2.72274    0.76155   3.575 0.000362 ***
+## arrest       0.00504    0.71874   0.007 0.994406    
+## psh17a       1.02273    1.14810   0.891 0.373190    
+## cidi         2.94720    0.73272   4.022 6.08e-05 ***
+## cgneed       1.50006    1.63713   0.916 0.359684    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 11.69 on 1382 degrees of freedom
+## Multiple R-squared:  0.05524,    Adjusted R-squared:  0.03883 
+## F-statistic: 3.367 on 24 and 1382 DF,  p-value: 8.306e-08</code></pre>
+</div>
+<div id="sample-description" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Sample Description</h2>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="01_Section4.4.1.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">## race aodserv</span></span>
+<span id="cb20-2"><a href="01_Section4.4.1.html#cb20-2" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> d1 <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="01_Section4.4.1.html#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(aodserv, black, hispanic, natam) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="01_Section4.4.1.html#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">race =</span> <span class="fu">case_when</span>(</span>
+<span id="cb20-5"><a href="01_Section4.4.1.html#cb20-5" aria-hidden="true" tabindex="-1"></a>    black <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb20-6"><a href="01_Section4.4.1.html#cb20-6" aria-hidden="true" tabindex="-1"></a>    hispanic <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb20-7"><a href="01_Section4.4.1.html#cb20-7" aria-hidden="true" tabindex="-1"></a>    natam <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">4</span>,</span>
+<span id="cb20-8"><a href="01_Section4.4.1.html#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">1</span></span>
+<span id="cb20-9"><a href="01_Section4.4.1.html#cb20-9" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb20-10"><a href="01_Section4.4.1.html#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="01_Section4.4.1.html#cb20-11" aria-hidden="true" tabindex="-1"></a>gmodels<span class="sc">::</span><span class="fu">CrossTable</span>(d2<span class="sc">$</span>race, d2<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d2$aodserv 
+##      d2$race |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            1 |       716 |        55 |       771 | 
+##              |     0.929 |     0.071 |     0.548 | 
+##              |     0.553 |     0.491 |           | 
+## -------------|-----------|-----------|-----------|
+##            2 |       319 |        31 |       350 | 
+##              |     0.911 |     0.089 |     0.249 | 
+##              |     0.246 |     0.277 |           | 
+## -------------|-----------|-----------|-----------|
+##            3 |       207 |        12 |       219 | 
+##              |     0.945 |     0.055 |     0.156 | 
+##              |     0.160 |     0.107 |           | 
+## -------------|-----------|-----------|-----------|
+##            4 |        53 |        14 |        67 | 
+##              |     0.791 |     0.209 |     0.048 | 
+##              |     0.041 |     0.125 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  18.24426     d.f. =  3     p =  0.0003916627 
+## 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="01_Section4.4.1.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## age aodserv</span></span>
+<span id="cb22-2"><a href="01_Section4.4.1.html#cb22-2" aria-hidden="true" tabindex="-1"></a>d3 <span class="ot">&lt;-</span> d1 <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="01_Section4.4.1.html#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(aodserv, chdage2, chdage3) <span class="sc">%&gt;%</span></span>
+<span id="cb22-4"><a href="01_Section4.4.1.html#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age =</span> <span class="fu">case_when</span>(</span>
+<span id="cb22-5"><a href="01_Section4.4.1.html#cb22-5" aria-hidden="true" tabindex="-1"></a>    chdage2 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb22-6"><a href="01_Section4.4.1.html#cb22-6" aria-hidden="true" tabindex="-1"></a>    chdage3 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb22-7"><a href="01_Section4.4.1.html#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">3</span></span>
+<span id="cb22-8"><a href="01_Section4.4.1.html#cb22-8" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb22-9"><a href="01_Section4.4.1.html#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="01_Section4.4.1.html#cb22-10" aria-hidden="true" tabindex="-1"></a>gmodels<span class="sc">::</span><span class="fu">CrossTable</span>(d3<span class="sc">$</span>age, d3<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d3$aodserv 
+##       d3$age |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            1 |       239 |        19 |       258 | 
+##              |     0.926 |     0.074 |     0.183 | 
+##              |     0.185 |     0.170 |           | 
+## -------------|-----------|-----------|-----------|
+##            2 |       606 |        55 |       661 | 
+##              |     0.917 |     0.083 |     0.470 | 
+##              |     0.468 |     0.491 |           | 
+## -------------|-----------|-----------|-----------|
+##            3 |       450 |        38 |       488 | 
+##              |     0.922 |     0.078 |     0.347 | 
+##              |     0.347 |     0.339 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  0.2623022     d.f. =  2     p =  0.8770852 
+## 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="01_Section4.4.1.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="do">## ra aodserv</span></span>
+<span id="cb24-2"><a href="01_Section4.4.1.html#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(d1<span class="sc">$</span>ra, d1<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d1$aodserv 
+##        d1$ra |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            0 |      1178 |        34 |      1212 | 
+##              |     0.972 |     0.028 |     0.861 | 
+##              |     0.910 |     0.304 |           | 
+## -------------|-----------|-----------|-----------|
+##            1 |       117 |        78 |       195 | 
+##              |     0.600 |     0.400 |     0.139 | 
+##              |     0.090 |     0.696 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  317.1802     d.f. =  1     p =  5.958214e-71 
+## 
+## Pearson&#39;s Chi-squared test with Yates&#39; continuity correction 
+## ------------------------------------------------------------
+## Chi^2 =  312.1238     d.f. =  1     p =  7.526006e-70 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="01_Section4.4.1.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="do">## cgage aodserv</span></span>
+<span id="cb26-2"><a href="01_Section4.4.1.html#cb26-2" aria-hidden="true" tabindex="-1"></a>d4 <span class="ot">&lt;-</span> d1 <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="01_Section4.4.1.html#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(aodserv, cgrage1, cgrage2, cgrage3) <span class="sc">%&gt;%</span></span>
+<span id="cb26-4"><a href="01_Section4.4.1.html#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cgage =</span> <span class="fu">case_when</span>(</span>
+<span id="cb26-5"><a href="01_Section4.4.1.html#cb26-5" aria-hidden="true" tabindex="-1"></a>    cgrage1 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb26-6"><a href="01_Section4.4.1.html#cb26-6" aria-hidden="true" tabindex="-1"></a>    cgrage2 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb26-7"><a href="01_Section4.4.1.html#cb26-7" aria-hidden="true" tabindex="-1"></a>    cgrage3 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb26-8"><a href="01_Section4.4.1.html#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">4</span></span>
+<span id="cb26-9"><a href="01_Section4.4.1.html#cb26-9" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb26-10"><a href="01_Section4.4.1.html#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="01_Section4.4.1.html#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(d4<span class="sc">$</span>cgage, d4<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d4$aodserv 
+##     d4$cgage |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            1 |       744 |        60 |       804 | 
+##              |     0.925 |     0.075 |     0.571 | 
+##              |     0.575 |     0.536 |           | 
+## -------------|-----------|-----------|-----------|
+##            2 |       424 |        41 |       465 | 
+##              |     0.912 |     0.088 |     0.330 | 
+##              |     0.327 |     0.366 |           | 
+## -------------|-----------|-----------|-----------|
+##            3 |       103 |         8 |       111 | 
+##              |     0.928 |     0.072 |     0.079 | 
+##              |     0.080 |     0.071 |           | 
+## -------------|-----------|-----------|-----------|
+##            4 |        24 |         3 |        27 | 
+##              |     0.889 |     0.111 |     0.019 | 
+##              |     0.019 |     0.027 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  1.189546     d.f. =  3     p =  0.7555126 
+## 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="01_Section4.4.1.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="do">## cgedu aodserv</span></span>
+<span id="cb28-2"><a href="01_Section4.4.1.html#cb28-2" aria-hidden="true" tabindex="-1"></a>d5 <span class="ot">&lt;-</span> d1 <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="01_Section4.4.1.html#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(aodserv, high, bahigh) <span class="sc">%&gt;%</span></span>
+<span id="cb28-4"><a href="01_Section4.4.1.html#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cgedu =</span> <span class="fu">case_when</span>(</span>
+<span id="cb28-5"><a href="01_Section4.4.1.html#cb28-5" aria-hidden="true" tabindex="-1"></a>    high <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb28-6"><a href="01_Section4.4.1.html#cb28-6" aria-hidden="true" tabindex="-1"></a>    bahigh <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb28-7"><a href="01_Section4.4.1.html#cb28-7" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">1</span></span>
+<span id="cb28-8"><a href="01_Section4.4.1.html#cb28-8" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb28-9"><a href="01_Section4.4.1.html#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="01_Section4.4.1.html#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(d5<span class="sc">$</span>cgedu, d5<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d5$aodserv 
+##     d5$cgedu |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            1 |       398 |        45 |       443 | 
+##              |     0.898 |     0.102 |     0.315 | 
+##              |     0.307 |     0.402 |           | 
+## -------------|-----------|-----------|-----------|
+##            2 |       573 |        45 |       618 | 
+##              |     0.927 |     0.073 |     0.439 | 
+##              |     0.442 |     0.402 |           | 
+## -------------|-----------|-----------|-----------|
+##            3 |       324 |        22 |       346 | 
+##              |     0.936 |     0.064 |     0.246 | 
+##              |     0.250 |     0.196 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  4.520902     d.f. =  2     p =  0.1043035 
+## 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="01_Section4.4.1.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="do">## employ aodserv</span></span>
+<span id="cb30-2"><a href="01_Section4.4.1.html#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(d1<span class="sc">$</span>employ, d1<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d1$aodserv 
+##    d1$employ |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            0 |       613 |        69 |       682 | 
+##              |     0.899 |     0.101 |     0.485 | 
+##              |     0.473 |     0.616 |           | 
+## -------------|-----------|-----------|-----------|
+##            1 |       682 |        43 |       725 | 
+##              |     0.941 |     0.059 |     0.515 | 
+##              |     0.527 |     0.384 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  8.40587     d.f. =  1     p =  0.003740114 
+## 
+## Pearson&#39;s Chi-squared test with Yates&#39; continuity correction 
+## ------------------------------------------------------------
+## Chi^2 =  7.844196     d.f. =  1     p =  0.005098412 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="01_Section4.4.1.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="do">## open aodserv</span></span>
+<span id="cb32-2"><a href="01_Section4.4.1.html#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(d1<span class="sc">$</span>open, d1<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d1$aodserv 
+##      d1$open |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            0 |       584 |        23 |       607 | 
+##              |     0.962 |     0.038 |     0.431 | 
+##              |     0.451 |     0.205 |           | 
+## -------------|-----------|-----------|-----------|
+##            1 |       711 |        89 |       800 | 
+##              |     0.889 |     0.111 |     0.569 | 
+##              |     0.549 |     0.795 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  25.35062     d.f. =  1     p =  4.779984e-07 
+## 
+## Pearson&#39;s Chi-squared test with Yates&#39; continuity correction 
+## ------------------------------------------------------------
+## Chi^2 =  24.35924     d.f. =  1     p =  7.994254e-07 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="01_Section4.4.1.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mtype aodserv</span></span>
+<span id="cb34-2"><a href="01_Section4.4.1.html#cb34-2" aria-hidden="true" tabindex="-1"></a>d6 <span class="ot">&lt;-</span> d1 <span class="sc">%&gt;%</span></span>
+<span id="cb34-3"><a href="01_Section4.4.1.html#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(aodserv, sexual, provide, supervis, other) <span class="sc">%&gt;%</span></span>
+<span id="cb34-4"><a href="01_Section4.4.1.html#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mytype =</span> <span class="fu">case_when</span>(</span>
+<span id="cb34-5"><a href="01_Section4.4.1.html#cb34-5" aria-hidden="true" tabindex="-1"></a>    sexual <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb34-6"><a href="01_Section4.4.1.html#cb34-6" aria-hidden="true" tabindex="-1"></a>    provide <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb34-7"><a href="01_Section4.4.1.html#cb34-7" aria-hidden="true" tabindex="-1"></a>    supervis <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">4</span>,</span>
+<span id="cb34-8"><a href="01_Section4.4.1.html#cb34-8" aria-hidden="true" tabindex="-1"></a>    other <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">5</span>,</span>
+<span id="cb34-9"><a href="01_Section4.4.1.html#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">1</span></span>
+<span id="cb34-10"><a href="01_Section4.4.1.html#cb34-10" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb34-11"><a href="01_Section4.4.1.html#cb34-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-12"><a href="01_Section4.4.1.html#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(d6<span class="sc">$</span>mytype, d6<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d6$aodserv 
+##    d6$mytype |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            1 |       355 |        20 |       375 | 
+##              |     0.947 |     0.053 |     0.267 | 
+##              |     0.274 |     0.179 |           | 
+## -------------|-----------|-----------|-----------|
+##            2 |       246 |        10 |       256 | 
+##              |     0.961 |     0.039 |     0.182 | 
+##              |     0.190 |     0.089 |           | 
+## -------------|-----------|-----------|-----------|
+##            3 |       208 |        23 |       231 | 
+##              |     0.900 |     0.100 |     0.164 | 
+##              |     0.161 |     0.205 |           | 
+## -------------|-----------|-----------|-----------|
+##            4 |       312 |        41 |       353 | 
+##              |     0.884 |     0.116 |     0.251 | 
+##              |     0.241 |     0.366 |           | 
+## -------------|-----------|-----------|-----------|
+##            5 |       174 |        18 |       192 | 
+##              |     0.906 |     0.094 |     0.136 | 
+##              |     0.134 |     0.161 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  17.49052     d.f. =  4     p =  0.001551586 
+## 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="01_Section4.4.1.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">## cra47a aodserv</span></span>
+<span id="cb36-2"><a href="01_Section4.4.1.html#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(d1<span class="sc">$</span>cra47a, d1<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d1$aodserv 
+##    d1$cra47a |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            0 |       925 |        63 |       988 | 
+##              |     0.936 |     0.064 |     0.702 | 
+##              |     0.714 |     0.562 |           | 
+## -------------|-----------|-----------|-----------|
+##            1 |       370 |        49 |       419 | 
+##              |     0.883 |     0.117 |     0.298 | 
+##              |     0.286 |     0.438 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  11.35724     d.f. =  1     p =  0.0007515451 
+## 
+## Pearson&#39;s Chi-squared test with Yates&#39; continuity correction 
+## ------------------------------------------------------------
+## Chi^2 =  10.64298     d.f. =  1     p =  0.001104893 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="01_Section4.4.1.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mental aodserv</span></span>
+<span id="cb38-2"><a href="01_Section4.4.1.html#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(d1<span class="sc">$</span>mental, d1<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d1$aodserv 
+##    d1$mental |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            0 |       977 |        53 |      1030 | 
+##              |     0.949 |     0.051 |     0.732 | 
+##              |     0.754 |     0.473 |           | 
+## -------------|-----------|-----------|-----------|
+##            1 |       318 |        59 |       377 | 
+##              |     0.844 |     0.156 |     0.268 | 
+##              |     0.246 |     0.527 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  41.56367     d.f. =  1     p =  1.140941e-10 
+## 
+## Pearson&#39;s Chi-squared test with Yates&#39; continuity correction 
+## ------------------------------------------------------------
+## Chi^2 =  40.14231     d.f. =  1     p =  2.361194e-10 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="01_Section4.4.1.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="do">## arrest aodserv</span></span>
+<span id="cb40-2"><a href="01_Section4.4.1.html#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(d1<span class="sc">$</span>arrest, d1<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d1$aodserv 
+##    d1$arrest |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            0 |       920 |        39 |       959 | 
+##              |     0.959 |     0.041 |     0.682 | 
+##              |     0.710 |     0.348 |           | 
+## -------------|-----------|-----------|-----------|
+##            1 |       375 |        73 |       448 | 
+##              |     0.837 |     0.163 |     0.318 | 
+##              |     0.290 |     0.652 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  62.31709     d.f. =  1     p =  2.923769e-15 
+## 
+## Pearson&#39;s Chi-squared test with Yates&#39; continuity correction 
+## ------------------------------------------------------------
+## Chi^2 =  60.65928     d.f. =  1     p =  6.785947e-15 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="01_Section4.4.1.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="do">## psh17a aodserv</span></span>
+<span id="cb42-2"><a href="01_Section4.4.1.html#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(d1<span class="sc">$</span>psh17a, d1<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d1$aodserv 
+##    d1$psh17a |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            0 |      1199 |        70 |      1269 | 
+##              |     0.945 |     0.055 |     0.902 | 
+##              |     0.926 |     0.625 |           | 
+## -------------|-----------|-----------|-----------|
+##            1 |        96 |        42 |       138 | 
+##              |     0.696 |     0.304 |     0.098 | 
+##              |     0.074 |     0.375 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  105.4861     d.f. =  1     p =  9.556549e-25 
+## 
+## Pearson&#39;s Chi-squared test with Yates&#39; continuity correction 
+## ------------------------------------------------------------
+## Chi^2 =  102.1124     d.f. =  1     p =  5.245956e-24 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="01_Section4.4.1.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="do">## cidi aodserv</span></span>
+<span id="cb44-2"><a href="01_Section4.4.1.html#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(d1<span class="sc">$</span>cidi, d1<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d1$aodserv 
+##      d1$cidi |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            0 |       964 |        41 |      1005 | 
+##              |     0.959 |     0.041 |     0.714 | 
+##              |     0.744 |     0.366 |           | 
+## -------------|-----------|-----------|-----------|
+##            1 |       331 |        71 |       402 | 
+##              |     0.823 |     0.177 |     0.286 | 
+##              |     0.256 |     0.634 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  72.29889     d.f. =  1     p =  1.849519e-17 
+## 
+## Pearson&#39;s Chi-squared test with Yates&#39; continuity correction 
+## ------------------------------------------------------------
+## Chi^2 =  70.45695     d.f. =  1     p =  4.704207e-17 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="01_Section4.4.1.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="do">## cgneed aodserv</span></span>
+<span id="cb46-2"><a href="01_Section4.4.1.html#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(d1<span class="sc">$</span>cgneed, d1<span class="sc">$</span>aodserv, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1407 
+## 
+##  
+##              | d1$aodserv 
+##    d1$cgneed |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            0 |      1257 |        91 |      1348 | 
+##              |     0.932 |     0.068 |     0.958 | 
+##              |     0.971 |     0.812 |           | 
+## -------------|-----------|-----------|-----------|
+##            1 |        38 |        21 |        59 | 
+##              |     0.644 |     0.356 |     0.042 | 
+##              |     0.029 |     0.188 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |      1295 |       112 |      1407 | 
+##              |     0.920 |     0.080 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  64.18202     d.f. =  1     p =  1.134394e-15 
+## 
+## Pearson&#39;s Chi-squared test with Yates&#39; continuity correction 
+## ------------------------------------------------------------
+## Chi^2 =  60.30568     d.f. =  1     p =  8.121281e-15 
+## 
+## </code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="02_Section4.4.2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

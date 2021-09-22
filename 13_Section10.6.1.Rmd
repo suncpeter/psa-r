@@ -1,0 +1,116 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
+# Section 10.6.1 Modeling Doses of Treatment (SD & PS)
+
+## Preparation
+
+```{r message=F, warning=F, error=F}
+library(nnet)
+library(lmtest)
+library(sandwich)
+library(stargazer)
+library(tidyverse)
+
+# Load Data
+d <- haven::read_dta("data/Data_Chapter10/chpt10.dta")
+
+# Function to replicate Stata tab
+tab <- function(df, var) {
+  df %>%
+    group_by({{ var }})  %>%
+    summarise(n = n(), .groups = "drop")  %>%
+    mutate(Percent = 100 * round((n / sum(n)), 4),
+           Cum. = 100 * round(cumsum(n / sum(n)),4)) %>% 
+    rename(Freq. = n)
+}
+```
+
+## Create Treatment Variable
+
+```{r message=FALSE, warning=FALSE}
+tab(d, k_adc)
+
+# Treatment
+d <- d %>% 
+  mutate(kadc_ds = as.factor(
+    case_when(
+      k_adc == 0 ~ 0,
+      k_adc >0 & k_adc <34 ~ 1,
+      k_adc >= 34 ~ 2 )))
+
+tab(d, kadc_ds)
+```
+
+## Generalized Propensity Scores
+
+### Mulitinomial Logit Model 
+
+```{r message=FALSE, warning=FALSE}
+# Use multinomial logit model to predict generalized propensity scores
+# set kadc_ds = 2 as base outcome
+d <- d %>% 
+  mutate(kadc_ds = relevel(kadc_ds, ref = 3)) 
+
+# mlogit
+m <- nnet::multinom(
+  kadc_ds ~ pcg_adc + age97 + mratio96 + pcged97 + black,
+  data = d
+)
+summary(m)
+
+# prediction
+pr <- as.data.frame(fitted(m)) %>% 
+  rename(
+    pr0 = "0",
+    pr1 = "1",
+    pr2 = "2"
+  )
+head(pr)
+summary(pr)
+```
+
+## Sampling Weights
+
+```{r message=FALSE, warning=FALSE}
+# define inverse of the generalized p-scores as sampling weights
+d <- d %>% 
+  mutate(dose_w = case_when(
+    kadc_ds == 0 ~ 1 / pr$pr0,
+    kadc_ds == 1 ~ 1 / pr$pr1,
+    kadc_ds == 2 ~ 1 / pr$pr2
+  ))
+summary(d$dose_w)
+```
+
+## Dummy Variables
+
+```{r message=FALSE, warning=FALSE}
+# create t-1 dummy variables to measure dose categories
+d <- d %>% 
+  mutate(kadc_ds0 = ifelse(kadc_ds == 0, 1, 0),
+         kadc_ds1 = ifelse(kadc_ds == 1, 1, 0))
+
+tab(d, kadc_ds0)
+tab(d, kadc_ds1)
+```
+
+## Regression
+
+### Without Control
+
+```{r}
+# Regression does not control for selection
+reg1 <- lm(lwss97 ~ male + black + age97 + pcged97 + mratio96 + pcg_adc + kadc_ds0 + kadc_ds1, data = d)
+lmtest::coeftest(reg1,vcovCL, cluster = d$pcg_id)
+```
+
+### With Control
+
+```{r}
+# Regression controls for selection using inverse p-scores as weights
+reg2 <- lm(lwss97 ~ male + black + age97 + pcged97 + mratio96 + pcg_adc + kadc_ds0 + kadc_ds1, weights = dose_w, data = d)
+lmtest::coeftest(reg2, vcovCL, cluster = d$pcg_id)
+```

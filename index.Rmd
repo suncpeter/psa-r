@@ -1,0 +1,20 @@
+---
+title: "R Code for *Propensity Score Analysis*"
+author: "Shanshan Du, Peter Sun, and Shenyang Guo"
+date: "December 30, 2020"
+site: bookdown::bookdown_site
+documentclass: book
+output:
+  bookdown::gitbook:
+    split_by: rmd
+---
+
+# Preface
+
+The R code presented here is based on Shenyang Guo and Mark Fraser's Stata code.^[https://ssw.unc.edu/psa/]
+
+```{r echo=F, out.width="50%"}
+knitr::include_graphics("img/cover.png")
+```
+
+\newpage

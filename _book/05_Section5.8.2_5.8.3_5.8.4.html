@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>6 Section 5.8.2, 5.8.3, and 5.8.4 (SD &amp; PS) | R Code for Propensity Score Analysis</title>
+  <meta name="description" content="6 Section 5.8.2, 5.8.3, and 5.8.4 (SD &amp; PS) | R Code for Propensity Score Analysis" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="6 Section 5.8.2, 5.8.3, and 5.8.4 (SD &amp; PS) | R Code for Propensity Score Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="6 Section 5.8.2, 5.8.3, and 5.8.4 (SD &amp; PS) | R Code for Propensity Score Analysis" />
+  
+  
+  
+
+<meta name="author" content="Shanshan Du, Peter Sun, and Shenyang Guo" />
+
+
+<meta name="date" content="2020-12-30" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="04_Section5.8.1.html"/>
+<link rel="next" href="06_Section5.8.5.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html"><i class="fa fa-check"></i><b>2</b> Section 4.4.1 Application of the Treatment Effect Model to Analysis of Observational Data (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#preparation"><i class="fa fa-check"></i><b>2.1</b> Preparation</a></li>
+<li class="chapter" data-level="2.2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#treatment-effect"><i class="fa fa-check"></i><b>2.2</b> Treatment Effect</a></li>
+<li class="chapter" data-level="2.3" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#bivariate-t-test"><i class="fa fa-check"></i><b>2.3</b> Bivariate t-test</a></li>
+<li class="chapter" data-level="2.4" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#regression-control"><i class="fa fa-check"></i><b>2.4</b> Regression Control</a></li>
+<li class="chapter" data-level="2.5" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#sample-description"><i class="fa fa-check"></i><b>2.5</b> Sample Description</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html"><i class="fa fa-check"></i><b>3</b> Section 4.4.2 Evaluation of Treatment Effects From a Program With a Group Randomization Design (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#preparation-1"><i class="fa fa-check"></i><b>3.1</b> Preparation</a></li>
+<li class="chapter" data-level="3.2" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#treatment-effect-using-robust-to-control-for-clustering"><i class="fa fa-check"></i><b>3.2</b> Treatment Effect: Using Robust to Control for Clustering</a></li>
+<li class="chapter" data-level="3.3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#bivariate-t-test-1"><i class="fa fa-check"></i><b>3.3</b> Bivariate t-test</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html"><i class="fa fa-check"></i><b>4</b> Section 4.4.3 Main Features of Treatreg (PS &amp; SD)</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#preparation-2"><i class="fa fa-check"></i><b>4.1</b> Preparation</a></li>
+<li class="chapter" data-level="4.2" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#run-models"><i class="fa fa-check"></i><b>4.2</b> Run Models</a></li>
+<li class="chapter" data-level="4.3" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#extract-coefficients"><i class="fa fa-check"></i><b>4.3</b> Extract Coefficients</a></li>
+<li class="chapter" data-level="4.4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#get-combined-results"><i class="fa fa-check"></i><b>4.4</b> Get Combined Results</a></li>
+<li class="chapter" data-level="4.5" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#results"><i class="fa fa-check"></i><b>4.5</b> Results</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html"><i class="fa fa-check"></i><b>5</b> Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#preparation-3"><i class="fa fa-check"></i><b>5.1</b> Preparation</a></li>
+<li class="chapter" data-level="5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#propensity-score-estimation"><i class="fa fa-check"></i><b>5.2</b> Propensity Score Estimation</a></li>
+<li class="chapter" data-level="5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-comparisons"><i class="fa fa-check"></i><b>5.3</b> Bivariate Comparisons</a></li>
+<li class="chapter" data-level="5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-covariate-balcance-check"><i class="fa fa-check"></i><b>5.4</b> PSM based on Logistic regression &amp; Covariate Balcance Check</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.4.1</b> Scheme 1 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.4.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.4.2</b> Scheme 2 - Nearest neighbor within caliper .1*SD</a></li>
+<li class="chapter" data-level="5.4.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.4.3</b> Scheme 3 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.4.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.4.4</b> Scheme 4 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-2"><i class="fa fa-check"></i><b>5.5</b> PSM based on Logistic regression 2</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.5.1</b> Scheme 5 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6---nearest-neighbor-within-caliper-.1sd-note-caliper-in-matchit-is-not-real-data"><i class="fa fa-check"></i><b>5.5.2</b> Scheme 6 - Nearest neighbor within caliper .1*SD (Note: caliper in MatchIt is not real data)</a></li>
+<li class="chapter" data-level="5.5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.5.3</b> Scheme 7 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.5.4</b> Scheme 8 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-3"><i class="fa fa-check"></i><b>5.6</b> PSM based on Logistic regression 3</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.6.1</b> Scheme 9 - Nearest neighbor within caliper .25*SD</a></li>
+<li class="chapter" data-level="5.6.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.6.2</b> Scheme 10 - Nearest neighbor within caliper .1*SD</a></li>
+<li class="chapter" data-level="5.6.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.6.3</b> Scheme 11 - Mahalanobis without propensity score</a></li>
+<li class="chapter" data-level="5.6.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.6.4</b> Scheme 12 - Mahalanobis with propensity score</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-test-after-matching"><i class="fa fa-check"></i><b>5.7</b> Bivariate test after matching</a></li>
+<li class="chapter" data-level="5.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#kaplan-meier-and-significance-test-of-difference-on-survivor-function"><i class="fa fa-check"></i><b>5.8</b> Kaplan-Meier and significance test of difference on survivor function</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#all"><i class="fa fa-check"></i><b>5.8.1</b> All</a></li>
+<li class="chapter" data-level="5.8.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1"><i class="fa fa-check"></i><b>5.8.2</b> Scheme 1</a></li>
+<li class="chapter" data-level="5.8.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2"><i class="fa fa-check"></i><b>5.8.3</b> Scheme 2</a></li>
+<li class="chapter" data-level="5.8.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3"><i class="fa fa-check"></i><b>5.8.4</b> Scheme 3</a></li>
+<li class="chapter" data-level="5.8.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4"><i class="fa fa-check"></i><b>5.8.5</b> Scheme 4</a></li>
+<li class="chapter" data-level="5.8.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5"><i class="fa fa-check"></i><b>5.8.6</b> Scheme 5</a></li>
+<li class="chapter" data-level="5.8.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6"><i class="fa fa-check"></i><b>5.8.7</b> Scheme 6</a></li>
+<li class="chapter" data-level="5.8.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7"><i class="fa fa-check"></i><b>5.8.8</b> Scheme 7</a></li>
+<li class="chapter" data-level="5.8.9" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8"><i class="fa fa-check"></i><b>5.8.9</b> Scheme 8</a></li>
+<li class="chapter" data-level="5.8.10" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9"><i class="fa fa-check"></i><b>5.8.10</b> Scheme 9</a></li>
+<li class="chapter" data-level="5.8.11" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10"><i class="fa fa-check"></i><b>5.8.11</b> Scheme 10</a></li>
+<li class="chapter" data-level="5.8.12" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11"><i class="fa fa-check"></i><b>5.8.12</b> Scheme 11</a></li>
+<li class="chapter" data-level="5.8.13" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12"><i class="fa fa-check"></i><b>5.8.13</b> Scheme 12</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html"><i class="fa fa-check"></i><b>6</b> Section 5.8.2, 5.8.3, and 5.8.4 (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.2-optimal-matching"><i class="fa fa-check"></i><b>6.1</b> Section 5.8.2 Optimal Matching</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#load-data"><i class="fa fa-check"></i><b>6.1.1</b> Load Data</a></li>
+<li class="chapter" data-level="6.1.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#bivariate-comparisons-1"><i class="fa fa-check"></i><b>6.1.2</b> Bivariate Comparisons</a></li>
+<li class="chapter" data-level="6.1.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#outcome-without-bias-control"><i class="fa fa-check"></i><b>6.1.3</b> Outcome Without Bias Control</a></li>
+<li class="chapter" data-level="6.1.4" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#matching"><i class="fa fa-check"></i><b>6.1.4</b> Matching</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.3-post-full-matching-analysis-of-outcome"><i class="fa fa-check"></i><b>6.2</b> Section 5.8.3 Post-Full-Matching Analysis of Outcome</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#hodges-lehmann-aligned-rank-test"><i class="fa fa-check"></i><b>6.2.1</b> Hodges-Lehmann Aligned Rank Test</a></li>
+<li class="chapter" data-level="6.2.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cohens-d"><i class="fa fa-check"></i><b>6.2.2</b> Cohen’s d</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.4-post-matching-analysis-using-regression-of-difference-scores"><i class="fa fa-check"></i><b>6.3</b> Section 5.8.4 Post-Matching Analysis Using Regression of Difference Scores</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html"><i class="fa fa-check"></i><b>7</b> Section 5.8.5 Multilevel Propensity Score (PS)</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccpros57"><i class="fa fa-check"></i><b>7.1</b> cccpros57</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data"><i class="fa fa-check"></i><b>7.1.1</b> Import Data</a></li>
+<li class="chapter" data-level="7.1.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score"><i class="fa fa-check"></i><b>7.1.2</b> Obtain Single-Level p-score</a></li>
+<li class="chapter" data-level="7.1.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model"><i class="fa fa-check"></i><b>7.1.3</b> Obtain School-Level p-score Model</a></li>
+<li class="chapter" data-level="7.1.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check"><i class="fa fa-check"></i><b>7.1.4</b> Before-Matching Balance Check</a></li>
+<li class="chapter" data-level="7.1.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl"><i class="fa fa-check"></i><b>7.1.5</b> Matching with ps_sgl</a></li>
+<li class="chapter" data-level="7.1.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch"><i class="fa fa-check"></i><b>7.1.6</b> Matching with ps_sch</a></li>
+<li class="chapter" data-level="7.1.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc"><i class="fa fa-check"></i><b>7.1.7</b> Check ICC</a></li>
+<li class="chapter" data-level="7.1.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel"><i class="fa fa-check"></i><b>7.1.8</b> Outcome Analsis: Multilevel</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccragg24"><i class="fa fa-check"></i><b>7.2</b> cccragg24</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data-1"><i class="fa fa-check"></i><b>7.2.1</b> Import Data</a></li>
+<li class="chapter" data-level="7.2.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score-1"><i class="fa fa-check"></i><b>7.2.2</b> Obtain Single-Level p-score</a></li>
+<li class="chapter" data-level="7.2.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model-1"><i class="fa fa-check"></i><b>7.2.3</b> Obtain School-Level p-score Model</a></li>
+<li class="chapter" data-level="7.2.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check-1"><i class="fa fa-check"></i><b>7.2.4</b> Before-Matching Balance Check</a></li>
+<li class="chapter" data-level="7.2.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl-1"><i class="fa fa-check"></i><b>7.2.5</b> Matching with ps_sgl</a></li>
+<li class="chapter" data-level="7.2.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch-1"><i class="fa fa-check"></i><b>7.2.6</b> Matching with ps_sch</a></li>
+<li class="chapter" data-level="7.2.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc-1"><i class="fa fa-check"></i><b>7.2.7</b> Check ICC</a></li>
+<li class="chapter" data-level="7.2.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel-1"><i class="fa fa-check"></i><b>7.2.8</b> Outcome Analsis: Multilevel</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html"><i class="fa fa-check"></i><b>8</b> Section 5.8.6 Comparison of Rand-gbm and Stata-boost (PS)</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#import-data-2"><i class="fa fa-check"></i><b>8.1</b> Import Data</a></li>
+<li class="chapter" data-level="8.2" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-rand-gbm-ps"><i class="fa fa-check"></i><b>8.2</b> Optimal pair matching Using pscores generated by Rand-gbm (ps)</a></li>
+<li class="chapter" data-level="8.3" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-stata-boost-psb"><i class="fa fa-check"></i><b>8.3</b> Optimal pair matching Using pscores generated by Stata-boost (psb)</a></li>
+<li class="chapter" data-level="8.4" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#balance-checks"><i class="fa fa-check"></i><b>8.4</b> Balance Checks</a></li>
+<li class="chapter" data-level="8.5" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#postmatching-regression-analysis-using-difference-scores"><i class="fa fa-check"></i><b>8.5</b> Postmatching Regression Analysis Using Difference Scores</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html"><i class="fa fa-check"></i><b>9</b> Section 6.5.2 Subclassification &amp; Cox Proportional Hazards (PS)</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#import-data-3"><i class="fa fa-check"></i><b>9.1</b> Import Data</a></li>
+<li class="chapter" data-level="9.2" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-propensity-score-using-logistic"><i class="fa fa-check"></i><b>9.2</b> Create Propensity Score Using Logistic</a></li>
+<li class="chapter" data-level="9.3" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-conduct-balance-check-using-normalized-difference"><i class="fa fa-check"></i><b>9.3</b> Function to Conduct Balance Check Using Normalized Difference</a></li>
+<li class="chapter" data-level="9.4" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-normalized-difference"><i class="fa fa-check"></i><b>9.4</b> Balance Check on the Original Sample (Normalized Difference)</a></li>
+<li class="chapter" data-level="9.5" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-check-balance-using-chi-square-tests"><i class="fa fa-check"></i><b>9.5</b> Function to Check Balance Using Chi-Square Tests</a></li>
+<li class="chapter" data-level="9.6" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-chi-square"><i class="fa fa-check"></i><b>9.6</b> Balance Check on the Original Sample (Chi-Square)</a></li>
+<li class="chapter" data-level="9.7" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#get-quintiles"><i class="fa fa-check"></i><b>9.7</b> Get Quintiles</a></li>
+<li class="chapter" data-level="9.8" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-subclasses-using-quintiles"><i class="fa fa-check"></i><b>9.8</b> Create 5 Subclasses Using Quintiles</a></li>
+<li class="chapter" data-level="9.9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#check-imbalance-post-subclassification-5-subclasses"><i class="fa fa-check"></i><b>9.9</b> Check Imbalance Post-Subclassification (5 Subclasses)</a></li>
+<li class="chapter" data-level="9.10" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trimming-search-for-best-cutoff-alpha-for-overlap"><i class="fa fa-check"></i><b>9.10</b> Trimming: Search for Best Cutoff Alpha for Overlap</a></li>
+<li class="chapter" data-level="9.11" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trim-observations"><i class="fa fa-check"></i><b>9.11</b> Trim Observations</a></li>
+<li class="chapter" data-level="9.12" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-new-subclasses-and-check-imbalance"><i class="fa fa-check"></i><b>9.12</b> Create 5 New Subclasses and Check Imbalance</a></li>
+<li class="chapter" data-level="9.13" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#outcome-analysis-by-subclass"><i class="fa fa-check"></i><b>9.13</b> Outcome Analysis by Subclass</a></li>
+<li class="chapter" data-level="9.14" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#aggregate-results"><i class="fa fa-check"></i><b>9.14</b> Aggregate Results</a></li>
+<li class="chapter" data-level="9.15" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#subclassification-with-matchit"><i class="fa fa-check"></i><b>9.15</b> Subclassification with MatchIt</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html"><i class="fa fa-check"></i><b>10</b> Section 7.3.1 Propensity Score Weighting (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#preparation-4"><i class="fa fa-check"></i><b>10.1</b> Preparation</a></li>
+<li class="chapter" data-level="10.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-1-obtain-weights-with-weightit"><i class="fa fa-check"></i><b>10.2</b> Solution 1: Obtain Weights with WeightIt</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights"><i class="fa fa-check"></i><b>10.2.1</b> Weights</a></li>
+<li class="chapter" data-level="10.2.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights"><i class="fa fa-check"></i><b>10.2.2</b> PSW With ATE Weights</a></li>
+<li class="chapter" data-level="10.2.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights"><i class="fa fa-check"></i><b>10.2.3</b> PSW With ATT Weights</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-2-creating-the-weights-manually"><i class="fa fa-check"></i><b>10.3</b> Solution 2: Creating the Weights Manually</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights-1"><i class="fa fa-check"></i><b>10.3.1</b> Weights</a></li>
+<li class="chapter" data-level="10.3.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights-1"><i class="fa fa-check"></i><b>10.3.2</b> PSW With ATE Weights</a></li>
+<li class="chapter" data-level="10.3.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights-1"><i class="fa fa-check"></i><b>10.3.3</b> PSW With ATT Weights</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#imbalance-checks"><i class="fa fa-check"></i><b>10.4</b> Imbalance Checks</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html"><i class="fa fa-check"></i><b>11</b> Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#preparation-5"><i class="fa fa-check"></i><b>11.1</b> Preparation</a></li>
+<li class="chapter" data-level="11.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#propensity-score-weighting"><i class="fa fa-check"></i><b>11.2</b> Propensity Score Weighting</a></li>
+<li class="chapter" data-level="11.3" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#cox-proportional-hazards-model"><i class="fa fa-check"></i><b>11.3</b> Cox Proportional Hazards Model</a></li>
+<li class="chapter" data-level="11.4" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#checking-imbalance"><i class="fa fa-check"></i><b>11.4</b> Checking Imbalance</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#chi-square-tests-original-sample"><i class="fa fa-check"></i><b>11.4.1</b> Chi-square Tests: Original Sample</a></li>
+<li class="chapter" data-level="11.4.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#weighted-logistic-regression"><i class="fa fa-check"></i><b>11.4.2</b> Weighted Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html"><i class="fa fa-check"></i><b>12</b> Section 8.4.1 Matching with Bias-Corrected and Robust Variance Estimators (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#preparation-6"><i class="fa fa-check"></i><b>12.1</b> Preparation</a></li>
+<li class="chapter" data-level="12.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#breusch-pagan-test-for-heteroskedasticity"><i class="fa fa-check"></i><b>12.2</b> Breusch-Pagan Test for Heteroskedasticity</a></li>
+<li class="chapter" data-level="12.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#matching-estimators"><i class="fa fa-check"></i><b>12.3</b> Matching Estimators</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-sate"><i class="fa fa-check"></i><b>12.3.1</b> Sample Average Treatment Effect (SATE)</a></li>
+<li class="chapter" data-level="12.3.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-pate"><i class="fa fa-check"></i><b>12.3.2</b> Population Average Treatment Effect (PATE)</a></li>
+<li class="chapter" data-level="12.3.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-treated-satt"><i class="fa fa-check"></i><b>12.3.3</b> Sample average treatment effect for the treated (SATT)</a></li>
+<li class="chapter" data-level="12.3.4" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-treated-patt"><i class="fa fa-check"></i><b>12.3.4</b> Population average treatment effect for the treated (PATT)</a></li>
+<li class="chapter" data-level="12.3.5" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-controls-satc"><i class="fa fa-check"></i><b>12.3.5</b> Sample average treatment effect for the controls (SATC)</a></li>
+<li class="chapter" data-level="12.3.6" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-controls-patc"><i class="fa fa-check"></i><b>12.3.6</b> Population average treatment effect for the controls (PATC)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html"><i class="fa fa-check"></i><b>13</b> Section 8.4.2 Efficacy Subset &amp; Matching Estimators (PS)</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#check-sample-sizes-and-get-summary-statistics"><i class="fa fa-check"></i><b>13.1</b> Check Sample Sizes and Get Summary Statistics</a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4adq"><i class="fa fa-check"></i><b>13.1.1</b> g4adq</a></li>
+<li class="chapter" data-level="13.1.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4hi"><i class="fa fa-check"></i><b>13.1.2</b> g4hi</a></li>
+<li class="chapter" data-level="13.1.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5adq"><i class="fa fa-check"></i><b>13.1.3</b> g5adq</a></li>
+<li class="chapter" data-level="13.1.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5hi"><i class="fa fa-check"></i><b>13.1.4</b> g5hi</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#functions-for-matching"><i class="fa fa-check"></i><b>13.2</b> Functions for Matching</a></li>
+<li class="chapter" data-level="13.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#define-matching-variables"><i class="fa fa-check"></i><b>13.3</b> Define Matching Variables</a></li>
+<li class="chapter" data-level="13.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#matching-1"><i class="fa fa-check"></i><b>13.4</b> Matching</a></li>
+<li class="chapter" data-level="13.5" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#function-to-aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.5</b> Function to Aggregate Using Rubin’s Rule</a></li>
+<li class="chapter" data-level="13.6" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.6</b> Aggregate Using Rubin’s Rule</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html"><i class="fa fa-check"></i><b>14</b> Section 10.6.1 Modeling Doses of Treatment (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#preparation-7"><i class="fa fa-check"></i><b>14.1</b> Preparation</a></li>
+<li class="chapter" data-level="14.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#create-treatment-variable"><i class="fa fa-check"></i><b>14.2</b> Create Treatment Variable</a></li>
+<li class="chapter" data-level="14.3" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#generalized-propensity-scores"><i class="fa fa-check"></i><b>14.3</b> Generalized Propensity Scores</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#mulitinomial-logit-model"><i class="fa fa-check"></i><b>14.3.1</b> Mulitinomial Logit Model</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#sampling-weights"><i class="fa fa-check"></i><b>14.4</b> Sampling Weights</a></li>
+<li class="chapter" data-level="14.5" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#dummy-variables"><i class="fa fa-check"></i><b>14.5</b> Dummy Variables</a></li>
+<li class="chapter" data-level="14.6" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#regression"><i class="fa fa-check"></i><b>14.6</b> Regression</a>
+<ul>
+<li class="chapter" data-level="14.6.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#without-control"><i class="fa fa-check"></i><b>14.6.1</b> Without Control</a></li>
+<li class="chapter" data-level="14.6.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#with-control"><i class="fa fa-check"></i><b>14.6.2</b> With Control</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html"><i class="fa fa-check"></i><b>15</b> Section 11.5.1 &amp; 11.5.2 Sensitivity Analysis of the Effects (SD &amp; PS)</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.1-sensitivity-analysis-of-the-effects"><i class="fa fa-check"></i><b>15.1</b> Section 11.5.1 Sensitivity Analysis of the Effects</a></li>
+<li class="chapter" data-level="15.2" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.2-sensitivity-analysis-pair-matching"><i class="fa fa-check"></i><b>15.2</b> Section 11.5.2 Sensitivity Analysis &amp; Pair Matching</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Code for <em>Propensity Score Analysis</em></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="section-5.8.2-5.8.3-and-5.8.4-sd-ps" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Section 5.8.2, 5.8.3, and 5.8.4 (SD &amp; PS)</h1>
+<div id="section-5.8.2-optimal-matching" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Section 5.8.2 Optimal Matching</h2>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb234-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(optmatch)</span>
+<span id="cb234-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb234-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb234-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb234-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb234-4"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb234-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sandwich)</span>
+<span id="cb234-5"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb234-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb234-6"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb234-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb234-7"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb234-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rlang)</span>
+<span id="cb234-8"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb234-8" aria-hidden="true" tabindex="-1"></a>select <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>select</span></code></pre></div>
+<div id="load-data" class="section level3" number="6.1.1">
+<h3><span class="header-section-number">6.1.1</span> Load Data</h3>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb235-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/chpt5_2_original.dta&quot;</span>)</span>
+<span id="cb235-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb235-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/chpt5_2.dta&quot;</span>)</span>
+<span id="cb235-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb235-3" aria-hidden="true" tabindex="-1"></a>cds <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/chpt5_2ps.dta&quot;</span>)</span></code></pre></div>
+</div>
+<div id="bivariate-comparisons-1" class="section level3" number="6.1.2">
+<h3><span class="header-section-number">6.1.2</span> Bivariate Comparisons</h3>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb236-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Intergenerational dependence </span></span>
+<span id="cb236-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb236-2" aria-hidden="true" tabindex="-1"></a>gmodels<span class="sc">::</span><span class="fu">CrossTable</span>(d<span class="sc">$</span>kuse, d<span class="sc">$</span>puse, </span>
+<span id="cb236-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb236-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">prop.c =</span> <span class="cn">FALSE</span>, <span class="at">prop.r =</span> <span class="cn">FALSE</span>, <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb236-4"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb236-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |         N / Table Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  1003 
+## 
+##  
+##              | d$puse 
+##       d$kuse |         0 |         1 | Row Total | 
+## -------------|-----------|-----------|-----------|
+##            0 |       615 |       114 |       729 | 
+##              |     0.613 |     0.114 |           | 
+## -------------|-----------|-----------|-----------|
+##            1 |       154 |       120 |       274 | 
+##              |     0.154 |     0.120 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |       769 |       234 |      1003 | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson&#39;s Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  88.27405     d.f. =  1     p =  5.698621e-21 
+## 
+## Pearson&#39;s Chi-squared test with Yates&#39; continuity correction 
+## ------------------------------------------------------------
+## Chi^2 =  86.70687     d.f. =  1     p =  1.258586e-20 
+## 
+## </code></pre>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wilcoxon Rank-Sum (Mann-Whitney) test and t-test</span></span>
+<span id="cb238-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-2" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span></span>
+<span id="cb238-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(mratio96, pcged97, pcg_adc, black, age97, male, kuse) <span class="sc">%&gt;%</span></span>
+<span id="cb238-4"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>kuse, <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb238-5"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(variable) <span class="sc">%&gt;%</span></span>
+<span id="cb238-6"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb238-7"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wilcoxon =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">wilcox.test</span>(.<span class="sc">$</span>value <span class="sc">~</span>.<span class="sc">$</span>kuse, <span class="at">correct =</span> F))) <span class="sc">%&gt;%</span></span>
+<span id="cb238-8"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wilcoxon.stat =</span> <span class="fu">map</span>(wilcoxon, <span class="sc">~</span><span class="fu">round</span>(.<span class="sc">$</span>statistic, <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb238-9"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wilcoxon.pvalue =</span> <span class="fu">map</span>(wilcoxon, <span class="sc">~</span><span class="fu">round</span>(.<span class="sc">$</span>p.value, <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb238-10"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(wilcoxon.stat, wilcoxon.pvalue)) <span class="sc">%&gt;%</span></span>
+<span id="cb238-11"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ttest =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">t.test</span>(.<span class="sc">$</span>value <span class="sc">~</span> .<span class="sc">$</span>kuse, <span class="at">var.equal =</span> T))) <span class="sc">%&gt;%</span></span>
+<span id="cb238-12"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">t.stat =</span> <span class="fu">map</span>(ttest, <span class="sc">~</span><span class="fu">round</span>(.<span class="sc">$</span>statistic, <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb238-13"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">t.pvalue =</span> <span class="fu">map</span>(ttest, <span class="sc">~</span><span class="fu">round</span>(.<span class="sc">$</span>p.value, <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb238-14"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(t.stat, t.pvalue)) <span class="sc">%&gt;%</span></span>
+<span id="cb238-15"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb238-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>data, <span class="sc">-</span>wilcoxon, <span class="sc">-</span>ttest)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 5
+## # Groups:   variable [6]
+##   variable wilcoxon.stat wilcoxon.pvalue  t.stat t.pvalue
+##   &lt;chr&gt;            &lt;dbl&gt;           &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+## 1 mratio96       172618.           0      12.3      0    
+## 2 pcged97        147410.           0      12.3      0    
+## 3 pcg_adc         69728            0     -11.0      0    
+## 4 black           58038            0     -12.7      0    
+## 5 age97           87129            0.002  -3.11     0.002
+## 6 male           101544            0.636   0.473    0.637</code></pre>
+</div>
+<div id="outcome-without-bias-control" class="section level3" number="6.1.3">
+<h3><span class="header-section-number">6.1.3</span> Outcome Without Bias Control</h3>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb240-1" aria-hidden="true" tabindex="-1"></a><span class="co"># visual</span></span>
+<span id="cb240-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb240-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> </span>
+<span id="cb240-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb240-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">treatfac =</span> <span class="fu">case_when</span>(kuse<span class="sc">==</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">&quot;Nonusers&quot;</span>, </span>
+<span id="cb240-4"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb240-4" aria-hidden="true" tabindex="-1"></a>                                      kuse<span class="sc">==</span><span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Users&quot;</span>))               </span>
+<span id="cb240-5"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb240-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(d, <span class="fu">aes</span>(<span class="at">y =</span> lwss97, <span class="at">x =</span> treatfac)) <span class="sc">+</span> </span>
+<span id="cb240-6"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb240-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb241-1" aria-hidden="true" tabindex="-1"></a><span class="co"># t-test</span></span>
+<span id="cb241-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb241-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(lwss97 <span class="sc">~</span> kuse, <span class="at">data =</span> d, <span class="at">var.equal =</span> T) <span class="sc">%&gt;%</span> </span>
+<span id="cb241-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb241-3" aria-hidden="true" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 10
+##   estimate estimate1 estimate2 statistic  p.value parameter conf.low conf.high
+##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1     9.82      104.      94.2      8.51 6.27e-17      1001     7.56      12.1
+## # ... with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;</code></pre>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb243-1" aria-hidden="true" tabindex="-1"></a><span class="co"># regression </span></span>
+<span id="cb243-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb243-2" aria-hidden="true" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">lm</span>( lwss97 <span class="sc">~</span> kuse <span class="sc">+</span> male <span class="sc">+</span> black <span class="sc">+</span> age97 <span class="sc">+</span> pcged97 <span class="sc">+</span> mratio96 <span class="sc">+</span> pcg_adc, </span>
+<span id="cb243-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb243-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> d)</span>
+<span id="cb243-4"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb243-4" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(lmtest<span class="sc">::</span><span class="fu">coeftest</span>(reg, <span class="at">vcov =</span> vcovCL, <span class="at">cluster =</span> d<span class="sc">$</span>pcg_id))</span></code></pre></div>
+<pre><code>## # A tibble: 8 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   84.9       4.50      18.9  4.30e-68
+## 2 kuse          -4.73      1.39      -3.40 7.00e- 4
+## 3 male          -2.00      0.987     -2.02 4.34e- 2
+## 4 black         -1.88      1.23      -1.53 1.27e- 1
+## 5 age97          0.873     0.170      5.14 3.30e- 7
+## 6 pcged97        0.910     0.336      2.71 6.91e- 3
+## 7 mratio96       1.13      0.332      3.41 6.67e- 4
+## 8 pcg_adc       -0.758     0.311     -2.44 1.50e- 2</code></pre>
+</div>
+<div id="matching" class="section level3" number="6.1.4">
+<h3><span class="header-section-number">6.1.4</span> Matching</h3>
+<p><em>Note: To be consistent with the STATA result, we will use the propensity scores created by Stata.</em></p>
+<div id="distribution-of-estimated-propensity-scores" class="section level4" number="6.1.4.1">
+<h4><span class="header-section-number">6.1.4.1</span> Distribution of estimated propensity scores</h4>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb245-1" aria-hidden="true" tabindex="-1"></a>cds <span class="ot">&lt;-</span> cds <span class="sc">%&gt;%</span> </span>
+<span id="cb245-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb245-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>( <span class="at">treatfac =</span> <span class="fu">case_when</span>( kuse<span class="sc">==</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">&quot;Nonusers&quot;</span>, </span>
+<span id="cb245-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb245-3" aria-hidden="true" tabindex="-1"></a>                                       kuse<span class="sc">==</span><span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Users&quot;</span>))</span>
+<span id="cb245-4"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb245-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb245-5"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb245-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cds, <span class="fu">aes</span>(<span class="at">x =</span> treatfac, <span class="at">y =</span> ps)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
+<span id="cb245-6"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb245-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Box Plots of Estimated Propensity Scores&quot;</span>) <span class="sc">+</span></span>
+<span id="cb245-7"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb245-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb246-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cds, <span class="fu">aes</span>(<span class="at">x =</span> ps, <span class="at">color =</span> treatfac)) <span class="sc">+</span> </span>
+<span id="cb246-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb246-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y=</span>..density..), <span class="at">fill=</span><span class="st">&quot;white&quot;</span>, <span class="at">position=</span><span class="st">&quot;dodge&quot;</span>)<span class="sc">+</span></span>
+<span id="cb246-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb246-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha=</span>.<span class="dv">2</span>, <span class="at">fill=</span><span class="st">&quot;#FF6666&quot;</span>) <span class="sc">+</span></span>
+<span id="cb246-4"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb246-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Histograms of Estimated Propensity Scores&quot;</span>) <span class="sc">+</span></span>
+<span id="cb246-5"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb246-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-52-2.png" width="672" /></p>
+</div>
+<div id="optimal-matching" class="section level4" number="6.1.4.2">
+<h4><span class="header-section-number">6.1.4.2</span> Optimal Matching</h4>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(cds)</span>
+<span id="cb247-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-2" aria-hidden="true" tabindex="-1"></a>prank <span class="ot">&lt;-</span> <span class="fu">rank</span>(ps)</span>
+<span id="cb247-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(prank) <span class="ot">&lt;-</span> kid</span>
+<span id="cb247-4"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-4" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">outer</span>(prank[kuse<span class="sc">==</span><span class="dv">1</span>], prank[kuse<span class="sc">==</span><span class="dv">0</span>], <span class="st">&quot;-&quot;</span>)</span>
+<span id="cb247-5"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-5" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">abs</span>(d1)</span>
+<span id="cb247-6"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb247-7"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fullmatch fm</span></span>
+<span id="cb247-8"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-8" aria-hidden="true" tabindex="-1"></a>fm <span class="ot">&lt;-</span> <span class="fu">fullmatch</span>(d1)</span>
+<span id="cb247-9"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-9" aria-hidden="true" tabindex="-1"></a>(fm.d <span class="ot">&lt;-</span> <span class="fu">matched.distances</span>(fm,d1,<span class="at">pres=</span><span class="cn">TRUE</span>))</span>
+<span id="cb247-10"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-10" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(fm.d,max)</span>
+<span id="cb247-11"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb247-12"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-12" aria-hidden="true" tabindex="-1"></a><span class="co">#variable match, (vm1 - at least 1 at most 4)</span></span>
+<span id="cb247-13"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-13" aria-hidden="true" tabindex="-1"></a>vm1 <span class="ot">&lt;-</span> <span class="fu">fullmatch</span>(d1,<span class="at">min.controls=</span><span class="dv">1</span>,<span class="at">max.controls=</span><span class="dv">4</span>)</span>
+<span id="cb247-14"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-14" aria-hidden="true" tabindex="-1"></a>(vm1.d <span class="ot">&lt;-</span> <span class="fu">matched.distances</span>(vm1,d1,<span class="at">pres=</span><span class="cn">TRUE</span>))</span>
+<span id="cb247-15"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-15" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(vm1.d,max)</span>
+<span id="cb247-16"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb247-17"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-17" aria-hidden="true" tabindex="-1"></a><span class="co">#variable match, (vm2 - at least 2 at most 4)</span></span>
+<span id="cb247-18"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-18" aria-hidden="true" tabindex="-1"></a>vm2 <span class="ot">&lt;-</span> <span class="fu">fullmatch</span>(d1,<span class="at">min.controls=</span><span class="dv">2</span>,<span class="at">max.controls=</span><span class="dv">4</span>)</span>
+<span id="cb247-19"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-19" aria-hidden="true" tabindex="-1"></a>(vm2.d <span class="ot">&lt;-</span> <span class="fu">matched.distances</span>(vm2,d1,<span class="at">pres=</span><span class="cn">TRUE</span>))</span>
+<span id="cb247-20"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-20" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(vm2.d,max)</span>
+<span id="cb247-21"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb247-22"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-22" aria-hidden="true" tabindex="-1"></a><span class="co">#variable match, (vm3 - use Hensen&#39;s equaion)</span></span>
+<span id="cb247-23"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-23" aria-hidden="true" tabindex="-1"></a>vm3 <span class="ot">&lt;-</span> <span class="fu">fullmatch</span>(d1,<span class="at">min.controls=</span><span class="fl">1.33</span>,<span class="at">max.controls=</span><span class="fl">5.32</span>)</span>
+<span id="cb247-24"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-24" aria-hidden="true" tabindex="-1"></a>(vm3.d <span class="ot">&lt;-</span> <span class="fu">matched.distances</span>(vm3,d1,<span class="at">pres=</span><span class="cn">TRUE</span>))</span>
+<span id="cb247-25"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-25" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(vm3.d,max)</span>
+<span id="cb247-26"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb247-27"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-27" aria-hidden="true" tabindex="-1"></a><span class="co">#variable match, (vm4 at least 2 at most 7)</span></span>
+<span id="cb247-28"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-28" aria-hidden="true" tabindex="-1"></a>vm4 <span class="ot">&lt;-</span> <span class="fu">fullmatch</span>(d1,<span class="at">min.controls=</span><span class="dv">2</span>,<span class="at">max.controls=</span><span class="dv">7</span>)</span>
+<span id="cb247-29"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-29" aria-hidden="true" tabindex="-1"></a>(vm4.d <span class="ot">&lt;-</span> <span class="fu">matched.distances</span>(vm4,d1,<span class="at">pres=</span><span class="cn">TRUE</span>))</span>
+<span id="cb247-30"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-30" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(vm4.d,max)</span>
+<span id="cb247-31"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb247-32"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-32" aria-hidden="true" tabindex="-1"></a><span class="co">#pairmatch pm</span></span>
+<span id="cb247-33"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-33" aria-hidden="true" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">pairmatch</span>(d1, <span class="at">controls=</span><span class="dv">1</span>)</span>
+<span id="cb247-34"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-34" aria-hidden="true" tabindex="-1"></a>(pm.d <span class="ot">&lt;-</span> <span class="fu">matched.distances</span>(pm,d1,<span class="at">pres=</span><span class="cn">TRUE</span>))</span>
+<span id="cb247-35"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb247-35" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(pm.d,max)</span></code></pre></div>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb248-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">unlist</span>(fm.d))</span></code></pre></div>
+<pre><code>## [1] 35.89389</code></pre>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb250-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">unlist</span>(fm.d))</span></code></pre></div>
+<pre><code>## [1] 31120</code></pre>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb252-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stratumStructure</span>(fm)</span></code></pre></div>
+<pre><code>##  25:1  13:1  11:1  10:1   9:1   6:1   5:1   4:1   3:1   2:1   1:1   1:2   1:3 
+##     1     1     3     1     1     3     4     3     5     5    49     9    11 
+##   1:4   1:5   1:6   1:7   1:8   1:9  1:10  1:11  1:15  1:17  1:18  1:19  1:21 
+##     7     8     3     3     4     2     3     2     1     1     1     1     1 
+##  1:24  1:31 1:248 
+##     1     1     1</code></pre>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb254-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">unlist</span>(vm1.d))</span></code></pre></div>
+<pre><code>## [1] 328.7579</code></pre>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb256-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">unlist</span>(vm1.d))</span></code></pre></div>
+<pre><code>## [1] 239664.5</code></pre>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb258-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stratumStructure</span>(vm1)</span></code></pre></div>
+<pre><code>## 1:1 1:3 1:4 
+## 122   1 151</code></pre>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb260-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">unlist</span>(vm2.d))</span></code></pre></div>
+<pre><code>## [1] 348.1852</code></pre>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb262-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">unlist</span>(vm2.d))</span></code></pre></div>
+<pre><code>## [1] 253827</code></pre>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb264-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stratumStructure</span>(vm2)</span></code></pre></div>
+<pre><code>## 1:2 1:3 1:4 
+## 183   1  90</code></pre>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb266-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">unlist</span>(vm3.d))</span></code></pre></div>
+<pre><code>## [1] 269.7222</code></pre>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb268-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">unlist</span>(vm3.d))</span></code></pre></div>
+<pre><code>## [1] 196627.5</code></pre>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb270-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stratumStructure</span>(vm3)</span></code></pre></div>
+<pre><code>## 1:1 1:6 
+## 183  91</code></pre>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb272-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">unlist</span>(vm4.d))</span></code></pre></div>
+<pre><code>## [1] 312.3162</code></pre>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb274-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">unlist</span>(vm4.d))</span></code></pre></div>
+<pre><code>## [1] 227678.5</code></pre>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb276-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stratumStructure</span>(vm4)</span></code></pre></div>
+<pre><code>## 1:2 1:3 1:7 
+## 237   1  36</code></pre>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">unlist</span>(pm.d))</span></code></pre></div>
+<pre><code>## [1] 143.2263</code></pre>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb280-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">unlist</span>(pm.d))</span></code></pre></div>
+<pre><code>## [1] 39244</code></pre>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb282-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stratumStructure</span>(pm)</span></code></pre></div>
+<pre><code>## 1:1 0:1 
+## 274 455</code></pre>
+</div>
+<div id="table-5.10.-covariate-imbalance-before-and-after-matching-by-matching-scheme" class="section level4" number="6.1.4.3">
+<h4><span class="header-section-number">6.1.4.3</span> Table 5.10. Covariate Imbalance Before and After Matching by Matching Scheme</h4>
+<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imbalance function</span></span>
+<span id="cb284-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-2" aria-hidden="true" tabindex="-1"></a>imbalance <span class="ot">&lt;-</span> <span class="cf">function</span>(cov, method) {</span>
+<span id="cb284-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb284-4"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get quosure</span></span>
+<span id="cb284-5"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-5" aria-hidden="true" tabindex="-1"></a>  cov_name <span class="ot">&lt;-</span> cov</span>
+<span id="cb284-6"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-6" aria-hidden="true" tabindex="-1"></a>  method_name <span class="ot">&lt;-</span> method</span>
+<span id="cb284-7"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-7" aria-hidden="true" tabindex="-1"></a>  cov <span class="ot">&lt;-</span> rlang<span class="sc">::</span><span class="fu">parse_expr</span>(cov)</span>
+<span id="cb284-8"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-8" aria-hidden="true" tabindex="-1"></a>  method <span class="ot">&lt;-</span> rlang<span class="sc">::</span><span class="fu">parse_expr</span>(method)</span>
+<span id="cb284-9"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb284-10"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># dx</span></span>
+<span id="cb284-11"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-11" aria-hidden="true" tabindex="-1"></a>  df2 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb284-12"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(kuse) <span class="sc">%&gt;%</span></span>
+<span id="cb284-13"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">m_x :=</span> <span class="fu">mean</span>(<span class="sc">!!</span>cov), </span>
+<span id="cb284-14"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">sd_x :=</span> <span class="fu">sd</span>(<span class="sc">!!</span>cov), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb284-15"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-15" aria-hidden="true" tabindex="-1"></a>  mxt <span class="ot">=</span> df2[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb284-16"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-16" aria-hidden="true" tabindex="-1"></a>  mxc <span class="ot">=</span> df2[<span class="dv">1</span>,<span class="dv">2</span>]</span>
+<span id="cb284-17"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-17" aria-hidden="true" tabindex="-1"></a>  s2xt <span class="ot">=</span> df2[<span class="dv">2</span>,<span class="dv">3</span>]<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb284-18"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-18" aria-hidden="true" tabindex="-1"></a>  s2xc <span class="ot">=</span> df2[<span class="dv">1</span>,<span class="dv">3</span>]<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb284-19"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-19" aria-hidden="true" tabindex="-1"></a>  sx <span class="ot">=</span> <span class="fu">sqrt</span>((s2xt<span class="sc">+</span>s2xc)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb284-20"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-20" aria-hidden="true" tabindex="-1"></a>  dx <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">abs</span>(mxt<span class="sc">-</span>mxc)<span class="sc">/</span>sx)</span>
+<span id="cb284-21"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb284-22"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># dxm</span></span>
+<span id="cb284-23"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (method <span class="sc">!=</span> <span class="st">&quot;before&quot;</span>) {</span>
+<span id="cb284-24"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-24" aria-hidden="true" tabindex="-1"></a>    df3 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb284-25"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">group_by</span>(<span class="sc">!!</span>method, kuse) <span class="sc">%&gt;%</span></span>
+<span id="cb284-26"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">m_x =</span> <span class="fu">mean</span>(<span class="sc">!!</span>cov),</span>
+<span id="cb284-27"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-27" aria-hidden="true" tabindex="-1"></a>                <span class="at">sd_x =</span> <span class="fu">sd</span>(<span class="sc">!!</span>cov),</span>
+<span id="cb284-28"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-28" aria-hidden="true" tabindex="-1"></a>                <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb284-29"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-29" aria-hidden="true" tabindex="-1"></a>                <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb284-30"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb284-31"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-31" aria-hidden="true" tabindex="-1"></a>    mxc <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">mean</span>(<span class="fu">filter</span>(df3, kuse <span class="sc">==</span> <span class="dv">0</span>)<span class="sc">$</span>m_x))</span>
+<span id="cb284-32"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-32" aria-hidden="true" tabindex="-1"></a>    mxt <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">mean</span>(<span class="fu">filter</span>(df3, kuse <span class="sc">==</span> <span class="dv">1</span>)<span class="sc">$</span>m_x))</span>
+<span id="cb284-33"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-33" aria-hidden="true" tabindex="-1"></a>    dxm_num <span class="ot">=</span> <span class="fu">abs</span>(mxt<span class="sc">-</span>mxc)</span>
+<span id="cb284-34"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-34" aria-hidden="true" tabindex="-1"></a>    dxm <span class="ot">=</span> <span class="fu">as.numeric</span>(dxm_num<span class="sc">/</span>sx)</span>
+<span id="cb284-35"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-35" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb284-36"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">tibble</span>(<span class="at">cov =</span> cov_name, <span class="at">method =</span> method_name, <span class="at">dx =</span> <span class="cn">NA</span>, <span class="at">dxm =</span> dxm))</span>
+<span id="cb284-37"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb284-38"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-38" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb284-39"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">tibble</span>(<span class="at">cov =</span> cov_name, <span class="at">method =</span> method_name, <span class="at">dx =</span> dx, <span class="at">dxm =</span> <span class="cn">NA</span>))</span>
+<span id="cb284-40"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-40" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb284-41"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-41" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb284-42"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb284-43"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Define covariates</span></span>
+<span id="cb284-44"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-44" aria-hidden="true" tabindex="-1"></a>cov_labels <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">cov =</span> <span class="fu">c</span>(<span class="st">&quot;mratio96&quot;</span>, <span class="st">&quot;pcged97&quot;</span>, <span class="st">&quot;pcg_adc&quot;</span>, </span>
+<span id="cb284-45"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-45" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">&quot;black&quot;</span>, <span class="st">&quot;age97&quot;</span>, <span class="st">&quot;male&quot;</span>),</span>
+<span id="cb284-46"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-46" aria-hidden="true" tabindex="-1"></a>                         <span class="at">new =</span> <span class="fu">c</span>(<span class="st">&quot;Ratio of family income to poverty line in 1996&quot;</span>, </span>
+<span id="cb284-47"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-47" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;Caregiver&#39;s education in 1997 (years of schooling)&quot;</span>, </span>
+<span id="cb284-48"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-48" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;Caregiver&#39;s number of years using AFDC in childhood&quot;</span>, </span>
+<span id="cb284-49"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-49" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;Child&#39;s race: African American (reference: other)&quot;</span>, </span>
+<span id="cb284-50"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-50" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;Child&#39;s age in 1997&quot;</span>, <span class="st">&quot;Child&#39;s gender: male (reference: female)&quot;</span>),</span>
+<span id="cb284-51"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-51" aria-hidden="true" tabindex="-1"></a>                         <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>))</span>
+<span id="cb284-52"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb284-53"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate dx and dxm using imbalance()</span></span>
+<span id="cb284-54"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-54" aria-hidden="true" tabindex="-1"></a>arg1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;mratio96&quot;</span>, <span class="st">&quot;pcged97&quot;</span>, <span class="st">&quot;pcg_adc&quot;</span>, <span class="st">&quot;black&quot;</span>, <span class="st">&quot;age97&quot;</span>, <span class="st">&quot;male&quot;</span>), <span class="at">each =</span> <span class="dv">7</span>)</span>
+<span id="cb284-55"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-55" aria-hidden="true" tabindex="-1"></a>arg2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;before&quot;</span>, <span class="st">&quot;fm&quot;</span>, <span class="st">&quot;vm1&quot;</span>, <span class="st">&quot;vm2&quot;</span>, <span class="st">&quot;vm3&quot;</span>, <span class="st">&quot;vm4&quot;</span>, <span class="st">&quot;pm&quot;</span>), <span class="fu">length</span>(arg1)<span class="sc">/</span><span class="dv">7</span>)</span>
+<span id="cb284-56"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-56" aria-hidden="true" tabindex="-1"></a>table_5<span class="fl">.10</span> <span class="ot">&lt;-</span> <span class="fu">map2_dfr</span>(arg1, arg2, imbalance) <span class="sc">%&gt;%</span></span>
+<span id="cb284-57"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">method =</span> <span class="fu">recode</span>(method,</span>
+<span id="cb284-58"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-58" aria-hidden="true" tabindex="-1"></a>                         <span class="st">`</span><span class="at">before</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;Before Matching&quot;</span>,</span>
+<span id="cb284-59"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-59" aria-hidden="true" tabindex="-1"></a>                          <span class="st">`</span><span class="at">fm</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;Full Matching&quot;</span>, </span>
+<span id="cb284-60"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-60" aria-hidden="true" tabindex="-1"></a>                         <span class="st">`</span><span class="at">vm1</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;Variable Matching 1 (at least 1, at most 4)&quot;</span>, </span>
+<span id="cb284-61"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-61" aria-hidden="true" tabindex="-1"></a>                         <span class="st">`</span><span class="at">vm2</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;Variable Matching 2 (at least 2, at most 4)&quot;</span>,</span>
+<span id="cb284-62"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-62" aria-hidden="true" tabindex="-1"></a>                         <span class="st">`</span><span class="at">vm3</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;Variable Matching 3 (Hansen&#39;s equation)&quot;</span>, </span>
+<span id="cb284-63"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-63" aria-hidden="true" tabindex="-1"></a>                         <span class="st">`</span><span class="at">vm4</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;Variable Matching 4 (at least 2, at most 7)&quot;</span>,</span>
+<span id="cb284-64"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-64" aria-hidden="true" tabindex="-1"></a>                         <span class="st">`</span><span class="at">pm</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;Pair matching&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb284-65"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(cov_labels, <span class="at">by =</span> <span class="st">&quot;cov&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb284-66"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(order) <span class="sc">%&gt;%</span></span>
+<span id="cb284-67"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(new, method, dx, dxm)</span>
+<span id="cb284-68"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb284-69"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Print Table 5.10</span></span>
+<span id="cb284-70"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-70" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">knitr.kable.NA =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb284-71"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-71" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(table_5<span class="fl">.10</span>, </span>
+<span id="cb284-72"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-72" aria-hidden="true" tabindex="-1"></a>             <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Covariate&quot;</span>, <span class="st">&quot;Matching Scheme&quot;</span>, <span class="st">&quot;$d_x$&quot;</span>, <span class="st">&quot;$d_{xm}$&quot;</span>), </span>
+<span id="cb284-73"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-73" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb284-74"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-74" aria-hidden="true" tabindex="-1"></a>             <span class="at">format =</span> <span class="st">&quot;html&quot;</span>, </span>
+<span id="cb284-75"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-75" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb284-76"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-76" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">&quot;Table 5.10. Covariate Imbalance Before and After Matching by Matching Scheme&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb284-77"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">latex_options =</span> <span class="st">&quot;striped&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb284-78"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">position =</span> <span class="st">&quot;center&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb284-79"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb284-79" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collapse_rows</span>(<span class="at">columns =</span> <span class="dv">1</span>, <span class="at">valign =</span> <span class="st">&quot;top&quot;</span>)</span></code></pre></div>
+<table class="table table" style="margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-55">Table 6.1: </span>Table 5.10. Covariate Imbalance Before and After Matching by Matching Scheme
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Covariate
+</th>
+<th style="text-align:left;">
+Matching Scheme
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(d_x\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(d_{xm}\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Ratio of family income to poverty line in 1996
+</td>
+<td style="text-align:left;">
+Before Matching
+</td>
+<td style="text-align:right;">
+1.02
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ratio of family income to poverty line in 1996
+</td>
+<td style="text-align:left;">
+Full Matching
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ratio of family income to poverty line in 1996
+</td>
+<td style="text-align:left;">
+Variable Matching 1 (at least 1, at most 4)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.79
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ratio of family income to poverty line in 1996
+</td>
+<td style="text-align:left;">
+Variable Matching 2 (at least 2, at most 4)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.94
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ratio of family income to poverty line in 1996
+</td>
+<td style="text-align:left;">
+Variable Matching 3 (Hansen’s equation)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.74
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ratio of family income to poverty line in 1996
+</td>
+<td style="text-align:left;">
+Variable Matching 4 (at least 2, at most 7)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.87
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ratio of family income to poverty line in 1996
+</td>
+<td style="text-align:left;">
+Pair matching
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s education in 1997 (years of schooling)
+</td>
+<td style="text-align:left;">
+Before Matching
+</td>
+<td style="text-align:right;">
+0.91
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s education in 1997 (years of schooling)
+</td>
+<td style="text-align:left;">
+Full Matching
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s education in 1997 (years of schooling)
+</td>
+<td style="text-align:left;">
+Variable Matching 1 (at least 1, at most 4)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.72
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s education in 1997 (years of schooling)
+</td>
+<td style="text-align:left;">
+Variable Matching 2 (at least 2, at most 4)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.87
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s education in 1997 (years of schooling)
+</td>
+<td style="text-align:left;">
+Variable Matching 3 (Hansen’s equation)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.75
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s education in 1997 (years of schooling)
+</td>
+<td style="text-align:left;">
+Variable Matching 4 (at least 2, at most 7)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.81
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s education in 1997 (years of schooling)
+</td>
+<td style="text-align:left;">
+Pair matching
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s number of years using AFDC in childhood
+</td>
+<td style="text-align:left;">
+Before Matching
+</td>
+<td style="text-align:right;">
+0.67
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s number of years using AFDC in childhood
+</td>
+<td style="text-align:left;">
+Full Matching
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s number of years using AFDC in childhood
+</td>
+<td style="text-align:left;">
+Variable Matching 1 (at least 1, at most 4)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.56
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s number of years using AFDC in childhood
+</td>
+<td style="text-align:left;">
+Variable Matching 2 (at least 2, at most 4)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.65
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s number of years using AFDC in childhood
+</td>
+<td style="text-align:left;">
+Variable Matching 3 (Hansen’s equation)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.55
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s number of years using AFDC in childhood
+</td>
+<td style="text-align:left;">
+Variable Matching 4 (at least 2, at most 7)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.63
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Caregiver’s number of years using AFDC in childhood
+</td>
+<td style="text-align:left;">
+Pair matching
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.40
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s race: African American (reference: other)
+</td>
+<td style="text-align:left;">
+Before Matching
+</td>
+<td style="text-align:right;">
+0.93
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s race: African American (reference: other)
+</td>
+<td style="text-align:left;">
+Full Matching
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s race: African American (reference: other)
+</td>
+<td style="text-align:left;">
+Variable Matching 1 (at least 1, at most 4)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.79
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s race: African American (reference: other)
+</td>
+<td style="text-align:left;">
+Variable Matching 2 (at least 2, at most 4)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.92
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s race: African American (reference: other)
+</td>
+<td style="text-align:left;">
+Variable Matching 3 (Hansen’s equation)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.73
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s race: African American (reference: other)
+</td>
+<td style="text-align:left;">
+Variable Matching 4 (at least 2, at most 7)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.85
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s race: African American (reference: other)
+</td>
+<td style="text-align:left;">
+Pair matching
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s age in 1997
+</td>
+<td style="text-align:left;">
+Before Matching
+</td>
+<td style="text-align:right;">
+0.22
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s age in 1997
+</td>
+<td style="text-align:left;">
+Full Matching
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s age in 1997
+</td>
+<td style="text-align:left;">
+Variable Matching 1 (at least 1, at most 4)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s age in 1997
+</td>
+<td style="text-align:left;">
+Variable Matching 2 (at least 2, at most 4)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.22
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s age in 1997
+</td>
+<td style="text-align:left;">
+Variable Matching 3 (Hansen’s equation)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s age in 1997
+</td>
+<td style="text-align:left;">
+Variable Matching 4 (at least 2, at most 7)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s age in 1997
+</td>
+<td style="text-align:left;">
+Pair matching
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s gender: male (reference: female)
+</td>
+<td style="text-align:left;">
+Before Matching
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s gender: male (reference: female)
+</td>
+<td style="text-align:left;">
+Full Matching
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s gender: male (reference: female)
+</td>
+<td style="text-align:left;">
+Variable Matching 1 (at least 1, at most 4)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s gender: male (reference: female)
+</td>
+<td style="text-align:left;">
+Variable Matching 2 (at least 2, at most 4)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s gender: male (reference: female)
+</td>
+<td style="text-align:left;">
+Variable Matching 3 (Hansen’s equation)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s gender: male (reference: female)
+</td>
+<td style="text-align:left;">
+Variable Matching 4 (at least 2, at most 7)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Child’s gender: male (reference: female)
+</td>
+<td style="text-align:left;">
+Pair matching
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="section-5.8.3-post-full-matching-analysis-of-outcome" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Section 5.8.3 Post-Full-Matching Analysis of Outcome</h2>
+<div id="hodges-lehmann-aligned-rank-test" class="section level3" number="6.2.1">
+<h3><span class="header-section-number">6.2.1</span> Hodges-Lehmann Aligned Rank Test</h3>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Shenyang Guo&#39;s Stata program, hodgesl, version 8.2</span></span>
+<span id="cb285-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-2" aria-hidden="true" tabindex="-1"></a>hodgesl <span class="ot">&lt;-</span> <span class="cf">function</span>(dataname, varname, blockname, treatname) {</span>
+<span id="cb285-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-3" aria-hidden="true" tabindex="-1"></a>  blockname_str <span class="ot">&lt;-</span> <span class="fu">deparse</span>(<span class="fu">substitute</span>(blockname))</span>
+<span id="cb285-4"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">1000</span>)</span>
+<span id="cb285-5"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-5" aria-hidden="true" tabindex="-1"></a>  renamed_file <span class="ot">&lt;-</span> dataname <span class="sc">%&gt;%</span></span>
+<span id="cb285-6"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>({{blockname}}))</span>
+<span id="cb285-7"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-7" aria-hidden="true" tabindex="-1"></a>  r1 <span class="ot">&lt;-</span> renamed_file <span class="sc">%&gt;%</span></span>
+<span id="cb285-8"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>({{blockname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-9"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">m_y =</span> <span class="fu">mean</span>({{varname}}), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-10"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>({{blockname}})</span>
+<span id="cb285-11"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-11" aria-hidden="true" tabindex="-1"></a>  r2 <span class="ot">&lt;-</span> renamed_file <span class="sc">%&gt;%</span></span>
+<span id="cb285-12"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>({{blockname}}, {{treatname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-13"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">mean_y =</span> <span class="fu">mean</span>({{varname}}),</span>
+<span id="cb285-14"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">n =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-15"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">mean_diff =</span> <span class="fu">ifelse</span>({{treatname}} <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb285-16"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-16" aria-hidden="true" tabindex="-1"></a>                              ((n<span class="sc">+</span><span class="fu">lag</span>(n))<span class="sc">/</span><span class="fu">sum</span>(n))<span class="sc">*</span>(mean_y<span class="sc">-</span><span class="fu">lag</span>(mean_y)), <span class="cn">NA</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb285-17"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">tx_effect =</span> <span class="fu">sum</span>(mean_diff, <span class="at">na.rm =</span> T)) <span class="sc">%&gt;%</span></span>
+<span id="cb285-18"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">i =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb285-19"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-20"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(tx_effect, i)</span>
+<span id="cb285-21"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-21" aria-hidden="true" tabindex="-1"></a>  fm_results <span class="ot">&lt;-</span> renamed_file <span class="sc">%&gt;%</span></span>
+<span id="cb285-22"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>({{blockname}}, {{treatname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-23"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">mean_y =</span> <span class="fu">mean</span>({{varname}}),</span>
+<span id="cb285-24"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-24" aria-hidden="true" tabindex="-1"></a>              <span class="at">n =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb285-25"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-25" aria-hidden="true" tabindex="-1"></a>  r3 <span class="ot">&lt;-</span> renamed_file <span class="sc">%&gt;%</span></span>
+<span id="cb285-26"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>({{blockname}}, {{treatname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-27"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">m_or_n =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-28"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>({{blockname}}, {{treatname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-29"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">mi =</span> <span class="fu">ifelse</span>({{treatname}} <span class="sc">==</span> <span class="dv">0</span>, m_or_n, </span>
+<span id="cb285-30"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-30" aria-hidden="true" tabindex="-1"></a>                <span class="fu">ifelse</span>({{treatname}} <span class="sc">==</span> <span class="dv">1</span>, <span class="cn">NA</span>, <span class="cn">NA</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb285-31"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">ni =</span> <span class="fu">ifelse</span>({{treatname}} <span class="sc">==</span> <span class="dv">1</span>, m_or_n,</span>
+<span id="cb285-32"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-32" aria-hidden="true" tabindex="-1"></a>                <span class="fu">ifelse</span>({{treatname}} <span class="sc">==</span> <span class="dv">0</span>, <span class="cn">NA</span>, <span class="cn">NA</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb285-33"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Ni =</span> ni<span class="sc">+</span><span class="fu">lag</span>(mi)) <span class="sc">%&gt;%</span></span>
+<span id="cb285-34"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">mi =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(mi), <span class="fu">lag</span>(mi), mi)) <span class="sc">%&gt;%</span></span>
+<span id="cb285-35"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Ni)) <span class="sc">%&gt;%</span></span>
+<span id="cb285-36"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">factor =</span> (mi<span class="sc">*</span>ni)<span class="sc">/</span>(Ni<span class="sc">*</span>(Ni<span class="dv">-1</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb285-37"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>({{blockname}}, factor) <span class="sc">%&gt;%</span></span>
+<span id="cb285-38"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>({{blockname}})</span>
+<span id="cb285-39"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-39" aria-hidden="true" tabindex="-1"></a>  r4 <span class="ot">&lt;-</span> renamed_file <span class="sc">%&gt;%</span></span>
+<span id="cb285-40"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>({{blockname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-41"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(r1, <span class="at">by =</span> blockname_str) <span class="sc">%&gt;%</span></span>
+<span id="cb285-42"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">dy =</span> {{varname}}<span class="sc">-</span>m_y) <span class="sc">%&gt;%</span></span>
+<span id="cb285-43"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(dy) <span class="sc">%&gt;%</span></span>
+<span id="cb285-44"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">rk =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb285-45"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>({{blockname}})</span>
+<span id="cb285-46"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-46" aria-hidden="true" tabindex="-1"></a>  r4a <span class="ot">&lt;-</span> r4 <span class="sc">%&gt;%</span></span>
+<span id="cb285-47"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>({{treatname}} <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-48"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>({{blockname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-49"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">wsi =</span> <span class="fu">sum</span>(rk), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb285-50"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-50" aria-hidden="true" tabindex="-1"></a>  r5 <span class="ot">&lt;-</span> r4 <span class="sc">%&gt;%</span></span>
+<span id="cb285-51"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>({{blockname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-52"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">ki_ =</span> <span class="fu">mean</span>(rk), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb285-53"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-53" aria-hidden="true" tabindex="-1"></a>  r6 <span class="ot">&lt;-</span> r4 <span class="sc">%&gt;%</span></span>
+<span id="cb285-54"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>({{treatname}} <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-55"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>({{blockname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-56"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">ni =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-57"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>({{blockname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-58"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(r5, <span class="at">by =</span> blockname_str) <span class="sc">%&gt;%</span></span>
+<span id="cb285-59"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">E_wsi =</span> ni<span class="sc">*</span>ki_) <span class="sc">%&gt;%</span></span>
+<span id="cb285-60"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-60" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>({{blockname}})</span>
+<span id="cb285-61"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-61" aria-hidden="true" tabindex="-1"></a>  r7 <span class="ot">&lt;-</span> r4 <span class="sc">%&gt;%</span></span>
+<span id="cb285-62"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-62" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>({{blockname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-63"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(r5, <span class="at">by =</span> blockname_str) <span class="sc">%&gt;%</span></span>
+<span id="cb285-64"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-64" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">k =</span> (rk<span class="sc">-</span>ki_)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-65"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>({{blockname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-66"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-66" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">ss_kd_i =</span> <span class="fu">sum</span>(k), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-67"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>({{blockname}})</span>
+<span id="cb285-68"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-68" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> r3 <span class="sc">%&gt;%</span></span>
+<span id="cb285-69"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-69" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>({{blockname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb285-70"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(r7, <span class="at">by =</span> blockname_str) <span class="sc">%&gt;%</span></span>
+<span id="cb285-71"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-71" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(r6, <span class="at">by =</span> blockname_str) <span class="sc">%&gt;%</span></span>
+<span id="cb285-72"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-72" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(r4a, <span class="at">by =</span> blockname_str) <span class="sc">%&gt;%</span></span>
+<span id="cb285-73"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-73" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">var_wsi =</span> factor<span class="sc">*</span>ss_kd_i,</span>
+<span id="cb285-74"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-74" aria-hidden="true" tabindex="-1"></a>          <span class="at">var =</span> <span class="fu">sum</span>(var_wsi),</span>
+<span id="cb285-75"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-75" aria-hidden="true" tabindex="-1"></a>          <span class="at">sum_Ewsi =</span> <span class="fu">sum</span>(E_wsi),</span>
+<span id="cb285-76"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-76" aria-hidden="true" tabindex="-1"></a>          <span class="at">ws =</span> <span class="fu">sum</span>(wsi),</span>
+<span id="cb285-77"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-77" aria-hidden="true" tabindex="-1"></a>          <span class="at">HL_mean =</span> ws<span class="sc">-</span>sum_Ewsi,</span>
+<span id="cb285-78"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-78" aria-hidden="true" tabindex="-1"></a>          <span class="at">HL_se =</span> <span class="fu">sqrt</span>(var),</span>
+<span id="cb285-79"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-79" aria-hidden="true" tabindex="-1"></a>          <span class="at">z =</span> HL_mean<span class="sc">/</span>HL_se,</span>
+<span id="cb285-80"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-80" aria-hidden="true" tabindex="-1"></a>          <span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fu">abs</span>(z))) <span class="sc">%&gt;%</span></span>
+<span id="cb285-81"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-81" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(HL_mean, HL_se, z, p) <span class="sc">%&gt;%</span></span>
+<span id="cb285-82"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-82" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-83"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-83" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">i =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb285-84"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-84" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(r2, <span class="at">by =</span> <span class="st">&quot;i&quot;</span>)</span>
+<span id="cb285-85"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(results)</span>
+<span id="cb285-86"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-86" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb285-87"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb285-88"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-88" aria-hidden="true" tabindex="-1"></a>df.h <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/chpt5_2(original).dta&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-89"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fm_s =</span> <span class="fu">paste0</span>(<span class="fu">round</span>(fm, <span class="dv">5</span>), <span class="st">&quot;s&quot;</span>))</span>
+<span id="cb285-90"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb285-90" aria-hidden="true" tabindex="-1"></a><span class="fu">hodgesl</span>(df.h, lwss97, fm_s, kuse)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 6
+##   HL_mean HL_se     z        p     i tx_effect
+##     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;     &lt;dbl&gt;
+## 1 -36028. 4559. -7.90 1.33e-15     1     -10.2</code></pre>
+</div>
+<div id="cohens-d" class="section level3" number="6.2.2">
+<h3><span class="header-section-number">6.2.2</span> Cohen’s d</h3>
+<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb287-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Shenyang Guo&#39;s Stata program, imbalance, version 8.2</span></span>
+<span id="cb287-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-2" aria-hidden="true" tabindex="-1"></a>imbalance2 <span class="ot">&lt;-</span> <span class="cf">function</span>(df, varname, treatname, blockname) {</span>
+<span id="cb287-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb287-4"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># dx</span></span>
+<span id="cb287-5"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-5" aria-hidden="true" tabindex="-1"></a>  df2 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb287-6"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>({{treatname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb287-7"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">m_x =</span> <span class="fu">mean</span>({{varname}}), <span class="at">sd_x =</span> <span class="fu">sd</span>({{varname}}), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb287-8"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-8" aria-hidden="true" tabindex="-1"></a>  mxt <span class="ot">=</span> df2[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb287-9"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-9" aria-hidden="true" tabindex="-1"></a>  mxc <span class="ot">=</span> df2[<span class="dv">1</span>,<span class="dv">2</span>]</span>
+<span id="cb287-10"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-10" aria-hidden="true" tabindex="-1"></a>  s2xt <span class="ot">=</span> df2[<span class="dv">2</span>,<span class="dv">3</span>]<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb287-11"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-11" aria-hidden="true" tabindex="-1"></a>  s2xc <span class="ot">=</span> df2[<span class="dv">1</span>,<span class="dv">3</span>]<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb287-12"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-12" aria-hidden="true" tabindex="-1"></a>  sx <span class="ot">=</span> <span class="fu">sqrt</span>((s2xt<span class="sc">+</span>s2xc)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb287-13"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-13" aria-hidden="true" tabindex="-1"></a>  dx <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">abs</span>(mxt<span class="sc">-</span>mxc)<span class="sc">/</span>sx)</span>
+<span id="cb287-14"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb287-15"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># dx</span></span>
+<span id="cb287-16"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-16" aria-hidden="true" tabindex="-1"></a>  df3 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb287-17"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>({{blockname}}, {{treatname}}) <span class="sc">%&gt;%</span></span>
+<span id="cb287-18"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">m_x =</span> <span class="fu">mean</span>({{varname}}),</span>
+<span id="cb287-19"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-19" aria-hidden="true" tabindex="-1"></a>              <span class="at">sd_x =</span> <span class="fu">sd</span>({{varname}}),</span>
+<span id="cb287-20"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-20" aria-hidden="true" tabindex="-1"></a>              <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb287-21"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-21" aria-hidden="true" tabindex="-1"></a>              <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb287-22"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb287-23"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-23" aria-hidden="true" tabindex="-1"></a>  mxc <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">mean</span>(<span class="fu">filter</span>(df3, {{treatname}} <span class="sc">==</span> <span class="dv">0</span>)<span class="sc">$</span>m_x))</span>
+<span id="cb287-24"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-24" aria-hidden="true" tabindex="-1"></a>  mxt <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">mean</span>(<span class="fu">filter</span>(df3, {{treatname}} <span class="sc">==</span> <span class="dv">1</span>)<span class="sc">$</span>m_x))</span>
+<span id="cb287-25"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-25" aria-hidden="true" tabindex="-1"></a>  dxm_num <span class="ot">=</span> <span class="fu">abs</span>(mxt<span class="sc">-</span>mxc)</span>
+<span id="cb287-26"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-26" aria-hidden="true" tabindex="-1"></a>  dxm <span class="ot">=</span> <span class="fu">as.numeric</span>(dxm_num<span class="sc">/</span>sx)</span>
+<span id="cb287-27"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb287-28"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">dx =</span> dx, <span class="at">dxm =</span> dxm))</span>
+<span id="cb287-29"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb287-30"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-31"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-31" aria-hidden="true" tabindex="-1"></a>df.h2 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/chpt5_2(original).dta&quot;</span>)</span>
+<span id="cb287-32"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb287-32" aria-hidden="true" tabindex="-1"></a><span class="fu">imbalance2</span>(df.h2, lwss97, kuse, fm)<span class="sc">$</span>dxm <span class="co"># dxm for the outcome variable is Cohen&#39;s d</span></span></code></pre></div>
+<pre><code>## [1] 0.6523181</code></pre>
+</div>
+</div>
+<div id="section-5.8.4-post-matching-analysis-using-regression-of-difference-scores" class="section level2" number="6.3">
+<h2><span class="header-section-number">6.3</span> Section 5.8.4 Post-Matching Analysis Using Regression of Difference Scores</h2>
+<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb289-1"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/chpt5_2.dta&quot;</span>)</span>
+<span id="cb289-2"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-3"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-3" aria-hidden="true" tabindex="-1"></a><span class="co"># kuse == 1</span></span>
+<span id="cb289-4"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-4" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb289-5"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(pm, kuse, <span class="at">y1 =</span> lwss97, <span class="at">male1 =</span> male, <span class="at">black1 =</span> black, <span class="at">age971 =</span> age97, </span>
+<span id="cb289-6"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">pcged971 =</span> pcged97, <span class="at">mratio961 =</span> mratio96, pcg_id) <span class="sc">%&gt;%</span> </span>
+<span id="cb289-7"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(kuse<span class="sc">==</span><span class="dv">1</span>) </span>
+<span id="cb289-8"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-9"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-9" aria-hidden="true" tabindex="-1"></a><span class="co"># kuse == 0</span></span>
+<span id="cb289-10"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-10" aria-hidden="true" tabindex="-1"></a>df0 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb289-11"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(pm, kuse, <span class="at">y0 =</span> lwss97, <span class="at">male0 =</span> male, <span class="at">black0 =</span> black, <span class="at">age970 =</span> age97, <span class="at">pcged970 =</span> pcged97, <span class="at">mratio960 =</span> mratio96, pcg_id) <span class="sc">%&gt;%</span> </span>
+<span id="cb289-12"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>( kuse <span class="sc">==</span> <span class="dv">0</span> ) </span>
+<span id="cb289-13"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-14"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-14" aria-hidden="true" tabindex="-1"></a><span class="co"># merge data</span></span>
+<span id="cb289-15"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-15" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(df0, df1, <span class="st">&quot;pm&quot;</span>)</span>
+<span id="cb289-16"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-16" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> df2 <span class="sc">%&gt;%</span> </span>
+<span id="cb289-17"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> y1 <span class="sc">-</span> y0,</span>
+<span id="cb289-18"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">male =</span> male1 <span class="sc">-</span> male0,</span>
+<span id="cb289-19"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">black =</span> black1 <span class="sc">-</span> black0,</span>
+<span id="cb289-20"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">age97 =</span> age971 <span class="sc">-</span> age970,</span>
+<span id="cb289-21"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">pcged97 =</span> pcged971 <span class="sc">-</span> pcged970,</span>
+<span id="cb289-22"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">mratio96 =</span> mratio961 <span class="sc">-</span> mratio960)</span>
+<span id="cb289-23"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-24"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-24" aria-hidden="true" tabindex="-1"></a><span class="co"># regression </span></span>
+<span id="cb289-25"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-25" aria-hidden="true" tabindex="-1"></a>reg1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> male <span class="sc">+</span> black <span class="sc">+</span> age97 <span class="sc">+</span> pcged97 <span class="sc">+</span> mratio96, <span class="at">data =</span> df2)</span>
+<span id="cb289-26"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cb289-26" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(lmtest<span class="sc">::</span><span class="fu">coeftest</span>(reg1, <span class="at">vcov =</span> vcovCL, <span class="at">cluster =</span> df2<span class="sc">$</span>pcg_id.x))</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 5
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)  -3.17       1.73    -1.83    0.0682
+## 2 male         -1.21       1.84    -0.657   0.512 
+## 3 black        -3.34       2.33    -1.43    0.153 
+## 4 age97         0.229      0.329    0.695   0.487 
+## 5 pcged97       0.0111     0.508    0.0219  0.983 
+## 6 mratio96      3.15       1.67     1.89    0.0602</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="04_Section5.8.1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="06_Section5.8.5.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
