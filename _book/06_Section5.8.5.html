@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>7 Section 5.8.5 Multilevel Propensity Score (PS) | R Code for Propensity Score Analysis</title>
   <meta name="description" content="7 Section 5.8.5 Multilevel Propensity Score (PS) | R Code for Propensity Score Analysis" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="7 Section 5.8.5 Multilevel Propensity Score (PS) | R Code for Propensity Score Analysis" />
   <meta property="og:type" content="book" />
-  
   
   
   
@@ -33,7 +32,6 @@
   
 <link rel="prev" href="05_Section5.8.2_5.8.3_5.8.4.html"/>
 <link rel="next" href="07_Section5.8.6.html"/>
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,8 +49,9 @@
 
 
 
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -135,218 +134,219 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
-<li class="chapter" data-level="2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html"><i class="fa fa-check"></i><b>2</b> Section 4.4.1 Application of the Treatment Effect Model to Analysis of Observational Data (SD &amp; PS)</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface<span></span></a></li>
+<li class="chapter" data-level="2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html"><i class="fa fa-check"></i><b>2</b> Section 4.4.1 Application of the Treatment Effect Model to Analysis of Observational Data (SD &amp; PS)<span></span></a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#preparation"><i class="fa fa-check"></i><b>2.1</b> Preparation</a></li>
-<li class="chapter" data-level="2.2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#treatment-effect"><i class="fa fa-check"></i><b>2.2</b> Treatment Effect</a></li>
-<li class="chapter" data-level="2.3" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#bivariate-t-test"><i class="fa fa-check"></i><b>2.3</b> Bivariate t-test</a></li>
-<li class="chapter" data-level="2.4" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#regression-control"><i class="fa fa-check"></i><b>2.4</b> Regression Control</a></li>
-<li class="chapter" data-level="2.5" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#sample-description"><i class="fa fa-check"></i><b>2.5</b> Sample Description</a></li>
+<li class="chapter" data-level="2.1" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#preparation"><i class="fa fa-check"></i><b>2.1</b> Preparation<span></span></a></li>
+<li class="chapter" data-level="2.2" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#treatment-effect"><i class="fa fa-check"></i><b>2.2</b> Treatment Effect<span></span></a></li>
+<li class="chapter" data-level="2.3" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#bivariate-t-test"><i class="fa fa-check"></i><b>2.3</b> Bivariate t-test<span></span></a></li>
+<li class="chapter" data-level="2.4" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#regression-control"><i class="fa fa-check"></i><b>2.4</b> Regression Control<span></span></a></li>
+<li class="chapter" data-level="2.5" data-path="01_Section4.4.1.html"><a href="01_Section4.4.1.html#sample-description"><i class="fa fa-check"></i><b>2.5</b> Sample Description<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html"><i class="fa fa-check"></i><b>3</b> Section 4.4.2 Evaluation of Treatment Effects From a Program With a Group Randomization Design (SD &amp; PS)</a>
+<li class="chapter" data-level="3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html"><i class="fa fa-check"></i><b>3</b> Section 4.4.2 Evaluation of Treatment Effects From a Program With a Group Randomization Design (SD &amp; PS)<span></span></a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#preparation-1"><i class="fa fa-check"></i><b>3.1</b> Preparation</a></li>
-<li class="chapter" data-level="3.2" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#treatment-effect-using-robust-to-control-for-clustering"><i class="fa fa-check"></i><b>3.2</b> Treatment Effect: Using Robust to Control for Clustering</a></li>
-<li class="chapter" data-level="3.3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#bivariate-t-test-1"><i class="fa fa-check"></i><b>3.3</b> Bivariate t-test</a></li>
+<li class="chapter" data-level="3.1" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#preparation-1"><i class="fa fa-check"></i><b>3.1</b> Preparation<span></span></a></li>
+<li class="chapter" data-level="3.2" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#treatment-effect-using-robust-to-control-for-clustering"><i class="fa fa-check"></i><b>3.2</b> Treatment Effect: Using Robust to Control for Clustering<span></span></a></li>
+<li class="chapter" data-level="3.3" data-path="02_Section4.4.2.html"><a href="02_Section4.4.2.html#bivariate-t-test-1"><i class="fa fa-check"></i><b>3.3</b> Bivariate t-test<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html"><i class="fa fa-check"></i><b>4</b> Section 4.4.3 Main Features of Treatreg (PS &amp; SD)</a>
+<li class="chapter" data-level="4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html"><i class="fa fa-check"></i><b>4</b> Section 4.4.3 Main Features of Treatreg (PS &amp; SD)<span></span></a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#preparation-2"><i class="fa fa-check"></i><b>4.1</b> Preparation</a></li>
-<li class="chapter" data-level="4.2" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#run-models"><i class="fa fa-check"></i><b>4.2</b> Run Models</a></li>
-<li class="chapter" data-level="4.3" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#extract-coefficients"><i class="fa fa-check"></i><b>4.3</b> Extract Coefficients</a></li>
-<li class="chapter" data-level="4.4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#get-combined-results"><i class="fa fa-check"></i><b>4.4</b> Get Combined Results</a></li>
-<li class="chapter" data-level="4.5" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#results"><i class="fa fa-check"></i><b>4.5</b> Results</a></li>
+<li class="chapter" data-level="4.1" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#preparation-2"><i class="fa fa-check"></i><b>4.1</b> Preparation<span></span></a></li>
+<li class="chapter" data-level="4.2" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#run-models"><i class="fa fa-check"></i><b>4.2</b> Run Models<span></span></a></li>
+<li class="chapter" data-level="4.3" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#extract-coefficients"><i class="fa fa-check"></i><b>4.3</b> Extract Coefficients<span></span></a></li>
+<li class="chapter" data-level="4.4" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#get-combined-results"><i class="fa fa-check"></i><b>4.4</b> Get Combined Results<span></span></a></li>
+<li class="chapter" data-level="4.5" data-path="03_Section4.4.3.html"><a href="03_Section4.4.3.html#results"><i class="fa fa-check"></i><b>4.5</b> Results<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html"><i class="fa fa-check"></i><b>5</b> Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD &amp; PS)</a>
+<li class="chapter" data-level="5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html"><i class="fa fa-check"></i><b>5</b> Section 5.8.1 Greedy Matching and Subsequent Analysis of Hazard Rates (SD &amp; PS)<span></span></a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#preparation-3"><i class="fa fa-check"></i><b>5.1</b> Preparation</a></li>
-<li class="chapter" data-level="5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#propensity-score-estimation"><i class="fa fa-check"></i><b>5.2</b> Propensity Score Estimation</a></li>
-<li class="chapter" data-level="5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-comparisons"><i class="fa fa-check"></i><b>5.3</b> Bivariate Comparisons</a></li>
-<li class="chapter" data-level="5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-covariate-balcance-check"><i class="fa fa-check"></i><b>5.4</b> PSM based on Logistic regression &amp; Covariate Balcance Check</a>
+<li class="chapter" data-level="5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#preparation-3"><i class="fa fa-check"></i><b>5.1</b> Preparation<span></span></a></li>
+<li class="chapter" data-level="5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#propensity-score-estimation"><i class="fa fa-check"></i><b>5.2</b> Propensity Score Estimation<span></span></a></li>
+<li class="chapter" data-level="5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-comparisons"><i class="fa fa-check"></i><b>5.3</b> Bivariate Comparisons<span></span></a></li>
+<li class="chapter" data-level="5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-covariate-balcance-check"><i class="fa fa-check"></i><b>5.4</b> PSM based on Logistic regression &amp; Covariate Balcance Check<span></span></a>
 <ul>
-<li class="chapter" data-level="5.4.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.4.1</b> Scheme 1 - Nearest neighbor within caliper .25*SD</a></li>
-<li class="chapter" data-level="5.4.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.4.2</b> Scheme 2 - Nearest neighbor within caliper .1*SD</a></li>
-<li class="chapter" data-level="5.4.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.4.3</b> Scheme 3 - Mahalanobis without propensity score</a></li>
-<li class="chapter" data-level="5.4.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.4.4</b> Scheme 4 - Mahalanobis with propensity score</a></li>
+<li class="chapter" data-level="5.4.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.4.1</b> Scheme 1 - Nearest neighbor within caliper .25*SD<span></span></a></li>
+<li class="chapter" data-level="5.4.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.4.2</b> Scheme 2 - Nearest neighbor within caliper .1*SD<span></span></a></li>
+<li class="chapter" data-level="5.4.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.4.3</b> Scheme 3 - Mahalanobis without propensity score<span></span></a></li>
+<li class="chapter" data-level="5.4.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.4.4</b> Scheme 4 - Mahalanobis with propensity score<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="5.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-2"><i class="fa fa-check"></i><b>5.5</b> PSM based on Logistic regression 2</a>
+<li class="chapter" data-level="5.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-2"><i class="fa fa-check"></i><b>5.5</b> PSM based on Logistic regression 2<span></span></a>
 <ul>
-<li class="chapter" data-level="5.5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.5.1</b> Scheme 5 - Nearest neighbor within caliper .25*SD</a></li>
-<li class="chapter" data-level="5.5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6---nearest-neighbor-within-caliper-.1sd-note-caliper-in-matchit-is-not-real-data"><i class="fa fa-check"></i><b>5.5.2</b> Scheme 6 - Nearest neighbor within caliper .1*SD (Note: caliper in MatchIt is not real data)</a></li>
-<li class="chapter" data-level="5.5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.5.3</b> Scheme 7 - Mahalanobis without propensity score</a></li>
-<li class="chapter" data-level="5.5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.5.4</b> Scheme 8 - Mahalanobis with propensity score</a></li>
+<li class="chapter" data-level="5.5.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.5.1</b> Scheme 5 - Nearest neighbor within caliper .25*SD<span></span></a></li>
+<li class="chapter" data-level="5.5.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6---nearest-neighbor-within-caliper-.1sd-note-caliper-in-matchit-is-not-real-data"><i class="fa fa-check"></i><b>5.5.2</b> Scheme 6 - Nearest neighbor within caliper .1*SD (Note: caliper in MatchIt is not real data)<span></span></a></li>
+<li class="chapter" data-level="5.5.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.5.3</b> Scheme 7 - Mahalanobis without propensity score<span></span></a></li>
+<li class="chapter" data-level="5.5.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.5.4</b> Scheme 8 - Mahalanobis with propensity score<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="5.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-3"><i class="fa fa-check"></i><b>5.6</b> PSM based on Logistic regression 3</a>
+<li class="chapter" data-level="5.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#psm-based-on-logistic-regression-3"><i class="fa fa-check"></i><b>5.6</b> PSM based on Logistic regression 3<span></span></a>
 <ul>
-<li class="chapter" data-level="5.6.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.6.1</b> Scheme 9 - Nearest neighbor within caliper .25*SD</a></li>
-<li class="chapter" data-level="5.6.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.6.2</b> Scheme 10 - Nearest neighbor within caliper .1*SD</a></li>
-<li class="chapter" data-level="5.6.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.6.3</b> Scheme 11 - Mahalanobis without propensity score</a></li>
-<li class="chapter" data-level="5.6.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.6.4</b> Scheme 12 - Mahalanobis with propensity score</a></li>
+<li class="chapter" data-level="5.6.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9---nearest-neighbor-within-caliper-.25sd"><i class="fa fa-check"></i><b>5.6.1</b> Scheme 9 - Nearest neighbor within caliper .25*SD<span></span></a></li>
+<li class="chapter" data-level="5.6.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10---nearest-neighbor-within-caliper-.1sd"><i class="fa fa-check"></i><b>5.6.2</b> Scheme 10 - Nearest neighbor within caliper .1*SD<span></span></a></li>
+<li class="chapter" data-level="5.6.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11---mahalanobis-without-propensity-score"><i class="fa fa-check"></i><b>5.6.3</b> Scheme 11 - Mahalanobis without propensity score<span></span></a></li>
+<li class="chapter" data-level="5.6.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12---mahalanobis-with-propensity-score"><i class="fa fa-check"></i><b>5.6.4</b> Scheme 12 - Mahalanobis with propensity score<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="5.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-test-after-matching"><i class="fa fa-check"></i><b>5.7</b> Bivariate test after matching</a></li>
-<li class="chapter" data-level="5.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#kaplan-meier-and-significance-test-of-difference-on-survivor-function"><i class="fa fa-check"></i><b>5.8</b> Kaplan-Meier and significance test of difference on survivor function</a>
+<li class="chapter" data-level="5.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#bivariate-test-after-matching"><i class="fa fa-check"></i><b>5.7</b> Bivariate test after matching<span></span></a></li>
+<li class="chapter" data-level="5.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#kaplan-meier-and-significance-test-of-difference-on-survivor-function"><i class="fa fa-check"></i><b>5.8</b> Kaplan-Meier and significance test of difference on survivor function<span></span></a>
 <ul>
-<li class="chapter" data-level="5.8.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#all"><i class="fa fa-check"></i><b>5.8.1</b> All</a></li>
-<li class="chapter" data-level="5.8.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1"><i class="fa fa-check"></i><b>5.8.2</b> Scheme 1</a></li>
-<li class="chapter" data-level="5.8.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2"><i class="fa fa-check"></i><b>5.8.3</b> Scheme 2</a></li>
-<li class="chapter" data-level="5.8.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3"><i class="fa fa-check"></i><b>5.8.4</b> Scheme 3</a></li>
-<li class="chapter" data-level="5.8.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4"><i class="fa fa-check"></i><b>5.8.5</b> Scheme 4</a></li>
-<li class="chapter" data-level="5.8.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5"><i class="fa fa-check"></i><b>5.8.6</b> Scheme 5</a></li>
-<li class="chapter" data-level="5.8.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6"><i class="fa fa-check"></i><b>5.8.7</b> Scheme 6</a></li>
-<li class="chapter" data-level="5.8.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7"><i class="fa fa-check"></i><b>5.8.8</b> Scheme 7</a></li>
-<li class="chapter" data-level="5.8.9" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8"><i class="fa fa-check"></i><b>5.8.9</b> Scheme 8</a></li>
-<li class="chapter" data-level="5.8.10" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9"><i class="fa fa-check"></i><b>5.8.10</b> Scheme 9</a></li>
-<li class="chapter" data-level="5.8.11" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10"><i class="fa fa-check"></i><b>5.8.11</b> Scheme 10</a></li>
-<li class="chapter" data-level="5.8.12" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11"><i class="fa fa-check"></i><b>5.8.12</b> Scheme 11</a></li>
-<li class="chapter" data-level="5.8.13" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12"><i class="fa fa-check"></i><b>5.8.13</b> Scheme 12</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html"><i class="fa fa-check"></i><b>6</b> Section 5.8.2, 5.8.3, and 5.8.4 (SD &amp; PS)</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.2-optimal-matching"><i class="fa fa-check"></i><b>6.1</b> Section 5.8.2 Optimal Matching</a>
-<ul>
-<li class="chapter" data-level="6.1.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#load-data"><i class="fa fa-check"></i><b>6.1.1</b> Load Data</a></li>
-<li class="chapter" data-level="6.1.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#bivariate-comparisons-1"><i class="fa fa-check"></i><b>6.1.2</b> Bivariate Comparisons</a></li>
-<li class="chapter" data-level="6.1.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#outcome-without-bias-control"><i class="fa fa-check"></i><b>6.1.3</b> Outcome Without Bias Control</a></li>
-<li class="chapter" data-level="6.1.4" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#matching"><i class="fa fa-check"></i><b>6.1.4</b> Matching</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.3-post-full-matching-analysis-of-outcome"><i class="fa fa-check"></i><b>6.2</b> Section 5.8.3 Post-Full-Matching Analysis of Outcome</a>
-<ul>
-<li class="chapter" data-level="6.2.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#hodges-lehmann-aligned-rank-test"><i class="fa fa-check"></i><b>6.2.1</b> Hodges-Lehmann Aligned Rank Test</a></li>
-<li class="chapter" data-level="6.2.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cohens-d"><i class="fa fa-check"></i><b>6.2.2</b> Cohen’s d</a></li>
-</ul></li>
-<li class="chapter" data-level="6.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.4-post-matching-analysis-using-regression-of-difference-scores"><i class="fa fa-check"></i><b>6.3</b> Section 5.8.4 Post-Matching Analysis Using Regression of Difference Scores</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html"><i class="fa fa-check"></i><b>7</b> Section 5.8.5 Multilevel Propensity Score (PS)</a>
-<ul>
-<li class="chapter" data-level="7.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccpros57"><i class="fa fa-check"></i><b>7.1</b> cccpros57</a>
-<ul>
-<li class="chapter" data-level="7.1.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data"><i class="fa fa-check"></i><b>7.1.1</b> Import Data</a></li>
-<li class="chapter" data-level="7.1.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score"><i class="fa fa-check"></i><b>7.1.2</b> Obtain Single-Level p-score</a></li>
-<li class="chapter" data-level="7.1.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model"><i class="fa fa-check"></i><b>7.1.3</b> Obtain School-Level p-score Model</a></li>
-<li class="chapter" data-level="7.1.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check"><i class="fa fa-check"></i><b>7.1.4</b> Before-Matching Balance Check</a></li>
-<li class="chapter" data-level="7.1.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl"><i class="fa fa-check"></i><b>7.1.5</b> Matching with ps_sgl</a></li>
-<li class="chapter" data-level="7.1.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch"><i class="fa fa-check"></i><b>7.1.6</b> Matching with ps_sch</a></li>
-<li class="chapter" data-level="7.1.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc"><i class="fa fa-check"></i><b>7.1.7</b> Check ICC</a></li>
-<li class="chapter" data-level="7.1.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel"><i class="fa fa-check"></i><b>7.1.8</b> Outcome Analsis: Multilevel</a></li>
-</ul></li>
-<li class="chapter" data-level="7.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccragg24"><i class="fa fa-check"></i><b>7.2</b> cccragg24</a>
-<ul>
-<li class="chapter" data-level="7.2.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data-1"><i class="fa fa-check"></i><b>7.2.1</b> Import Data</a></li>
-<li class="chapter" data-level="7.2.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score-1"><i class="fa fa-check"></i><b>7.2.2</b> Obtain Single-Level p-score</a></li>
-<li class="chapter" data-level="7.2.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model-1"><i class="fa fa-check"></i><b>7.2.3</b> Obtain School-Level p-score Model</a></li>
-<li class="chapter" data-level="7.2.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check-1"><i class="fa fa-check"></i><b>7.2.4</b> Before-Matching Balance Check</a></li>
-<li class="chapter" data-level="7.2.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl-1"><i class="fa fa-check"></i><b>7.2.5</b> Matching with ps_sgl</a></li>
-<li class="chapter" data-level="7.2.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch-1"><i class="fa fa-check"></i><b>7.2.6</b> Matching with ps_sch</a></li>
-<li class="chapter" data-level="7.2.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc-1"><i class="fa fa-check"></i><b>7.2.7</b> Check ICC</a></li>
-<li class="chapter" data-level="7.2.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel-1"><i class="fa fa-check"></i><b>7.2.8</b> Outcome Analsis: Multilevel</a></li>
+<li class="chapter" data-level="5.8.1" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#all"><i class="fa fa-check"></i><b>5.8.1</b> All<span></span></a></li>
+<li class="chapter" data-level="5.8.2" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-1"><i class="fa fa-check"></i><b>5.8.2</b> Scheme 1<span></span></a></li>
+<li class="chapter" data-level="5.8.3" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-2"><i class="fa fa-check"></i><b>5.8.3</b> Scheme 2<span></span></a></li>
+<li class="chapter" data-level="5.8.4" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-3"><i class="fa fa-check"></i><b>5.8.4</b> Scheme 3<span></span></a></li>
+<li class="chapter" data-level="5.8.5" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-4"><i class="fa fa-check"></i><b>5.8.5</b> Scheme 4<span></span></a></li>
+<li class="chapter" data-level="5.8.6" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-5"><i class="fa fa-check"></i><b>5.8.6</b> Scheme 5<span></span></a></li>
+<li class="chapter" data-level="5.8.7" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-6"><i class="fa fa-check"></i><b>5.8.7</b> Scheme 6<span></span></a></li>
+<li class="chapter" data-level="5.8.8" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-7"><i class="fa fa-check"></i><b>5.8.8</b> Scheme 7<span></span></a></li>
+<li class="chapter" data-level="5.8.9" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-8"><i class="fa fa-check"></i><b>5.8.9</b> Scheme 8<span></span></a></li>
+<li class="chapter" data-level="5.8.10" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-9"><i class="fa fa-check"></i><b>5.8.10</b> Scheme 9<span></span></a></li>
+<li class="chapter" data-level="5.8.11" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-10"><i class="fa fa-check"></i><b>5.8.11</b> Scheme 10<span></span></a></li>
+<li class="chapter" data-level="5.8.12" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-11"><i class="fa fa-check"></i><b>5.8.12</b> Scheme 11<span></span></a></li>
+<li class="chapter" data-level="5.8.13" data-path="04_Section5.8.1.html"><a href="04_Section5.8.1.html#scheme-12"><i class="fa fa-check"></i><b>5.8.13</b> Scheme 12<span></span></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html"><i class="fa fa-check"></i><b>8</b> Section 5.8.6 Comparison of Rand-gbm and Stata-boost (PS)</a>
+<li class="chapter" data-level="6" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html"><i class="fa fa-check"></i><b>6</b> Section 5.8.2, 5.8.3, and 5.8.4 (SD &amp; PS)<span></span></a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#import-data-2"><i class="fa fa-check"></i><b>8.1</b> Import Data</a></li>
-<li class="chapter" data-level="8.2" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-rand-gbm-ps"><i class="fa fa-check"></i><b>8.2</b> Optimal pair matching Using pscores generated by Rand-gbm (ps)</a></li>
-<li class="chapter" data-level="8.3" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-stata-boost-psb"><i class="fa fa-check"></i><b>8.3</b> Optimal pair matching Using pscores generated by Stata-boost (psb)</a></li>
-<li class="chapter" data-level="8.4" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#balance-checks"><i class="fa fa-check"></i><b>8.4</b> Balance Checks</a></li>
-<li class="chapter" data-level="8.5" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#postmatching-regression-analysis-using-difference-scores"><i class="fa fa-check"></i><b>8.5</b> Postmatching Regression Analysis Using Difference Scores</a></li>
+<li class="chapter" data-level="6.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.2-optimal-matching"><i class="fa fa-check"></i><b>6.1</b> Section 5.8.2 Optimal Matching<span></span></a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#load-data"><i class="fa fa-check"></i><b>6.1.1</b> Load Data<span></span></a></li>
+<li class="chapter" data-level="6.1.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#bivariate-comparisons-1"><i class="fa fa-check"></i><b>6.1.2</b> Bivariate Comparisons<span></span></a></li>
+<li class="chapter" data-level="6.1.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#outcome-without-bias-control"><i class="fa fa-check"></i><b>6.1.3</b> Outcome Without Bias Control<span></span></a></li>
+<li class="chapter" data-level="6.1.4" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#matching"><i class="fa fa-check"></i><b>6.1.4</b> Matching<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html"><i class="fa fa-check"></i><b>9</b> Section 6.5.2 Subclassification &amp; Cox Proportional Hazards (PS)</a>
+<li class="chapter" data-level="6.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.3-post-full-matching-analysis-of-outcome"><i class="fa fa-check"></i><b>6.2</b> Section 5.8.3 Post-Full-Matching Analysis of Outcome<span></span></a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#import-data-3"><i class="fa fa-check"></i><b>9.1</b> Import Data</a></li>
-<li class="chapter" data-level="9.2" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-propensity-score-using-logistic"><i class="fa fa-check"></i><b>9.2</b> Create Propensity Score Using Logistic</a></li>
-<li class="chapter" data-level="9.3" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-conduct-balance-check-using-normalized-difference"><i class="fa fa-check"></i><b>9.3</b> Function to Conduct Balance Check Using Normalized Difference</a></li>
-<li class="chapter" data-level="9.4" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-normalized-difference"><i class="fa fa-check"></i><b>9.4</b> Balance Check on the Original Sample (Normalized Difference)</a></li>
-<li class="chapter" data-level="9.5" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-check-balance-using-chi-square-tests"><i class="fa fa-check"></i><b>9.5</b> Function to Check Balance Using Chi-Square Tests</a></li>
-<li class="chapter" data-level="9.6" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-chi-square"><i class="fa fa-check"></i><b>9.6</b> Balance Check on the Original Sample (Chi-Square)</a></li>
-<li class="chapter" data-level="9.7" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#get-quintiles"><i class="fa fa-check"></i><b>9.7</b> Get Quintiles</a></li>
-<li class="chapter" data-level="9.8" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-subclasses-using-quintiles"><i class="fa fa-check"></i><b>9.8</b> Create 5 Subclasses Using Quintiles</a></li>
-<li class="chapter" data-level="9.9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#check-imbalance-post-subclassification-5-subclasses"><i class="fa fa-check"></i><b>9.9</b> Check Imbalance Post-Subclassification (5 Subclasses)</a></li>
-<li class="chapter" data-level="9.10" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trimming-search-for-best-cutoff-alpha-for-overlap"><i class="fa fa-check"></i><b>9.10</b> Trimming: Search for Best Cutoff Alpha for Overlap</a></li>
-<li class="chapter" data-level="9.11" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trim-observations"><i class="fa fa-check"></i><b>9.11</b> Trim Observations</a></li>
-<li class="chapter" data-level="9.12" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-new-subclasses-and-check-imbalance"><i class="fa fa-check"></i><b>9.12</b> Create 5 New Subclasses and Check Imbalance</a></li>
-<li class="chapter" data-level="9.13" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#outcome-analysis-by-subclass"><i class="fa fa-check"></i><b>9.13</b> Outcome Analysis by Subclass</a></li>
-<li class="chapter" data-level="9.14" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#aggregate-results"><i class="fa fa-check"></i><b>9.14</b> Aggregate Results</a></li>
-<li class="chapter" data-level="9.15" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#subclassification-with-matchit"><i class="fa fa-check"></i><b>9.15</b> Subclassification with MatchIt</a></li>
+<li class="chapter" data-level="6.2.1" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#hodges-lehmann-aligned-rank-test"><i class="fa fa-check"></i><b>6.2.1</b> Hodges-Lehmann Aligned Rank Test<span></span></a></li>
+<li class="chapter" data-level="6.2.2" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#cohens-d"><i class="fa fa-check"></i><b>6.2.2</b> Cohen’s d<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html"><i class="fa fa-check"></i><b>10</b> Section 7.3.1 Propensity Score Weighting (SD &amp; PS)</a>
-<ul>
-<li class="chapter" data-level="10.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#preparation-4"><i class="fa fa-check"></i><b>10.1</b> Preparation</a></li>
-<li class="chapter" data-level="10.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-1-obtain-weights-with-weightit"><i class="fa fa-check"></i><b>10.2</b> Solution 1: Obtain Weights with WeightIt</a>
-<ul>
-<li class="chapter" data-level="10.2.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights"><i class="fa fa-check"></i><b>10.2.1</b> Weights</a></li>
-<li class="chapter" data-level="10.2.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights"><i class="fa fa-check"></i><b>10.2.2</b> PSW With ATE Weights</a></li>
-<li class="chapter" data-level="10.2.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights"><i class="fa fa-check"></i><b>10.2.3</b> PSW With ATT Weights</a></li>
+<li class="chapter" data-level="6.3" data-path="05_Section5.8.2_5.8.3_5.8.4.html"><a href="05_Section5.8.2_5.8.3_5.8.4.html#section-5.8.4-post-matching-analysis-using-regression-of-difference-scores"><i class="fa fa-check"></i><b>6.3</b> Section 5.8.4 Post-Matching Analysis Using Regression of Difference Scores<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-2-creating-the-weights-manually"><i class="fa fa-check"></i><b>10.3</b> Solution 2: Creating the Weights Manually</a>
+<li class="chapter" data-level="7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html"><i class="fa fa-check"></i><b>7</b> Section 5.8.5 Multilevel Propensity Score (PS)<span></span></a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights-1"><i class="fa fa-check"></i><b>10.3.1</b> Weights</a></li>
-<li class="chapter" data-level="10.3.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights-1"><i class="fa fa-check"></i><b>10.3.2</b> PSW With ATE Weights</a></li>
-<li class="chapter" data-level="10.3.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights-1"><i class="fa fa-check"></i><b>10.3.3</b> PSW With ATT Weights</a></li>
+<li class="chapter" data-level="7.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccpros57"><i class="fa fa-check"></i><b>7.1</b> cccpros57<span></span></a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data"><i class="fa fa-check"></i><b>7.1.1</b> Import Data<span></span></a></li>
+<li class="chapter" data-level="7.1.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score"><i class="fa fa-check"></i><b>7.1.2</b> Obtain Single-Level p-score<span></span></a></li>
+<li class="chapter" data-level="7.1.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model"><i class="fa fa-check"></i><b>7.1.3</b> Obtain School-Level p-score Model<span></span></a></li>
+<li class="chapter" data-level="7.1.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check"><i class="fa fa-check"></i><b>7.1.4</b> Before-Matching Balance Check<span></span></a></li>
+<li class="chapter" data-level="7.1.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl"><i class="fa fa-check"></i><b>7.1.5</b> Matching with ps_sgl<span></span></a></li>
+<li class="chapter" data-level="7.1.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch"><i class="fa fa-check"></i><b>7.1.6</b> Matching with ps_sch<span></span></a></li>
+<li class="chapter" data-level="7.1.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc"><i class="fa fa-check"></i><b>7.1.7</b> Check ICC<span></span></a></li>
+<li class="chapter" data-level="7.1.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel"><i class="fa fa-check"></i><b>7.1.8</b> Outcome Analsis: Multilevel<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#imbalance-checks"><i class="fa fa-check"></i><b>10.4</b> Imbalance Checks</a></li>
-</ul></li>
-<li class="chapter" data-level="11" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html"><i class="fa fa-check"></i><b>11</b> Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD &amp; PS)</a>
+<li class="chapter" data-level="7.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#cccragg24"><i class="fa fa-check"></i><b>7.2</b> cccragg24<span></span></a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#preparation-5"><i class="fa fa-check"></i><b>11.1</b> Preparation</a></li>
-<li class="chapter" data-level="11.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#propensity-score-weighting"><i class="fa fa-check"></i><b>11.2</b> Propensity Score Weighting</a></li>
-<li class="chapter" data-level="11.3" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#cox-proportional-hazards-model"><i class="fa fa-check"></i><b>11.3</b> Cox Proportional Hazards Model</a></li>
-<li class="chapter" data-level="11.4" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#checking-imbalance"><i class="fa fa-check"></i><b>11.4</b> Checking Imbalance</a>
-<ul>
-<li class="chapter" data-level="11.4.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#chi-square-tests-original-sample"><i class="fa fa-check"></i><b>11.4.1</b> Chi-square Tests: Original Sample</a></li>
-<li class="chapter" data-level="11.4.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#weighted-logistic-regression"><i class="fa fa-check"></i><b>11.4.2</b> Weighted Logistic Regression</a></li>
+<li class="chapter" data-level="7.2.1" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#import-data-1"><i class="fa fa-check"></i><b>7.2.1</b> Import Data<span></span></a></li>
+<li class="chapter" data-level="7.2.2" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-single-level-p-score-1"><i class="fa fa-check"></i><b>7.2.2</b> Obtain Single-Level p-score<span></span></a></li>
+<li class="chapter" data-level="7.2.3" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#obtain-school-level-p-score-model-1"><i class="fa fa-check"></i><b>7.2.3</b> Obtain School-Level p-score Model<span></span></a></li>
+<li class="chapter" data-level="7.2.4" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#before-matching-balance-check-1"><i class="fa fa-check"></i><b>7.2.4</b> Before-Matching Balance Check<span></span></a></li>
+<li class="chapter" data-level="7.2.5" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sgl-1"><i class="fa fa-check"></i><b>7.2.5</b> Matching with ps_sgl<span></span></a></li>
+<li class="chapter" data-level="7.2.6" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#matching-with-ps_sch-1"><i class="fa fa-check"></i><b>7.2.6</b> Matching with ps_sch<span></span></a></li>
+<li class="chapter" data-level="7.2.7" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#check-icc-1"><i class="fa fa-check"></i><b>7.2.7</b> Check ICC<span></span></a></li>
+<li class="chapter" data-level="7.2.8" data-path="06_Section5.8.5.html"><a href="06_Section5.8.5.html#outcome-analsis-multilevel-1"><i class="fa fa-check"></i><b>7.2.8</b> Outcome Analsis: Multilevel<span></span></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html"><i class="fa fa-check"></i><b>12</b> Section 8.4.1 Matching with Bias-Corrected and Robust Variance Estimators (SD &amp; PS)</a>
+<li class="chapter" data-level="8" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html"><i class="fa fa-check"></i><b>8</b> Section 5.8.6 Comparison of Rand-gbm and Stata-boost (PS)<span></span></a>
 <ul>
-<li class="chapter" data-level="12.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#preparation-6"><i class="fa fa-check"></i><b>12.1</b> Preparation</a></li>
-<li class="chapter" data-level="12.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#breusch-pagan-test-for-heteroskedasticity"><i class="fa fa-check"></i><b>12.2</b> Breusch-Pagan Test for Heteroskedasticity</a></li>
-<li class="chapter" data-level="12.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#matching-estimators"><i class="fa fa-check"></i><b>12.3</b> Matching Estimators</a>
+<li class="chapter" data-level="8.1" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#import-data-2"><i class="fa fa-check"></i><b>8.1</b> Import Data<span></span></a></li>
+<li class="chapter" data-level="8.2" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-rand-gbm-ps"><i class="fa fa-check"></i><b>8.2</b> Optimal pair matching Using pscores generated by Rand-gbm (ps)<span></span></a></li>
+<li class="chapter" data-level="8.3" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#optimal-pair-matching-using-pscores-generated-by-stata-boost-psb"><i class="fa fa-check"></i><b>8.3</b> Optimal pair matching Using pscores generated by Stata-boost (psb)<span></span></a></li>
+<li class="chapter" data-level="8.4" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#balance-checks"><i class="fa fa-check"></i><b>8.4</b> Balance Checks<span></span></a></li>
+<li class="chapter" data-level="8.5" data-path="07_Section5.8.6.html"><a href="07_Section5.8.6.html#postmatching-regression-analysis-using-difference-scores"><i class="fa fa-check"></i><b>8.5</b> Postmatching Regression Analysis Using Difference Scores<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html"><i class="fa fa-check"></i><b>9</b> Section 6.5.2 Subclassification &amp; Cox Proportional Hazards (PS)<span></span></a>
 <ul>
-<li class="chapter" data-level="12.3.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-sate"><i class="fa fa-check"></i><b>12.3.1</b> Sample Average Treatment Effect (SATE)</a></li>
-<li class="chapter" data-level="12.3.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-pate"><i class="fa fa-check"></i><b>12.3.2</b> Population Average Treatment Effect (PATE)</a></li>
-<li class="chapter" data-level="12.3.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-treated-satt"><i class="fa fa-check"></i><b>12.3.3</b> Sample average treatment effect for the treated (SATT)</a></li>
-<li class="chapter" data-level="12.3.4" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-treated-patt"><i class="fa fa-check"></i><b>12.3.4</b> Population average treatment effect for the treated (PATT)</a></li>
-<li class="chapter" data-level="12.3.5" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-controls-satc"><i class="fa fa-check"></i><b>12.3.5</b> Sample average treatment effect for the controls (SATC)</a></li>
-<li class="chapter" data-level="12.3.6" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-controls-patc"><i class="fa fa-check"></i><b>12.3.6</b> Population average treatment effect for the controls (PATC)</a></li>
+<li class="chapter" data-level="9.1" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#import-data-3"><i class="fa fa-check"></i><b>9.1</b> Import Data<span></span></a></li>
+<li class="chapter" data-level="9.2" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-propensity-score-using-logistic"><i class="fa fa-check"></i><b>9.2</b> Create Propensity Score Using Logistic<span></span></a></li>
+<li class="chapter" data-level="9.3" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-conduct-balance-check-using-normalized-difference"><i class="fa fa-check"></i><b>9.3</b> Function to Conduct Balance Check Using Normalized Difference<span></span></a></li>
+<li class="chapter" data-level="9.4" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-normalized-difference"><i class="fa fa-check"></i><b>9.4</b> Balance Check on the Original Sample (Normalized Difference)<span></span></a></li>
+<li class="chapter" data-level="9.5" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#function-to-check-balance-using-chi-square-tests"><i class="fa fa-check"></i><b>9.5</b> Function to Check Balance Using Chi-Square Tests<span></span></a></li>
+<li class="chapter" data-level="9.6" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#balance-check-on-the-original-sample-chi-square"><i class="fa fa-check"></i><b>9.6</b> Balance Check on the Original Sample (Chi-Square)<span></span></a></li>
+<li class="chapter" data-level="9.7" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#get-quintiles"><i class="fa fa-check"></i><b>9.7</b> Get Quintiles<span></span></a></li>
+<li class="chapter" data-level="9.8" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-subclasses-using-quintiles"><i class="fa fa-check"></i><b>9.8</b> Create 5 Subclasses Using Quintiles<span></span></a></li>
+<li class="chapter" data-level="9.9" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#check-imbalance-post-subclassification-5-subclasses"><i class="fa fa-check"></i><b>9.9</b> Check Imbalance Post-Subclassification (5 Subclasses)<span></span></a></li>
+<li class="chapter" data-level="9.10" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trimming-search-for-best-cutoff-alpha-for-overlap"><i class="fa fa-check"></i><b>9.10</b> Trimming: Search for Best Cutoff Alpha for Overlap<span></span></a></li>
+<li class="chapter" data-level="9.11" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#trim-observations"><i class="fa fa-check"></i><b>9.11</b> Trim Observations<span></span></a></li>
+<li class="chapter" data-level="9.12" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#create-5-new-subclasses-and-check-imbalance"><i class="fa fa-check"></i><b>9.12</b> Create 5 New Subclasses and Check Imbalance<span></span></a></li>
+<li class="chapter" data-level="9.13" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#outcome-analysis-by-subclass"><i class="fa fa-check"></i><b>9.13</b> Outcome Analysis by Subclass<span></span></a></li>
+<li class="chapter" data-level="9.14" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#aggregate-results"><i class="fa fa-check"></i><b>9.14</b> Aggregate Results<span></span></a></li>
+<li class="chapter" data-level="9.15" data-path="08_Section6.5.2.html"><a href="08_Section6.5.2.html#subclassification-with-matchit"><i class="fa fa-check"></i><b>9.15</b> Subclassification with MatchIt<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html"><i class="fa fa-check"></i><b>10</b> Section 7.3.1 Propensity Score Weighting (SD &amp; PS)<span></span></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#preparation-4"><i class="fa fa-check"></i><b>10.1</b> Preparation<span></span></a></li>
+<li class="chapter" data-level="10.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-1-obtain-weights-with-weightit"><i class="fa fa-check"></i><b>10.2</b> Solution 1: Obtain Weights with WeightIt<span></span></a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights"><i class="fa fa-check"></i><b>10.2.1</b> Weights<span></span></a></li>
+<li class="chapter" data-level="10.2.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights"><i class="fa fa-check"></i><b>10.2.2</b> PSW With ATE Weights<span></span></a></li>
+<li class="chapter" data-level="10.2.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights"><i class="fa fa-check"></i><b>10.2.3</b> PSW With ATT Weights<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#solution-2-creating-the-weights-manually"><i class="fa fa-check"></i><b>10.3</b> Solution 2: Creating the Weights Manually<span></span></a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#weights-1"><i class="fa fa-check"></i><b>10.3.1</b> Weights<span></span></a></li>
+<li class="chapter" data-level="10.3.2" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-ate-weights-1"><i class="fa fa-check"></i><b>10.3.2</b> PSW With ATE Weights<span></span></a></li>
+<li class="chapter" data-level="10.3.3" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#psw-with-att-weights-1"><i class="fa fa-check"></i><b>10.3.3</b> PSW With ATT Weights<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="09_Section7.3.1.html"><a href="09_Section7.3.1.html#imbalance-checks"><i class="fa fa-check"></i><b>10.4</b> Imbalance Checks<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html"><i class="fa fa-check"></i><b>11</b> Section 7.3.2 Propensity Score Weighting With a Cox Proportional Hazards Model (SD &amp; PS)<span></span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#preparation-5"><i class="fa fa-check"></i><b>11.1</b> Preparation<span></span></a></li>
+<li class="chapter" data-level="11.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#propensity-score-weighting"><i class="fa fa-check"></i><b>11.2</b> Propensity Score Weighting<span></span></a></li>
+<li class="chapter" data-level="11.3" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#cox-proportional-hazards-model"><i class="fa fa-check"></i><b>11.3</b> Cox Proportional Hazards Model<span></span></a></li>
+<li class="chapter" data-level="11.4" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#checking-imbalance"><i class="fa fa-check"></i><b>11.4</b> Checking Imbalance<span></span></a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#chi-square-tests-original-sample"><i class="fa fa-check"></i><b>11.4.1</b> Chi-square Tests: Original Sample<span></span></a></li>
+<li class="chapter" data-level="11.4.2" data-path="10_Section7.3.2.html"><a href="10_Section7.3.2.html#weighted-logistic-regression"><i class="fa fa-check"></i><b>11.4.2</b> Weighted Logistic Regression<span></span></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html"><i class="fa fa-check"></i><b>13</b> Section 8.4.2 Efficacy Subset &amp; Matching Estimators (PS)</a>
+<li class="chapter" data-level="12" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html"><i class="fa fa-check"></i><b>12</b> Section 8.4.1 Matching with Bias-Corrected and Robust Variance Estimators (SD &amp; PS)<span></span></a>
 <ul>
-<li class="chapter" data-level="13.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#check-sample-sizes-and-get-summary-statistics"><i class="fa fa-check"></i><b>13.1</b> Check Sample Sizes and Get Summary Statistics</a>
+<li class="chapter" data-level="12.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#preparation-6"><i class="fa fa-check"></i><b>12.1</b> Preparation<span></span></a></li>
+<li class="chapter" data-level="12.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#breusch-pagan-test-for-heteroskedasticity"><i class="fa fa-check"></i><b>12.2</b> Breusch-Pagan Test for Heteroskedasticity<span></span></a></li>
+<li class="chapter" data-level="12.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#matching-estimators"><i class="fa fa-check"></i><b>12.3</b> Matching Estimators<span></span></a>
 <ul>
-<li class="chapter" data-level="13.1.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4adq"><i class="fa fa-check"></i><b>13.1.1</b> g4adq</a></li>
-<li class="chapter" data-level="13.1.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4hi"><i class="fa fa-check"></i><b>13.1.2</b> g4hi</a></li>
-<li class="chapter" data-level="13.1.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5adq"><i class="fa fa-check"></i><b>13.1.3</b> g5adq</a></li>
-<li class="chapter" data-level="13.1.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5hi"><i class="fa fa-check"></i><b>13.1.4</b> g5hi</a></li>
-</ul></li>
-<li class="chapter" data-level="13.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#functions-for-matching"><i class="fa fa-check"></i><b>13.2</b> Functions for Matching</a></li>
-<li class="chapter" data-level="13.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#define-matching-variables"><i class="fa fa-check"></i><b>13.3</b> Define Matching Variables</a></li>
-<li class="chapter" data-level="13.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#matching-1"><i class="fa fa-check"></i><b>13.4</b> Matching</a></li>
-<li class="chapter" data-level="13.5" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#function-to-aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.5</b> Function to Aggregate Using Rubin’s Rule</a></li>
-<li class="chapter" data-level="13.6" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.6</b> Aggregate Using Rubin’s Rule</a></li>
-</ul></li>
-<li class="chapter" data-level="14" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html"><i class="fa fa-check"></i><b>14</b> Section 10.6.1 Modeling Doses of Treatment (SD &amp; PS)</a>
-<ul>
-<li class="chapter" data-level="14.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#preparation-7"><i class="fa fa-check"></i><b>14.1</b> Preparation</a></li>
-<li class="chapter" data-level="14.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#create-treatment-variable"><i class="fa fa-check"></i><b>14.2</b> Create Treatment Variable</a></li>
-<li class="chapter" data-level="14.3" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#generalized-propensity-scores"><i class="fa fa-check"></i><b>14.3</b> Generalized Propensity Scores</a>
-<ul>
-<li class="chapter" data-level="14.3.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#mulitinomial-logit-model"><i class="fa fa-check"></i><b>14.3.1</b> Mulitinomial Logit Model</a></li>
-</ul></li>
-<li class="chapter" data-level="14.4" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#sampling-weights"><i class="fa fa-check"></i><b>14.4</b> Sampling Weights</a></li>
-<li class="chapter" data-level="14.5" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#dummy-variables"><i class="fa fa-check"></i><b>14.5</b> Dummy Variables</a></li>
-<li class="chapter" data-level="14.6" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#regression"><i class="fa fa-check"></i><b>14.6</b> Regression</a>
-<ul>
-<li class="chapter" data-level="14.6.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#without-control"><i class="fa fa-check"></i><b>14.6.1</b> Without Control</a></li>
-<li class="chapter" data-level="14.6.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#with-control"><i class="fa fa-check"></i><b>14.6.2</b> With Control</a></li>
+<li class="chapter" data-level="12.3.1" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-sate"><i class="fa fa-check"></i><b>12.3.1</b> Sample Average Treatment Effect (SATE)<span></span></a></li>
+<li class="chapter" data-level="12.3.2" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-pate"><i class="fa fa-check"></i><b>12.3.2</b> Population Average Treatment Effect (PATE)<span></span></a></li>
+<li class="chapter" data-level="12.3.3" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-treated-satt"><i class="fa fa-check"></i><b>12.3.3</b> Sample average treatment effect for the treated (SATT)<span></span></a></li>
+<li class="chapter" data-level="12.3.4" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-treated-patt"><i class="fa fa-check"></i><b>12.3.4</b> Population average treatment effect for the treated (PATT)<span></span></a></li>
+<li class="chapter" data-level="12.3.5" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#sample-average-treatment-effect-for-the-controls-satc"><i class="fa fa-check"></i><b>12.3.5</b> Sample average treatment effect for the controls (SATC)<span></span></a></li>
+<li class="chapter" data-level="12.3.6" data-path="11_Section8.4.1.html"><a href="11_Section8.4.1.html#population-average-treatment-effect-for-the-controls-patc"><i class="fa fa-check"></i><b>12.3.6</b> Population average treatment effect for the controls (PATC)<span></span></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="15" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html"><i class="fa fa-check"></i><b>15</b> Section 11.5.1 &amp; 11.5.2 Sensitivity Analysis of the Effects (SD &amp; PS)</a>
+<li class="chapter" data-level="13" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html"><i class="fa fa-check"></i><b>13</b> Section 8.4.2 Efficacy Subset &amp; Matching Estimators (PS)<span></span></a>
 <ul>
-<li class="chapter" data-level="15.1" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.1-sensitivity-analysis-of-the-effects"><i class="fa fa-check"></i><b>15.1</b> Section 11.5.1 Sensitivity Analysis of the Effects</a></li>
-<li class="chapter" data-level="15.2" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.2-sensitivity-analysis-pair-matching"><i class="fa fa-check"></i><b>15.2</b> Section 11.5.2 Sensitivity Analysis &amp; Pair Matching</a></li>
+<li class="chapter" data-level="13.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#check-sample-sizes-and-get-summary-statistics"><i class="fa fa-check"></i><b>13.1</b> Check Sample Sizes and Get Summary Statistics<span></span></a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4adq"><i class="fa fa-check"></i><b>13.1.1</b> g4adq<span></span></a></li>
+<li class="chapter" data-level="13.1.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g4hi"><i class="fa fa-check"></i><b>13.1.2</b> g4hi<span></span></a></li>
+<li class="chapter" data-level="13.1.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5adq"><i class="fa fa-check"></i><b>13.1.3</b> g5adq<span></span></a></li>
+<li class="chapter" data-level="13.1.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#g5hi"><i class="fa fa-check"></i><b>13.1.4</b> g5hi<span></span></a></li>
 </ul></li>
+<li class="chapter" data-level="13.2" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#functions-for-matching"><i class="fa fa-check"></i><b>13.2</b> Functions for Matching<span></span></a></li>
+<li class="chapter" data-level="13.3" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#define-matching-variables"><i class="fa fa-check"></i><b>13.3</b> Define Matching Variables<span></span></a></li>
+<li class="chapter" data-level="13.4" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#matching-1"><i class="fa fa-check"></i><b>13.4</b> Matching<span></span></a></li>
+<li class="chapter" data-level="13.5" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#function-to-aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.5</b> Function to Aggregate Using Rubin’s Rule<span></span></a></li>
+<li class="chapter" data-level="13.6" data-path="12_Section8.4.2.html"><a href="12_Section8.4.2.html#aggregate-using-rubins-rule"><i class="fa fa-check"></i><b>13.6</b> Aggregate Using Rubin’s Rule<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html"><i class="fa fa-check"></i><b>14</b> Section 10.6.1 Modeling Doses of Treatment (SD &amp; PS)<span></span></a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#preparation-7"><i class="fa fa-check"></i><b>14.1</b> Preparation<span></span></a></li>
+<li class="chapter" data-level="14.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#create-treatment-variable"><i class="fa fa-check"></i><b>14.2</b> Create Treatment Variable<span></span></a></li>
+<li class="chapter" data-level="14.3" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#generalized-propensity-scores"><i class="fa fa-check"></i><b>14.3</b> Generalized Propensity Scores<span></span></a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#mulitinomial-logit-model"><i class="fa fa-check"></i><b>14.3.1</b> Mulitinomial Logit Model<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#sampling-weights"><i class="fa fa-check"></i><b>14.4</b> Sampling Weights<span></span></a></li>
+<li class="chapter" data-level="14.5" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#dummy-variables"><i class="fa fa-check"></i><b>14.5</b> Dummy Variables<span></span></a></li>
+<li class="chapter" data-level="14.6" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#regression"><i class="fa fa-check"></i><b>14.6</b> Regression<span></span></a>
+<ul>
+<li class="chapter" data-level="14.6.1" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#without-control"><i class="fa fa-check"></i><b>14.6.1</b> Without Control<span></span></a></li>
+<li class="chapter" data-level="14.6.2" data-path="13_Section10.6.1.html"><a href="13_Section10.6.1.html#with-control"><i class="fa fa-check"></i><b>14.6.2</b> With Control<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html"><i class="fa fa-check"></i><b>15</b> Section 11.5.1 &amp; 11.5.2 Sensitivity Analysis of the Effects (SD &amp; PS)<span></span></a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.1-sensitivity-analysis-of-the-effects"><i class="fa fa-check"></i><b>15.1</b> Section 11.5.1 Sensitivity Analysis of the Effects<span></span></a></li>
+<li class="chapter" data-level="15.2" data-path="14_Section11.5.1_11.5.2.html"><a href="14_Section11.5.1_11.5.2.html#section-11.5.2-sensitivity-analysis-pair-matching"><i class="fa fa-check"></i><b>15.2</b> Section 11.5.2 Sensitivity Analysis &amp; Pair Matching<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="15_SessionInfo.html"><a href="15_SessionInfo.html"><i class="fa fa-check"></i><b>16</b> Session Info<span></span></a></li>
 </ul>
 
       </nav>
@@ -364,8 +364,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="section-5.8.5-multilevel-propensity-score-ps" class="section level1" number="7">
-<h1><span class="header-section-number">7</span> Section 5.8.5 Multilevel Propensity Score (PS)</h1>
+<div id="section-5.8.5-multilevel-propensity-score-ps" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">7</span> Section 5.8.5 Multilevel Propensity Score (PS)<a href="06_Section5.8.5.html#section-5.8.5-multilevel-propensity-score-ps" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="06_Section5.8.5.html#cb291-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb291-2"><a href="06_Section5.8.5.html#cb291-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
 <span id="cb291-3"><a href="06_Section5.8.5.html#cb291-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
@@ -377,10 +377,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb291-9"><a href="06_Section5.8.5.html#cb291-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjlabelled)</span>
 <span id="cb291-10"><a href="06_Section5.8.5.html#cb291-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(performance)</span>
 <span id="cb291-11"><a href="06_Section5.8.5.html#cb291-11" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span></code></pre></div>
-<div id="cccpros57" class="section level2" number="7.1">
-<h2><span class="header-section-number">7.1</span> cccpros57</h2>
-<div id="import-data" class="section level3" number="7.1.1">
-<h3><span class="header-section-number">7.1.1</span> Import Data</h3>
+<div id="cccpros57" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> cccpros57<a href="06_Section5.8.5.html#cccpros57" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="import-data" class="section level3 hasAnchor" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> Import Data<a href="06_Section5.8.5.html#import-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb292-1"><a href="06_Section5.8.5.html#cb292-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove formats and labels, because matchit requires a vector for the distance option</span></span>
 <span id="cb292-2"><a href="06_Section5.8.5.html#cb292-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/cccpros57.dta&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb292-3"><a href="06_Section5.8.5.html#cb292-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">zap_formats</span>()</span>
@@ -390,8 +390,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb292-7"><a href="06_Section5.8.5.html#cb292-7" aria-hidden="true" tabindex="-1"></a>post1 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/post1.dta&quot;</span>)</span>
 <span id="cb292-8"><a href="06_Section5.8.5.html#cb292-8" aria-hidden="true" tabindex="-1"></a>post2 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/post2.dta&quot;</span>)</span></code></pre></div>
 </div>
-<div id="obtain-single-level-p-score" class="section level3" number="7.1.2">
-<h3><span class="header-section-number">7.1.2</span> Obtain Single-Level p-score</h3>
+<div id="obtain-single-level-p-score" class="section level3 hasAnchor" number="7.1.2">
+<h3><span class="header-section-number">7.1.2</span> Obtain Single-Level p-score<a href="06_Section5.8.5.html#obtain-single-level-p-score" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb293-1"><a href="06_Section5.8.5.html#cb293-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="st">&quot;intschb ~ agey + female + black + hisp + pcedu + incpovlr + pcempf + </span></span>
 <span id="cb293-2"><a href="06_Section5.8.5.html#cb293-2" aria-hidden="true" tabindex="-1"></a><span class="st">          fatherr + AYP05Cs + pmin05s&quot;</span>, <span class="at">family =</span> binomial, <span class="at">data =</span> df)</span>
 <span id="cb293-3"><a href="06_Section5.8.5.html#cb293-3" aria-hidden="true" tabindex="-1"></a>m1.sum <span class="ot">&lt;-</span> <span class="fu">summary</span>(m1)</span>
@@ -420,8 +420,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## pmin05s             0.00005024149              0.004414004</code></pre>
 <div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb298-1"><a href="06_Section5.8.5.html#cb298-1" aria-hidden="true" tabindex="-1"></a>ps_sgl <span class="ot">&lt;-</span> <span class="fu">predict</span>(m1, <span class="at">type =</span> <span class="st">&quot;response&quot;</span>) <span class="co"># equivalent to df$ps_sgl</span></span></code></pre></div>
 </div>
-<div id="obtain-school-level-p-score-model" class="section level3" number="7.1.3">
-<h3><span class="header-section-number">7.1.3</span> Obtain School-Level p-score Model</h3>
+<div id="obtain-school-level-p-score-model" class="section level3 hasAnchor" number="7.1.3">
+<h3><span class="header-section-number">7.1.3</span> Obtain School-Level p-score Model<a href="06_Section5.8.5.html#obtain-school-level-p-score-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="06_Section5.8.5.html#cb299-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep the first row/observation for each schbl value</span></span>
 <span id="cb299-2"><a href="06_Section5.8.5.html#cb299-2" aria-hidden="true" tabindex="-1"></a>df.school <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
 <span id="cb299-3"><a href="06_Section5.8.5.html#cb299-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(schbl) <span class="sc">%&gt;%</span></span>
@@ -440,8 +440,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## AYP05Cs     0.64764761513951                1.048226
 ## pmin05s     0.00000007544837             2563.223374</code></pre>
 </div>
-<div id="before-matching-balance-check" class="section level3" number="7.1.4">
-<h3><span class="header-section-number">7.1.4</span> Before-Matching Balance Check</h3>
+<div id="before-matching-balance-check" class="section level3 hasAnchor" number="7.1.4">
+<h3><span class="header-section-number">7.1.4</span> Before-Matching Balance Check<a href="06_Section5.8.5.html#before-matching-balance-check" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb304-1"><a href="06_Section5.8.5.html#cb304-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(agey <span class="sc">~</span> intschb, <span class="at">data =</span> df, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
@@ -578,8 +578,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Unmatched       0       0
 ## Discarded       0       0</code></pre>
 </div>
-<div id="matching-with-ps_sgl" class="section level3" number="7.1.5">
-<h3><span class="header-section-number">7.1.5</span> Matching with ps_sgl</h3>
+<div id="matching-with-ps_sgl" class="section level3 hasAnchor" number="7.1.5">
+<h3><span class="header-section-number">7.1.5</span> Matching with ps_sgl<a href="06_Section5.8.5.html#matching-with-ps_sgl" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Note that the caliper argument in <code>matchit()</code> is “the number of standard deviations of the distance measure within which to draw control units (default = 0, no caliper matching). If a caliper is specified, a control unit within the caliper for a treated unit is randomly selected as the match for that treated unit.”<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
 <div class="sourceCode" id="cb326"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb326-1"><a href="06_Section5.8.5.html#cb326-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a column of x random numbers, sort x in ascending order, calculate caliper with ps_sgl</span></span>
 <span id="cb326-2"><a href="06_Section5.8.5.html#cb326-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1000</span>)</span>
@@ -614,8 +614,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb328-11"><a href="06_Section5.8.5.html#cb328-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-64-1.png" width="672" /></p>
 </div>
-<div id="matching-with-ps_sch" class="section level3" number="7.1.6">
-<h3><span class="header-section-number">7.1.6</span> Matching with ps_sch</h3>
+<div id="matching-with-ps_sch" class="section level3 hasAnchor" number="7.1.6">
+<h3><span class="header-section-number">7.1.6</span> Matching with ps_sch<a href="06_Section5.8.5.html#matching-with-ps_sch" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="06_Section5.8.5.html#cb329-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a column of x random numbers, sort x in ascending order, calculate caliper with ps_sch</span></span>
 <span id="cb329-2"><a href="06_Section5.8.5.html#cb329-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1000</span>)</span>
 <span id="cb329-3"><a href="06_Section5.8.5.html#cb329-3" aria-hidden="true" tabindex="-1"></a>df.scheme2 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
@@ -645,8 +645,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb329-27"><a href="06_Section5.8.5.html#cb329-27" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
 </div>
-<div id="check-icc" class="section level3" number="7.1.7">
-<h3><span class="header-section-number">7.1.7</span> Check ICC</h3>
+<div id="check-icc" class="section level3 hasAnchor" number="7.1.7">
+<h3><span class="header-section-number">7.1.7</span> Check ICC<a href="06_Section5.8.5.html#check-icc" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb330-1"><a href="06_Section5.8.5.html#cb330-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to calculate Stata&#39;s &quot;rho&quot; (ICC) in xtreg</span></span>
 <span id="cb330-2"><a href="06_Section5.8.5.html#cb330-2" aria-hidden="true" tabindex="-1"></a>get_icc <span class="ot">&lt;-</span> <span class="cf">function</span>(lmer_obj, group) {</span>
 <span id="cb330-3"><a href="06_Section5.8.5.html#cb330-3" aria-hidden="true" tabindex="-1"></a>  sigma_u2 <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">attr</span>(<span class="fu">VarCorr</span>(lmer_obj)[[group]], <span class="st">&quot;stddev&quot;</span>))<span class="sc">^</span><span class="dv">2</span></span>
@@ -672,12 +672,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## [1] 0.1930747</code></pre>
 <div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb338-1"><a href="06_Section5.8.5.html#cb338-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scheme 2: ICC using the matched set as a clustering variable (create mset first)</span></span>
 <span id="cb338-2"><a href="06_Section5.8.5.html#cb338-2" aria-hidden="true" tabindex="-1"></a>m7 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(cccpros57 <span class="sc">~</span> (<span class="dv">1</span><span class="sc">|</span>mset), <span class="at">data =</span> post2, <span class="at">REML =</span> F)</span></code></pre></div>
-<pre><code>## boundary (singular) fit: see ?isSingular</code></pre>
+<pre><code>## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
 <div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="06_Section5.8.5.html#cb340-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_icc</span>(m7, <span class="st">&quot;mset&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 </div>
-<div id="outcome-analsis-multilevel" class="section level3" number="7.1.8">
-<h3><span class="header-section-number">7.1.8</span> Outcome Analsis: Multilevel</h3>
+<div id="outcome-analsis-multilevel" class="section level3 hasAnchor" number="7.1.8">
+<h3><span class="header-section-number">7.1.8</span> Outcome Analsis: Multilevel<a href="06_Section5.8.5.html#outcome-analsis-multilevel" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="06_Section5.8.5.html#cb342-1" aria-hidden="true" tabindex="-1"></a>out1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(cccpros57 <span class="sc">~</span> intschb <span class="sc">+</span> agey <span class="sc">+</span> female <span class="sc">+</span> black <span class="sc">+</span> hisp <span class="sc">+</span> pcedu <span class="sc">+</span></span>
 <span id="cb342-2"><a href="06_Section5.8.5.html#cb342-2" aria-hidden="true" tabindex="-1"></a>             incpovlr <span class="sc">+</span> pcempf <span class="sc">+</span> fatherr <span class="sc">+</span> AYP05Cs <span class="sc">+</span> pmin05s <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>schbl),</span>
 <span id="cb342-3"><a href="06_Section5.8.5.html#cb342-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> df,</span>
@@ -943,10 +943,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## pmin05s   0.850</code></pre>
 </div>
 </div>
-<div id="cccragg24" class="section level2" number="7.2">
-<h2><span class="header-section-number">7.2</span> cccragg24</h2>
-<div id="import-data-1" class="section level3" number="7.2.1">
-<h3><span class="header-section-number">7.2.1</span> Import Data</h3>
+<div id="cccragg24" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> cccragg24<a href="06_Section5.8.5.html#cccragg24" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="import-data-1" class="section level3 hasAnchor" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> Import Data<a href="06_Section5.8.5.html#import-data-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb350-1"><a href="06_Section5.8.5.html#cb350-1" aria-hidden="true" tabindex="-1"></a>ra <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/cccragg24.dta&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb350-2"><a href="06_Section5.8.5.html#cb350-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">zap_formats</span>()</span>
 <span id="cb350-3"><a href="06_Section5.8.5.html#cb350-3" aria-hidden="true" tabindex="-1"></a>ra <span class="ot">&lt;-</span> sjlabelled<span class="sc">::</span><span class="fu">remove_all_labels</span>(ra) <span class="sc">%&gt;%</span></span>
@@ -954,8 +954,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb350-5"><a href="06_Section5.8.5.html#cb350-5" aria-hidden="true" tabindex="-1"></a>post3 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/post3.dta&quot;</span>)</span>
 <span id="cb350-6"><a href="06_Section5.8.5.html#cb350-6" aria-hidden="true" tabindex="-1"></a>post4 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">&quot;data/Data_Chapter5/post4.dta&quot;</span>)</span></code></pre></div>
 </div>
-<div id="obtain-single-level-p-score-1" class="section level3" number="7.2.2">
-<h3><span class="header-section-number">7.2.2</span> Obtain Single-Level p-score</h3>
+<div id="obtain-single-level-p-score-1" class="section level3 hasAnchor" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> Obtain Single-Level p-score<a href="06_Section5.8.5.html#obtain-single-level-p-score-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="06_Section5.8.5.html#cb351-1" aria-hidden="true" tabindex="-1"></a>ra_glm <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="st">&quot;intschb ~ agey + female + black + hisp + pcedu + incpovlr + pcempf + </span></span>
 <span id="cb351-2"><a href="06_Section5.8.5.html#cb351-2" aria-hidden="true" tabindex="-1"></a><span class="st">          fatherr + AYP05Cs + pmin05s&quot;</span>, <span class="at">family =</span> binomial, <span class="at">data =</span> ra)</span>
 <span id="cb351-3"><a href="06_Section5.8.5.html#cb351-3" aria-hidden="true" tabindex="-1"></a>ra_glm_sum <span class="ot">&lt;-</span> <span class="fu">summary</span>(ra_glm)</span>
@@ -968,8 +968,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##        1.289773619        0.807745966        0.001351376</code></pre>
 <div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb353-1"><a href="06_Section5.8.5.html#cb353-1" aria-hidden="true" tabindex="-1"></a>ra_ps_sgl <span class="ot">&lt;-</span> <span class="fu">predict</span>(ra_glm, <span class="at">type =</span> <span class="st">&quot;response&quot;</span>)</span></code></pre></div>
 </div>
-<div id="obtain-school-level-p-score-model-1" class="section level3" number="7.2.3">
-<h3><span class="header-section-number">7.2.3</span> Obtain School-Level p-score Model</h3>
+<div id="obtain-school-level-p-score-model-1" class="section level3 hasAnchor" number="7.2.3">
+<h3><span class="header-section-number">7.2.3</span> Obtain School-Level p-score Model<a href="06_Section5.8.5.html#obtain-school-level-p-score-model-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb354-1"><a href="06_Section5.8.5.html#cb354-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep the first row/observation for each schbl value</span></span>
 <span id="cb354-2"><a href="06_Section5.8.5.html#cb354-2" aria-hidden="true" tabindex="-1"></a>ra_school <span class="ot">&lt;-</span> ra <span class="sc">%&gt;%</span></span>
 <span id="cb354-3"><a href="06_Section5.8.5.html#cb354-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(schbl) <span class="sc">%&gt;%</span></span>
@@ -986,8 +986,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##            fatherr            AYP05Cs            pmin05s 
 ##        1.289773619        0.807745966        0.001351376</code></pre>
 </div>
-<div id="before-matching-balance-check-1" class="section level3" number="7.2.4">
-<h3><span class="header-section-number">7.2.4</span> Before-Matching Balance Check</h3>
+<div id="before-matching-balance-check-1" class="section level3 hasAnchor" number="7.2.4">
+<h3><span class="header-section-number">7.2.4</span> Before-Matching Balance Check<a href="06_Section5.8.5.html#before-matching-balance-check-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="06_Section5.8.5.html#cb356-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(agey <span class="sc">~</span> intschb, <span class="at">data =</span> ra, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
@@ -1079,8 +1079,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## mean in group 0 mean in group 1 
 ##       0.5016288       0.5666165</code></pre>
 </div>
-<div id="matching-with-ps_sgl-1" class="section level3" number="7.2.5">
-<h3><span class="header-section-number">7.2.5</span> Matching with ps_sgl</h3>
+<div id="matching-with-ps_sgl-1" class="section level3 hasAnchor" number="7.2.5">
+<h3><span class="header-section-number">7.2.5</span> Matching with ps_sgl<a href="06_Section5.8.5.html#matching-with-ps_sgl-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="06_Section5.8.5.html#cb376-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scheme 1 - Nearest Neighbor with ps_sgl</span></span>
 <span id="cb376-2"><a href="06_Section5.8.5.html#cb376-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1000</span>)</span>
 <span id="cb376-3"><a href="06_Section5.8.5.html#cb376-3" aria-hidden="true" tabindex="-1"></a>ra_scheme1 <span class="ot">&lt;-</span> MatchIt<span class="sc">::</span><span class="fu">matchit</span>(intschb <span class="sc">~</span> agey <span class="sc">+</span> female <span class="sc">+</span> black <span class="sc">+</span> hisp <span class="sc">+</span> pcedu <span class="sc">+</span> </span>
@@ -1105,8 +1105,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb378-11"><a href="06_Section5.8.5.html#cb378-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
 </div>
-<div id="matching-with-ps_sch-1" class="section level3" number="7.2.6">
-<h3><span class="header-section-number">7.2.6</span> Matching with ps_sch</h3>
+<div id="matching-with-ps_sch-1" class="section level3 hasAnchor" number="7.2.6">
+<h3><span class="header-section-number">7.2.6</span> Matching with ps_sch<a href="06_Section5.8.5.html#matching-with-ps_sch-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb379-1"><a href="06_Section5.8.5.html#cb379-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scheme 2 - Nearest Neighbor with ps_sch</span></span>
 <span id="cb379-2"><a href="06_Section5.8.5.html#cb379-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1000</span>)</span>
 <span id="cb379-3"><a href="06_Section5.8.5.html#cb379-3" aria-hidden="true" tabindex="-1"></a>ra_scheme2 <span class="ot">&lt;-</span> MatchIt<span class="sc">::</span><span class="fu">matchit</span>(intschb <span class="sc">~</span> agey <span class="sc">+</span> female <span class="sc">+</span> black <span class="sc">+</span> hisp <span class="sc">+</span> pcedu <span class="sc">+</span> incpovlr <span class="sc">+</span></span>
@@ -1131,8 +1131,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb381-11"><a href="06_Section5.8.5.html#cb381-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-73-1.png" width="672" /></p>
 </div>
-<div id="check-icc-1" class="section level3" number="7.2.7">
-<h3><span class="header-section-number">7.2.7</span> Check ICC</h3>
+<div id="check-icc-1" class="section level3 hasAnchor" number="7.2.7">
+<h3><span class="header-section-number">7.2.7</span> Check ICC<a href="06_Section5.8.5.html#check-icc-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb382-1"><a href="06_Section5.8.5.html#cb382-1" aria-hidden="true" tabindex="-1"></a>i1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(cccragg24 <span class="sc">~</span> (<span class="dv">1</span><span class="sc">|</span>schbl), <span class="at">data =</span> ra, <span class="at">REML =</span> F)</span>
 <span id="cb382-2"><a href="06_Section5.8.5.html#cb382-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_icc</span>(i1, <span class="st">&quot;schbl&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] 0.07795007</code></pre>
@@ -1140,7 +1140,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb384-2"><a href="06_Section5.8.5.html#cb384-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_icc</span>(i2, <span class="st">&quot;schbl&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] 0.05052852</code></pre>
 <div class="sourceCode" id="cb386"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb386-1"><a href="06_Section5.8.5.html#cb386-1" aria-hidden="true" tabindex="-1"></a>i3 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(cccragg24 <span class="sc">~</span> (<span class="dv">1</span><span class="sc">|</span>mset), <span class="at">data =</span> post3, <span class="at">REML =</span> F)</span></code></pre></div>
-<pre><code>## boundary (singular) fit: see ?isSingular</code></pre>
+<pre><code>## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
 <div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb388-1"><a href="06_Section5.8.5.html#cb388-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_icc</span>(i3, <span class="st">&quot;mset&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <div class="sourceCode" id="cb390"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb390-1"><a href="06_Section5.8.5.html#cb390-1" aria-hidden="true" tabindex="-1"></a>i4 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(cccragg24 <span class="sc">~</span> (<span class="dv">1</span><span class="sc">|</span>schbl), <span class="at">data =</span> post4, <span class="at">REML =</span> F)</span>
@@ -1150,8 +1150,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb392-2"><a href="06_Section5.8.5.html#cb392-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_icc</span>(i5, <span class="st">&quot;mset&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] 0.1915563</code></pre>
 </div>
-<div id="outcome-analsis-multilevel-1" class="section level3" number="7.2.8">
-<h3><span class="header-section-number">7.2.8</span> Outcome Analsis: Multilevel</h3>
+<div id="outcome-analsis-multilevel-1" class="section level3 hasAnchor" number="7.2.8">
+<h3><span class="header-section-number">7.2.8</span> Outcome Analsis: Multilevel<a href="06_Section5.8.5.html#outcome-analsis-multilevel-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb394-1"><a href="06_Section5.8.5.html#cb394-1" aria-hidden="true" tabindex="-1"></a>ra_out1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(cccragg24 <span class="sc">~</span> intschb <span class="sc">+</span> agey <span class="sc">+</span> female <span class="sc">+</span> black <span class="sc">+</span> hisp <span class="sc">+</span> pcedu <span class="sc">+</span></span>
 <span id="cb394-2"><a href="06_Section5.8.5.html#cb394-2" aria-hidden="true" tabindex="-1"></a>             incpovlr <span class="sc">+</span> pcempf <span class="sc">+</span> fatherr <span class="sc">+</span> AYP05Cs <span class="sc">+</span> pmin05s <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>schbl),</span>
 <span id="cb394-3"><a href="06_Section5.8.5.html#cb394-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> ra,</span>

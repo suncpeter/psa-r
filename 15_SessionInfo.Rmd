@@ -1,0 +1,7 @@
+# Session Info
+
+The R session information when compiling this book:
+
+```{r}
+sessionInfo()
+```

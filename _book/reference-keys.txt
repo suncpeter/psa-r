@@ -156,3 +156,4 @@ with-control
 section-11.5.1-11.5.2-sensitivity-analysis-of-the-effects-sd-ps
 section-11.5.1-sensitivity-analysis-of-the-effects
 section-11.5.2-sensitivity-analysis-pair-matching
+session-info
